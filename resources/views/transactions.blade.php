@@ -8,35 +8,37 @@
     </x-slot>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-        <div class="text-center ">
-            <div style="display: grid; place-content: center;">
+        
+        <div class="">
+            <div class="transactCenter">
                 <div class="flex flex-wrap">
                     @foreach ($acceptedRequests as $acceptedRequest)
-                        <div class="m-10 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px;">
+                        <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px;">
                             <div style="width: 300px; height: 550px;">
                                 <div class="p-5">
-                                    <h1><b>Borrower</b></h1>
-                                    {{ $acceptedRequest->user->name }} <br> <br>
-                                    <h1><b>ID Number</b></h1>
-                                    {{ $acceptedRequest->user->id_number }} <br> <br>
-                                    <h1><b>Book Title</b></h1>
-                                    {{ $acceptedRequest->book_title }} <br> <br>
-                                    <h1><b>Borrowed On</b></h1>
-                                    {{ $acceptedRequest->date_borrow->format('Y-m-d H:i A') }} <br> <br>
-                                    <h1><b>Pickup Date</b></h1>
-                                    {{ $acceptedRequest->date_pickup->format('Y-m-d H:i A') }} <br> <br>
-                                    <h1><b>Return Date</b></h1>
-                                    {{ $acceptedRequest->date_return->format('Y-m-d H:i A') }} <br> <br>
-                                    <h1><b>Fines</b></h1> <br>
+                                    <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>
+                                    {{ $acceptedRequest->user->name }} <br> <hr> <br>
+                                    <h1><b><i class="fa-solid fa-id-card"></i> ID Number</b></h1>
+                                    {{ $acceptedRequest->user->id_number }} <br> <hr> <br>
+                                    <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
+                                    {{ $acceptedRequest->book_title }} <br> <hr> <br>
+                                    <h1><b><i class="fa-solid fa-calendar-days"></i> Borrowed On</b></h1>
+                                    {{ $acceptedRequest->date_borrow->format('Y-m-d H:i A') }} <br> <hr> <br>
+                                    <h1><b><i class="fa-solid fa-calendar-days"></i> Pickup Date</b></h1>
+                                    {{ $acceptedRequest->date_pickup->format('Y-m-d H:i A') }} <br> <hr> <br>
+                                    <h1><b><i class="fa-solid fa-calendar-days"></i> Return Date</b></h1>
+                                    {{ $acceptedRequest->date_return->format('Y-m-d H:i A') }} <br> <hr> <br>
+                                    <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
                                     @if (!is_null($acceptedRequest->fines) && $acceptedRequest->fines > 0.00)
                                         ₱ {{ $acceptedRequest->fines }} <b style="font-size: 10px;">Additional {{$acceptedRequest->fines}} for another day passes</b>
                                     @else
                                         <b style="font-size: 10px;">No fines before return date expires</b>
-                                    @endif
+                                    @endif <br> <hr>
 
                                 </div>
 
                             </div>
+                          <div class="text-center">
                             <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
@@ -47,6 +49,7 @@
                                     <b><i class="fa-solid fa-rotate-left"></i> Return Book</b>
                                 </button>
                             </form>
+                          </div>
                         </div>
                     @endforeach
                 </div>
@@ -99,6 +102,22 @@
    {{-- Loading Screen --}}
    <div id="loading-bar" class="loading-bar"></div>
   <style>
+            @media (max-width: 1000px) and (max-height: 640px) {
+            .transactCenter{
+        display: flex;
+        place-content: center;
+    }
+    }
+
+    @media (max-width: 600px) and (max-height: 640px) {
+        .transactCenter{
+        display: flex;
+        place-content: center;
+    }
+    }
+    .transactCenter{
+        display: grid;
+    }
 .loading-bar {
   width: 0;
   height: 5px; /* You can adjust the height as needed */

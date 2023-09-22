@@ -39,7 +39,7 @@
             </div> <br>
 
         <div  class="overflow-hidden">
-            <label for="description"><b><i class="fa-solid fa-font"></i> Description</b></label><br>
+            <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
             <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required>{{$book->description}}</textarea>
         </div> <br>
         <div style="">
@@ -57,7 +57,7 @@
         <br>
 
         <div class="text-right">
-            <button class="rounded-lg p-4 text-white bg-blue-600 hover:bg-blue-700 duration-100" style="width: 175px;" type="submit"><b><i class="fa-solid fa-save"></i> Update Book</b></button>
+            <button class="rounded-lg p-4  text-blue-600 hover:text-blue-700 duration-100" style="width: 175px;" type="submit"><b><i class="fa-solid fa-save"></i> Update Book</b></button>
 
         </div>
     </form>

@@ -25,7 +25,7 @@
 
                 <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
                 @if (Auth::user()->is_admin)
-              <button type="button" class="bg-green-600 hover:bg-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px; color: white;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-address-book"></i> Add Book</button>
+              <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-address-book"></i> Add Book</button>
               </div>
             @endif
           </div>
@@ -85,7 +85,6 @@
             <div class="modalFlex">
                 <form action="{{ route('book') }}" method="post" enctype="multipart/form-data">
                     @csrf
-
                         <div>
                             <label for="title"><b><i class="fa-solid fa-heading"></i> Title</b></label><br>
                             <input placeholder="Title" class="modalInput rounded-lg" type="text" id="title" name="title" required>
@@ -113,7 +112,7 @@
                         </div> <br>
 
                     <div  class="overflow-hidden">
-                        <label for="description"><b><i class="fa-solid fa-font"></i> Description</b></label><br>
+                        <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
                         <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required></textarea>
                     </div> <br>
                     <div style="">
@@ -125,8 +124,8 @@
                     <br>
 
                    <div class="flex justify-end">
-                    <button class="rounded-lg p-4 text-white bg-slate-600 hover:bg-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
-                    <button class="rounded-lg p-4 text-white bg-blue-600 hover:bg-blue-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-plus"></i>  Add Book</button>
+                    <button class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                    <button class="rounded-lg p-4 text-blue-600 hover:text-blue-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-plus"></i>  Add Book</button>
                    </div>
                     </form>
             </div>
@@ -146,15 +145,13 @@
             <br>
             <hr> <br>
             <div class="">
-
-
                    <div class="flex justify-end">
-                    <button class="rounded-lg p-4 text-white bg-slate-600 hover:bg-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                    <button class="rounded-lg p-4  text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
 
                     <form action="{{ route('bookList.destroy', ['id' => '__BOOK_ID__']) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')
-                        <button class="rounded-lg p-4 text-white bg-blue-600 hover:bg-blue-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-trash"></i>  Confirm</button>
+                        <button class="rounded-lg p-4  text-red-600 hover:text-red-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-trash"></i>  Confirm</button>
                     </form>
                    </div>
 

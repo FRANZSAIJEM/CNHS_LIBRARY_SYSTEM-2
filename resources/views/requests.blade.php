@@ -1,4 +1,3 @@
-
 <x-app-layout>
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -25,21 +24,21 @@
 
             </div>
         </div>
-        <div style="display: grid; place-content: center;">
+        <div class="requestCenter">
             <div class="flex flex-wrap">
                 @foreach ($users as $user)
                     @foreach ($user->requestedBooks as $requestedBook)
-                    <div class="m-10 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px;">
-                        <div style="width: 250px; height: 350px;">
+                    <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px;">
+                        <div style="width: 300px; height: 350px;">
                             <div class="p-5">
-                                <h1><b>Borrower</b></h1>
-                                {{ $user->name }} <br> <br>
-                                <h1><b>ID Number</b></h1>
-                                {{ $user->id_number }} <br> <br>
-                                <h1><b>Book Title</b></h1>
-                                {{ $requestedBook->title }} <br> <br>
-                                <h1><b>Grade Level</b></h1>
-                                {{ $user->grade_level }}
+                                <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>
+                                {{ $user->name }} <br> <hr> <br>
+                                <h1><b><i class="fa-solid fa-id-card"></i> ID Number</b></h1>
+                                {{ $user->id_number }} <br> <hr> <br>
+                                <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
+                                {{ $requestedBook->title }} <br> <hr> <br>
+                                <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
+                                {{ $user->grade_level }} <br> <hr>
                             </div>
                         </div>
                         <div class="flex" style="margin-top: 4px;">
@@ -54,9 +53,40 @@
                             </form>
                         </div>
                     </div>
-                    <div id="confirmAcceptModal-{{ $requestedBook->id }}" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
-                        <div style="background-color: white; border-radius: 5px; width: 300px; margin: 100px auto; padding: 20px; text-align: center;">
-                            <div style="display: inline-flex">
+                    <div id="confirmAcceptModal-{{ $requestedBook->id }}" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+                        <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
+                            <div class="flex justify-between">
+                                <h2><b><i class="fa-solid fa-calendar-days"></i> Set Date</b></h2>
+                                <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <hr> <br>
+                            <p>
+                                <form action="{{ route('acceptRequest', ['user' => $user, 'book' => '__REQUESTEDBOOK_ID__']) }}" method="POST">
+                                    @csrf
+                                    <div>
+                                        <label for="date_pickup"><b><i class="fa-solid fa-boxes-packing"></i> Date Pickup</b></label> <br>
+                                        <input class="border-none" type="datetime-local" id="date_pickup" name="date_pickup" required>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <label for="date_return"><b><i class="fa-solid fa-rotate-left"></i> Date Return</b></label> <br>
+                                        <input class="border-none"  type="datetime-local" id="date_return" name="date_return" required>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <label for="fines"><b><i class="fa-solid fa-money-check-dollar"></i> Fines (optional)</b></label> <br>
+                                        <input class="border-none"  type="number" step="0.01" id="fines" name="fines" placeholder="Enter fine amount">
+                                    </div> <br>
+                                        <hr>
+                                        <br>
+                                    <div class="flex justify-end">
+                                        <button class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                                        <button type="submit" class="rounded-lg p-4  text-green-600 hover:text-green-700 duration-100" style="width: 125px;"><i class="fa-solid fa-check"></i>  Accept</button>
+                                    </div>
+                                </form>
+                            </p>
+
+                            {{-- <div style="display: inline-flex">
                                 <!-- Form to submit the delete request -->
                                 <form action="{{ route('acceptRequest', ['user' => $user, 'book' => '__REQUESTEDBOOK_ID__']) }}" method="POST">
                                     @csrf
@@ -74,11 +104,13 @@
                                         <label for="fines">Fines (optional):</label>
                                         <input type="number" step="0.01" id="fines" name="fines" placeholder="Enter fine amount">
                                     </div>
+                                        <div class="flex justify-end">
 
-                                    <button style="background-color: rgb(146, 146, 146); padding: 10px 20px; margin-right: 10px; border-radius: 5px; color: white;" onclick="hideAcceptanceModal({{ $requestedBook->id }})">Cancel</button>
-                                    <button type="submit" style="margin: 5px; background-color: rgb(60, 163, 60);  color: white; padding: 10px; border-radius: 5px; width: 100px;">Accept</button>
+                                            <button class="rounded-lg p-4 text-white bg-slate-600 hover:bg-slate-700 duration-100" style="width: 125px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})">Cancel</button>
+                                            <button type="submit" class="rounded-lg p-4 text-white bg-blue-600 hover:bg-blue-700 duration-100" style="width: 125px;">Accept</button>
+                                        </div>
                                 </form>
-                           </div>
+                           </div> --}}
                         </div>
                     </div>
                     @endforeach
@@ -150,6 +182,48 @@
     {{-- Loading Screen --}}
     <div id="loading-bar" class="loading-bar"></div>
 <style>
+    @media (max-width: 1000px) and (max-height: 640px) {
+        .requestCenter{
+            display: flex;
+            place-content: center;
+        }
+        .modalWidth{
+        width: 300px;
+    }
+        .modalInput{
+            width: 500px;
+        }
+
+    }
+
+    @media (max-width: 600px) and (max-height: 640px) {
+        .requestCenter{
+            display: flex;
+            place-content: center;
+        }
+        .modalWidth{
+        width: 300px;
+    }
+        .modalInput{
+            width: 10px;
+        }
+    }
+
+    .modalInput{
+        width: 550px;
+    }
+    .modalWidth{
+        width: 300px;
+    }
+    .modalFlex{
+        display: inline-flex;
+    }
+
+
+    .requestCenter{
+        display: flex;
+
+    }
         .search-bar {
             display: block;
             max-height: 0;
@@ -197,6 +271,15 @@ function showAcceptanceModal(requestedBook) {
             // Set the action of the form to include the specific book's ID
             var form = modal.querySelector('form');
             form.action = form.action.replace('__REQUESTEDBOOK_ID__', requestedBook);
+        }
+
+        function hideConfirmationModal() {
+            var modal = document.getElementById('confirmAddModal');
+            var modal2 = document.getElementById('confirmDeleteModal');
+
+            modal.style.display = 'none';
+            modal2.style.display = 'none';
+
         }
 
         function hideAcceptanceModal(requestedBook) {
