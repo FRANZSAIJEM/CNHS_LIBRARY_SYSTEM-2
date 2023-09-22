@@ -16,15 +16,13 @@
                 @if (isset($book))
                     <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 352px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" ></div>
                 @endif
-                <h1 class="mt-5"><b><i class="fa-solid fa-paragraph"></i> Description</b></h1>
-                <textarea class="shadow-md dark:bg-dark-eval-1 border-none" disabled style="resize: none; width: 250px;" name="" id="" cols="50" rows="4">{{$book->description}}</textarea>
 
            </div>
 
             <div class="marginTwo" style="width: 250px;">
                 <h1><b><i class="fa-solid fa-book"></i> Title</b></h1>
                 {{$book->title}} <br> <hr> <br>
-                <h1><b><i class="fa-solid fa-book"></i> Author</b></h1>
+                <h1><b><i class="fa-solid fa-user"></i> Author</b></h1>
                 {{$book->author}} <br> <hr> <br>
                 <h1><b><i class="fa-solid fa-bars-staggered"></i> Subject</b></h1>
                 {{$book->subject}} <br> <hr> <br>
@@ -32,9 +30,13 @@
                 {{$book->isbn}} <br> <hr> <br>
                 <h1><b><i class="fa-solid fa-chart-line"></i> Availability</b> </h1>
                 <b style="color: {{ $book->availability === 'Not Available' ? 'red' : 'rgb(0, 255, 0)' }}">{{ $book->availability }}</b>
-                <br>
+                <br> <hr>
             </div>
 
+        </div>
+        <h1><b><i class="fa-solid fa-paragraph"></i> Description</b></h1>
+        <div style="display: grid; place-content: center">
+            <textarea style="resize: none" class="justDescription p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="" id="" rows="4">{{$book->description}}</textarea>
         </div>
 
     </div>
@@ -106,6 +108,9 @@
     {{-- Loading Screen --}}
     <div id="loading-bar" class="loading-bar"></div>
 <style>
+    .justDescription{
+        width: 600px;
+    }
     /* Define your CSS class */
     .acceptModal{
         width: 500px;
@@ -139,6 +144,9 @@
     }
 
     @media (max-width: 1000px) and (max-height: 640px) {
+        .justDescription{
+        width: 600px;
+    }
         .viewFlex{
         display: flex;
 
@@ -154,6 +162,9 @@
     }
 
     @media (max-width: 600px) and (max-height: 640px) {
+        .justDescription{
+            width: 300px;
+    }
         .viewFlex{
         display: block;
     }

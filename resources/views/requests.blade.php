@@ -8,6 +8,11 @@
     </x-slot>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+        @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
         <div class="text-right mb-5">
             <div>
                 <div class="" style="display: grid; place-content: center;">
@@ -26,6 +31,7 @@
         </div>
         <div class="requestCenter">
             <div class="flex flex-wrap">
+                @if (count($users) > 0)
                 @foreach ($users as $user)
                     @foreach ($user->requestedBooks as $requestedBook)
                     <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px;">
@@ -53,7 +59,7 @@
                             </form>
                         </div>
                     </div>
-                    <div id="confirmAcceptModal-{{ $requestedBook->id }}" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+                    <div  id="confirmAcceptModal-{{ $requestedBook->id }}" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
                         <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
                             <div class="flex justify-between">
                                 <h2><b><i class="fa-solid fa-calendar-days"></i> Set Date</b></h2>
@@ -86,35 +92,14 @@
                                 </form>
                             </p>
 
-                            {{-- <div style="display: inline-flex">
-                                <!-- Form to submit the delete request -->
-                                <form action="{{ route('acceptRequest', ['user' => $user, 'book' => '__REQUESTEDBOOK_ID__']) }}" method="POST">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="date_pickup">Date Pickup:</label>
-                                        <input type="datetime-local" id="date_pickup" name="date_pickup" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="date_return">Date Return:</label>
-                                        <input type="datetime-local" id="date_return" name="date_return" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="fines">Fines (optional):</label>
-                                        <input type="number" step="0.01" id="fines" name="fines" placeholder="Enter fine amount">
-                                    </div>
-                                        <div class="flex justify-end">
-
-                                            <button class="rounded-lg p-4 text-white bg-slate-600 hover:bg-slate-700 duration-100" style="width: 125px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})">Cancel</button>
-                                            <button type="submit" class="rounded-lg p-4 text-white bg-blue-600 hover:bg-blue-700 duration-100" style="width: 125px;">Accept</button>
-                                        </div>
-                                </form>
-                           </div> --}}
                         </div>
                     </div>
                     @endforeach
                 @endforeach
+                    @else
+                    <!-- Message for no requests -->
+                    <p>You have no requests.</p>
+                @endif
             </div>
         </div>
             {{-- @foreach ($users as $user)
@@ -188,11 +173,9 @@
             place-content: center;
         }
         .modalWidth{
-        width: 300px;
+        width: 100px;
     }
-        .modalInput{
-            width: 500px;
-        }
+
 
     }
 
@@ -202,11 +185,9 @@
             place-content: center;
         }
         .modalWidth{
-        width: 300px;
+        width: auto;
     }
-        .modalInput{
-            width: 10px;
-        }
+
     }
 
     .modalInput{

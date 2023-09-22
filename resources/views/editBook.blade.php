@@ -41,6 +41,7 @@
         <div  class="overflow-hidden">
             <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
             <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required>{{$book->description}}</textarea>
+            <p id="charCount">Characters remaining: 255</p>
         </div> <br>
         <div style="">
 
@@ -117,6 +118,18 @@
 </style>
 
 <script>
+    const textarea = document.getElementById('description');
+    const charCount = document.getElementById('charCount');
+    const maxChars = 255;
+
+    textarea.addEventListener('input', function () {
+        const remainingChars = maxChars - textarea.value.length;
+        charCount.textContent = `Characters remaining: ${remainingChars}`;
+        if (remainingChars < 0) {
+            textarea.value = textarea.value.slice(0, maxChars);
+            charCount.textContent = 'Character limit reached';
+        }
+    });
 // JavaScript to show and hide the loading bar
 window.addEventListener('beforeunload', function () {
   document.getElementById('loading-bar').style.width = '100%';

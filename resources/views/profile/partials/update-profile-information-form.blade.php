@@ -21,6 +21,8 @@
         @csrf
         @method('patch')
 
+        <h1>ID Number: {{$user->id_number}}</h1>
+
         <div class="space-y-2">
             <x-form.label
                 for="name"
@@ -40,6 +42,48 @@
 
             <x-form.error :messages="$errors->get('name')" />
         </div>
+
+        <div class="space-y-2">
+            <x-form.label
+                for="contact"
+                :value="__('Contact')"
+            />
+
+            <x-form.input
+                id="contact"
+                name="contact"
+                type="text"
+                class="block w-full"
+                :value="old('contact', $user->contact)"
+                required
+                autofocus
+                autocomplete="contact"
+            />
+
+            <x-form.error :messages="$errors->get('name')" />
+        </div>
+
+
+        <div class="space-y-2">
+            <x-form.label
+                for="grade_level"
+                :value="__('Grade Level')"
+            />
+
+            <x-form.input
+                id="grade_level"
+                name="grade_level"
+                type="text"
+                class="block w-full"
+                :value="old('grade_level', $user->grade_level)"
+                required
+                autofocus
+                autocomplete="grade_level"
+            />
+
+            <x-form.error :messages="$errors->get('name')" />
+        </div>
+
 
         <div class="space-y-2">
             <x-form.label

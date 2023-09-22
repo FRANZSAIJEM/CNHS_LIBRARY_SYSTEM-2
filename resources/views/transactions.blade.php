@@ -8,10 +8,15 @@
     </x-slot>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-        
+        @if(session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
         <div class="">
             <div class="transactCenter">
                 <div class="flex flex-wrap">
+                    @if (count($acceptedRequests) > 0)
                     @foreach ($acceptedRequests as $acceptedRequest)
                         <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px;">
                             <div style="width: 300px; height: 550px;">
@@ -52,6 +57,10 @@
                           </div>
                         </div>
                     @endforeach
+                    @else
+                    <!-- Message for no requests -->
+                    <p>There is no transactios.</p>
+                @endif
                 </div>
             </div>
             {{-- <div>

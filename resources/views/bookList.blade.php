@@ -10,6 +10,12 @@
 <div>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+                 <!-- Success Message -->
+                 @if(session('success'))
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                        {{ session('success') }}
+                    </div>
+                @endif
         <div class="text-right mb-5">
               <div>
                 <div class="" style="display: grid; place-content: center;">
@@ -29,39 +35,41 @@
               </div>
             @endif
           </div>
-       <div style="display: grid; place-content: center;">
-        <div class="flex flex-wrap">
-            @foreach ($bookList as $bookLists)
-            <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px;">
-                <a href="{{ route('viewBook', ['id' => $bookLists->id]) }}" style="text-decoration: none;">
-                    <div style="background-position: center center; border-radius: 5px; width: 250px; height: 350px; background-size: cover; background-image: url('{{ asset('storage/' . $bookLists->image) }}');">
-                        <div style="color: white; text-align: center; padding: 10px; text-shadow: 0px 0px 5px black">
-                            <div style="margin-top: 75px;">
-                                <b style="font-size: 25px;">Title</b> <br>
-                                {{$bookLists->title}} <br>
-                                <b style="font-size: 25px;">Author</b> <br>
-                                {{$bookLists->author}} <br>
-                                <b style="font-size: 25px;">Subject</b> <br>
-                                {{$bookLists->subject}} <br>
+       <div style="">
+            <div class="bookCenter">
+                <div class="flex flex-wrap">
+                    @foreach ($bookList as $bookLists)
+                    <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px;">
+                        <a href="{{ route('viewBook', ['id' => $bookLists->id]) }}" style="text-decoration: none;">
+                            <div style="background-position: center center; border-radius: 5px; width: 250px; height: 350px; background-size: cover; background-image: url('{{ asset('storage/' . $bookLists->image) }}');">
+                                <div style="color: white; text-align: center; padding: 10px; text-shadow: 0px 0px 5px black">
+                                    <div style="margin-top: 75px;">
+                                        <b style="font-size: 25px;">Title</b> <br>
+                                        {{$bookLists->title}} <br>
+                                        <b style="font-size: 25px;">Author</b> <br>
+                                        {{$bookLists->author}} <br>
+                                        <b style="font-size: 25px;">Subject</b> <br>
+                                        {{$bookLists->subject}} <br>
+                                    </div>
+                                </div>
                             </div>
+                        </a>
+                        @if (Auth::user()->is_admin)
+                        <div style="text-align: center; margin-top: 4px;">
+                            <form action="{{ route('editBook.edit', ['id' => $bookLists->id]) }}" method="GET" style="display: inline;">
+                                @csrf
+                                <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="width: 123px !important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit</b></button>
+                            </form>
+
+                            <!-- Button to trigger the modal -->
+                            <button class="text-red-600 hover:text-red-700 duration-100" type="button" style="width: 123px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal({{ $bookLists->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
                         </div>
+                        @endif
                     </div>
-                </a>
-                @if (Auth::user()->is_admin)
-                <div style="text-align: center; margin-top: 4px;">
-                    <form action="{{ route('editBook.edit', ['id' => $bookLists->id]) }}" method="GET" style="display: inline;">
-                        @csrf
-                        <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="width: 123px !important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit</b></button>
-                    </form>
+                @endforeach
 
-                    <!-- Button to trigger the modal -->
-                    <button class="text-red-600 hover:text-red-700 duration-100" type="button" style="width: 123px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal({{ $bookLists->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
                 </div>
-                @endif
             </div>
-        @endforeach
-
-        </div>
        <div style="display: grid; place-content: center;">
 
         <div class="pagination">
@@ -111,10 +119,12 @@
                             <input placeholder="ISBN" class="modalInput rounded-lg" type="text" id="isbn" name="isbn" required>
                         </div> <br>
 
-                    <div  class="overflow-hidden">
-                        <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
-                        <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required></textarea>
-                    </div> <br>
+                        <div class="overflow-hidden">
+                            <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
+                            <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required></textarea>
+                        </div>
+                        <p id="charCount">Characters remaining: 255</p>
+
                     <div style="">
 
                         <input class="shadow-md" type="file" id="image" name="image" accept="image/*" required style="background-color: rgb(230, 230, 230); color:transparent; cursor: pointer; text-align: right; border-radius: 5px; height: 350px; width: 255px;">
@@ -162,6 +172,9 @@
        <div id="loading-bar" class="loading-bar"></div>
 </div>
 <style>
+        .bookCenter{
+        display: grid;
+    }
     .pagination{
         width: 350px;
     }
@@ -215,6 +228,10 @@
         object-fit: cover;
     }
     @media (max-width: 1000px) and (max-height: 640px) {
+        .bookCenter{
+        display: flex;
+        place-content: center;
+    }
         .modalWidth{
             width: 550px;
         }
@@ -228,6 +245,10 @@
     }
 
     @media (max-width: 600px) and (max-height: 640px) {
+        .bookCenter{
+        display: flex;
+        place-content: center;
+    }
         .modalWidth{
             width: 300px;
         }
@@ -240,6 +261,18 @@
     }
 </style>
 <script>
+        const textarea = document.getElementById('description');
+    const charCount = document.getElementById('charCount');
+    const maxChars = 255;
+
+    textarea.addEventListener('input', function () {
+        const remainingChars = maxChars - textarea.value.length;
+        charCount.textContent = `Characters remaining: ${remainingChars}`;
+        if (remainingChars < 0) {
+            textarea.value = textarea.value.slice(0, maxChars);
+            charCount.textContent = 'Character limit reached';
+        }
+    });
        function showAddConfirmationModal(bookId) {
             var modal = document.getElementById('confirmAddModal');
             modal.style.display = 'block';

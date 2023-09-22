@@ -1,7 +1,7 @@
 <x-sidebar.overlay />
 
 <aside
-style="box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.286)"
+style="box-shadow: rgba(255, 201, 138, 0.4) 5px 5px, rgba(238, 189, 126, 0.3) 10px 10px;"
     class="fixed inset-y-0 z-20 flex flex-col py-4 space-y-6 bg-orange-300 dark:bg-dark-eval-1"
     :class="{
         'translate-x-0 w-64': isSidebarOpen || isSidebarHovered,

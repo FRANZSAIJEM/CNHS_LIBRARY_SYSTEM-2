@@ -46,7 +46,7 @@ class BookController extends Controller
 
         Book::create($validatedData);
 
-        return redirect()->route('bookList')->with('success', 'Book added successfully!');
+        return redirect()->route('bookList')->with('success', 'A new book added successfully!');
     }
 
     public function edit($id)
