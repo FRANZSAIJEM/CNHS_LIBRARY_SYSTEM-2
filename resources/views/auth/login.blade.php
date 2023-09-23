@@ -6,13 +6,14 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-         <!-- Success Message -->
         @if(session('error'))
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
-                {{ session('error') }}
+            <div class="error-message-container">
+                <div class="error-message bg-red-100  text-red-700 p-4 mb-4">
+                    {{ session('error') }}
+                </div>
+                <div class="loadingBar"></div>
             </div>
         @endif
-
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -109,4 +110,61 @@
             </div>
         </form>
     </x-auth-card>
+    <style>
+    .error-message-container {
+        position: relative;
+    }
+
+    .error-message {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .loadingBar{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background-color: #af0000ab;
+        transition: width 3s linear;
+    }
+
+    </style>
+    <script>
+            window.addEventListener('DOMContentLoaded', (event) => {
+        const errorMessage = document.querySelector('.error-message');
+        if (errorMessage) {
+            setTimeout(() => {
+                errorMessage.style.opacity = '1';
+                errorMessage.style.transform = 'translateY(0)';
+            }, 100);
+        }
+    });
+
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const errorMessageContainer = document.querySelector('.error-message-container');
+        const errorMessage = document.querySelector('.error-message');
+        const loadingBar = document.querySelector('.loadingBar');
+
+        if (errorMessage) {
+            setTimeout(() => {
+                loadingBar.style.width = '100%';
+            }, 100);
+
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+                errorMessage.style.opacity = '0';
+                errorMessage.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    errorMessageContainer.remove();
+                }, 300);
+            }, 3000); // 3 seconds for the loading bar to animate, then 100 milliseconds for the success message to disappear
+        }
+    });
+    </script>
 </x-guest-layout>
+
+

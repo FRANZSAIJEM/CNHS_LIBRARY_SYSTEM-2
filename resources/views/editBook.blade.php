@@ -41,9 +41,10 @@
         <div  class="overflow-hidden">
             <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
             <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required>{{$book->description}}</textarea>
-            <p id="charCount">Characters remaining: 255</p>
+            {{-- <p id="charCount">Characters remaining: 255</p> --}}
         </div> <br>
         <div style="">
+            <label for="description"><b><i class="fa-solid fa-image"></i> Change cover photo</b></label><br>
 
             <input class="shadow-md" type="file" id="image" name="image" accept="image/*" style="background-color: rgb(230, 230, 230); color:transparent; cursor: pointer; text-align: right; border-radius: 5px; height: 350px; width: 255px;">
             @if ($book->image)
@@ -98,7 +99,7 @@
         margin-top: -350px;
         object-fit: cover;
     }
-    @media (max-width: 1000px) and (max-height: 640px) {
+    @media (max-width: 1000px) and (max-height: 1000px) {
         .modalWidth{
             width: 550px;
         }
@@ -107,7 +108,7 @@
         }
     }
 
-    @media (max-width: 600px) and (max-height: 640px) {
+    @media (max-width: 600px) and (max-height: 1000px) {
         .modalWidth{
             width: 300px;
         }

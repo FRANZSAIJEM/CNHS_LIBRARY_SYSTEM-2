@@ -4,6 +4,7 @@
 ])
 
 <div
+
     class="relative"
     x-data="{ open: @json($active) }"
 >

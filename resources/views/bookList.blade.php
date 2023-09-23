@@ -10,12 +10,16 @@
 <div>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-                 <!-- Success Message -->
-                 @if(session('success'))
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
-                        {{ session('success') }}
-                    </div>
-                @endif
+        <!-- Success Message Container -->
+        @if(session('success'))
+            <div class="success-message-container">
+                <div class="success-message bg-green-100  text-green-700 p-4 mb-4">
+                    {{ session('success') }}
+                </div>
+                <div class="loadingBar"></div>
+            </div>
+        @endif
+
         <div class="text-right mb-5">
               <div>
                 <div class="" style="display: grid; place-content: center;">
@@ -31,17 +35,17 @@
 
                 <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
                 @if (Auth::user()->is_admin)
-              <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-address-book"></i> Add Book</button>
+              <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
               </div>
             @endif
           </div>
        <div style="">
             <div class="bookCenter">
-                <div class="flex flex-wrap">
+                <div class="bookDisplay flex flex-wrap">
                     @foreach ($bookList as $bookLists)
                     <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px;">
                         <a href="{{ route('viewBook', ['id' => $bookLists->id]) }}" style="text-decoration: none;">
-                            <div style="background-position: center center; border-radius: 5px; width: 250px; height: 350px; background-size: cover; background-image: url('{{ asset('storage/' . $bookLists->image) }}');">
+                            <div class="bookImage" style="background-position: center center; border-radius: 5px; background-size: cover; background-image: url('{{ asset('storage/' . $bookLists->image) }}');">
                                 <div style="color: white; text-align: center; padding: 10px; text-shadow: 0px 0px 5px black">
                                     <div style="margin-top: 75px;">
                                         <b style="font-size: 25px;">Title</b> <br>
@@ -122,11 +126,11 @@
                         <div class="overflow-hidden">
                             <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
                             <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required></textarea>
-                        </div>
-                        <p id="charCount">Characters remaining: 255</p>
+                        </div> <br>
+                        {{-- <p id="charCount">Characters remaining: 255</p> --}}
 
                     <div style="">
-
+                        <label for="description"><b><i class="fa-solid fa-image"></i> Choose cover photo</b></label><br>
                         <input class="shadow-md" type="file" id="image" name="image" accept="image/*" required style="background-color: rgb(230, 230, 230); color:transparent; cursor: pointer; text-align: right; border-radius: 5px; height: 350px; width: 255px;">
                         <img id="previewImage" src="#" style="height: 350px; width: 255px;">
                     </div> <br>
@@ -172,6 +176,37 @@
        <div id="loading-bar" class="loading-bar"></div>
 </div>
 <style>
+
+    .success-message-container {
+        position: relative;
+    }
+
+    .success-message {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .loadingBar{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background-color: #00af2cab;
+        transition: width 3s linear;
+    }
+
+
+    .bookImage{
+        width: 250px; height: 350px;
+        transition: 0.2s;
+
+    }
+    .bookImage:hover{
+        height: 347px;
+        box-shadow: none;
+    }
         .bookCenter{
         display: grid;
     }
@@ -227,7 +262,7 @@
         margin-top: -350px;
         object-fit: cover;
     }
-    @media (max-width: 1000px) and (max-height: 640px) {
+    @media (max-width: 1000px) and (max-height: 2000px) {
         .bookCenter{
         display: flex;
         place-content: center;
@@ -244,7 +279,7 @@
         }
     }
 
-    @media (max-width: 600px) and (max-height: 640px) {
+    @media (max-width: 600px) and (max-height: 2000px) {
         .bookCenter{
         display: flex;
         place-content: center;
@@ -332,6 +367,51 @@ window.addEventListener('load', function () {
             searchForm.style.maxHeight = '200px'; // Adjust the value as needed
         } else {
             searchForm.style.maxHeight = '0';
+        }
+    });
+
+
+    // window.addEventListener('DOMContentLoaded', (event) => {
+    //     const bookDisplay = document.querySelector('.bookDisplay');
+    //     if (bookDisplay) {
+    //         setTimeout(() => {
+    //             bookDisplay.style.opacity = '1';
+    //             bookDisplay.style.transform = 'translateY(0)';
+
+
+    //         }, 100);
+    //     }
+    // });
+
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.style.opacity = '1';
+                successMessage.style.transform = 'translateY(0)';
+            }, 100);
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const successMessageContainer = document.querySelector('.success-message-container');
+        const successMessage = document.querySelector('.success-message');
+        const loadingBar = document.querySelector('.loadingBar');
+
+        if (successMessage) {
+            setTimeout(() => {
+                loadingBar.style.width = '100%';
+            }, 100);
+
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+                successMessage.style.opacity = '0';
+                successMessage.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    successMessageContainer.remove();
+                }, 300);
+            }, 3000); // 3 seconds for the loading bar to animate, then 100 milliseconds for the success message to disappear
         }
     });
 </script>

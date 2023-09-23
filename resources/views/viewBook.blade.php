@@ -11,6 +11,16 @@
 
 <div style="display: grid; place-content: center;">
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+        <!-- Success Message Container -->
+        @if(session('success'))
+            <div class="success-message-container">
+                <div class="success-message bg-green-100  text-green-700 p-4 mb-4">
+                    {{ session('success') }}
+                </div>
+                <div class="loadingBar"></div>
+            </div>
+            @endif
+
         <div class="viewFlex">
            <div class="marginTwo">
                 @if (isset($book))
@@ -108,6 +118,26 @@
     {{-- Loading Screen --}}
     <div id="loading-bar" class="loading-bar"></div>
 <style>
+    .success-message-container {
+        position: relative;
+    }
+
+    .success-message {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .loadingBar{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background-color: #00af2cab;
+        transition: width 3s linear;
+    }
+
     .justDescription{
         width: 600px;
     }
@@ -212,6 +242,39 @@ window.addEventListener('beforeunload', function () {
 window.addEventListener('load', function () {
   document.getElementById('loading-bar').style.width = '0';
 });
+
+
+
+window.addEventListener('DOMContentLoaded', (event) => {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.style.opacity = '1';
+                successMessage.style.transform = 'translateY(0)';
+            }, 100);
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const successMessageContainer = document.querySelector('.success-message-container');
+        const successMessage = document.querySelector('.success-message');
+        const loadingBar = document.querySelector('.loadingBar');
+
+        if (successMessage) {
+            setTimeout(() => {
+                loadingBar.style.width = '100%';
+            }, 100);
+
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+                successMessage.style.opacity = '0';
+                successMessage.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    successMessageContainer.remove();
+                }, 300);
+            }, 3000); // 3 seconds for the loading bar to animate, then 100 milliseconds for the success message to disappear
+        }
+    });
 
 </script>
 </x-app-layout>
