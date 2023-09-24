@@ -53,25 +53,24 @@
     <div style="display: grid; place-content: center;" class="mt-5">
         @if (!Auth::user()->is_admin)
         <div >
-            <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook ? 'disabled' : '' }}"
+            <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook ||  auth()->user()->hasRequestedBookAny() ? 'disabled' : '' }}"
                 onclick="showConfirmationModal({{ $book->id }})"
                 type="submit"
-                {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook ? 'disabled' : '' }}
-        >
+                {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook ||  auth()->user()->hasRequestedBookAny()  ? 'disabled' : '' }}
+            >
                 <b>
                     @if ($book->requestedByUsers->count() > 0)
-                        @if ($userHasAcceptedRequest)
-                        <i class="fa-solid fa-code-pull-request"></i> Requested by {{ $book->requestedByUsers[0]->name }}
-                        @elseif ($userHasRequestedThisBook)
-                        <i class="fa-solid fa-code-pull-request"></i> Requested
+                        @if (auth()->user()->hasRequestedBook($book->id))
+                            <i class="fa-solid fa-code-pull-request"></i> Requested
                         @else
-                        <i class="fa-solid fa-code-pull-request"></i> Requested by {{ $book->requestedByUsers[0]->name }}
+                            <i class="fa-solid fa-code-pull-request"></i> Requested by {{ $book->requestedByUsers[0]->name }}
                         @endif
                     @else
-                    <i class="fa-solid fa-code-pull-request"></i> Request
+                        <i class="fa-solid fa-code-pull-request"></i> Request
                     @endif
                 </b>
             </button>
+
         </div>
     @endif
     </div>

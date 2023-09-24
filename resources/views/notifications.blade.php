@@ -29,7 +29,7 @@
             @if ($hasNotifications)
                 @if ($totalFines > 0)
                 <div class="mb-5 p-5 rounded-md shadow-md dark:bg-dark-eval-1 ">
-                    <h1><b>Hello</b> {{ $loggedInUser->name }}</h1> <br>
+                    <h1><b>Hello</b> {{ $loggedInUser->name }},</h1>
                     <p>
                         We hope this message finds you well. We would like to bring to your attention that the return date for the book(s) you borrowed,
                         @foreach ($acceptedRequests as $request)
@@ -84,7 +84,7 @@
                     <p>
                         We are pleased to inform you that your book request for "{{$request->book_title}}" has been confirmed. We have scheduled a pick-up
                     time and date for your convenience. <br> <br>
-
+                    <hr>
                      <br>
 
                     <div>
@@ -99,7 +99,7 @@
                         <b>Date Return</b> <br>
                         {{$request->date_return}}
                     </div>
-                    </p> <br> <hr> <br>
+                    </p>
                 </div>
                 @endforeach
         </div>
