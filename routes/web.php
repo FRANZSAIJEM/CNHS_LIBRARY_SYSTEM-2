@@ -27,7 +27,7 @@ use App\Http\Middleware\AdminMiddleware;
 
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('welcome');
 });
 
 
