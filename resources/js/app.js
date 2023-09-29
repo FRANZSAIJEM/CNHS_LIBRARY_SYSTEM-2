@@ -32,23 +32,23 @@ document.addEventListener('alpine:init', () => {
         }
 
         const getTheme = () => {
-            if (window.localStorage.getItem('dark')) {
-                return JSON.parse(window.localStorage.getItem('dark'))
+            if (window.localStorage.getItem('light')) {
+                return JSON.parse(window.localStorage.getItem('light'))
             }
             return (
                 !!window.matchMedia &&
-                window.matchMedia('(prefers-color-scheme: dark)').matches
+                window.matchMedia('(prefers-color-scheme: light)').matches
             )
         }
         const setTheme = (value) => {
-            window.localStorage.setItem('dark', value)
+            window.localStorage.setItem('light', value)
         }
         return {
             init,
-            isDarkMode: getTheme(),
+            isLightMode: getTheme(),
             toggleTheme() {
-                this.isDarkMode = !this.isDarkMode
-                setTheme(this.isDarkMode)
+                this.isLightMode = !this.isLightMode
+                setTheme(this.isLightMode)
             },
             isSidebarOpen: window.innerWidth > 1024,
             isSidebarHovered: false,

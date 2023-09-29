@@ -35,8 +35,11 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'grade_level' => ['string', 'max:255', 'nullable'],
             'contact' => ['string', 'nullable'],
+            'gender' => ['string', 'nullable'],
             'id_number' => ['required', 'string', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'image' => '|image|mimes:jpeg,png,jpg,gif|max:2048',
+
         ]);
 
         $is_admin = ($request->id_number === '00001') ? true : false;
@@ -47,10 +50,31 @@ class RegisteredUserController extends Controller
             'grade_level' => $request->grade_level ?: null,
             'id_number' => $request->id_number,
             'contact' => $request->contact ?: null,
+            'gender' => $request->gender ?: null,
             'password' => Hash::make($request->password),
         ]);
 
         $user->is_admin = $is_admin ? 1 : 0; // Set is_admin to 1 if true, 0 if false
+
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('profile_images', 'public');
+            $user->image = $imagePath;
+        } else {
+            // Set a default image path based on gender
+            $gender = $request->input('gender'); // Assuming 'gender' is the name of the select input
+            if ($gender === 'male') {
+                $user->image = 'Male.png'; // Replace with the actual path for the male default image
+            } elseif ($gender === 'female') {
+                $user->image = 'Female.png'; // Replace with the actual path for the female default image
+            } else {
+                $user->image = 'Other.png';
+            }
+        }
+
+
+
+
         $user->save();
 
         event(new Registered($user));

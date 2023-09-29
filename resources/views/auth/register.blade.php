@@ -15,7 +15,7 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="">
@@ -24,6 +24,7 @@
                 <div class="grid gap-5">
                     <div class="fields">
                         <div>
+
                             <!-- Name -->
                             <div class="space-y-2 m-5">
                                 <x-form.label
@@ -49,6 +50,9 @@
                                     />
                                 </x-form.input-with-icon-wrapper>
                             </div>
+
+
+
 
                             <div class="space-y-2 m-5">
                                 <x-form.label
@@ -126,6 +130,24 @@
 
                             </div>
                             <div>
+
+
+                                <div class="space-y-2 m-5">
+                                    <x-form.label for="gender" :value="__('Gender')" />
+
+                                    <x-form.select
+                                        id="gender"
+                                        name="gender"
+                                        :value="old('gender')"
+                                        class="block w-full"
+                                        autofocus
+                                    >
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </x-form.select>
+                                </div>
+
 
 
                             <div class="space-y-2 m-5">

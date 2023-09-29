@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         <div class="flex" style="margin-top: 4px;">
-                            <a class="text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
+                            <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
 
                             <button type="button" class="open-modal text-green-600 hover:text-green-700 duration-100" onclick="showAcceptanceModal({{ $requestedBook->id }})" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-check"></i> Accept</b></button>
 
@@ -192,7 +192,7 @@
         transition: width 3s linear;
     }
 
-    @media (max-width: 1000px) and (max-height: 640px) {
+    @media (max-width: 1000px) and (max-height: 2000px) {
         .requestCenter{
             display: flex;
             place-content: center;
@@ -204,7 +204,7 @@
 
     }
 
-    @media (max-width: 600px) and (max-height: 640px) {
+    @media (max-width: 600px) and (max-height: 2000px) {
         .requestCenter{
             display: flex;
             place-content: center;

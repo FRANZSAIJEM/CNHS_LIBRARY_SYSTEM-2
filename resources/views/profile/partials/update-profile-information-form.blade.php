@@ -1,4 +1,14 @@
+@if(session('success'))
+<div class="success-message-container">
+    <div class="success-message bg-green-100  text-green-700 p-4 mb-4">
+        {{ session('success') }}
+    </div>
+    <div class="loadingBar"></div>
+</div>
+@endif
+
 <section>
+
     <header>
         <h2 class="text-lg font-medium">
             {{ __('Profile Information') }}
@@ -13,7 +23,7 @@
         @csrf
     </form>
 
-    <form
+    <form enctype="multipart/form-data"
         method="post"
         action="{{ route('profile.update') }}"
         class="mt-6 space-y-6"
@@ -21,7 +31,32 @@
         @csrf
         @method('patch')
 
-        <h1>ID Number: {{$user->id_number}}</h1>
+
+        @if ($user->image)
+            <img class="rounded-full" src="{{($user->image) }}" id="previewImage" src="#" style="height: 250px; width: 255px;">
+        @else
+            <img id="previewImage" src="#" style="height: 350px; width: 255px;">
+        @endif
+
+        <div class="space-y-2">
+            <x-form.label
+                for="id_number"
+                :value="__('ID Number')"
+            />
+
+            <x-form.input
+                id="id_number"
+                name="id_number"
+                type="text"
+                class="block w-full"
+                :value="old('name', $user->id_number)"
+                disabled
+                autofocus
+                autocomplete="id_number"
+            />
+
+            <x-form.error :messages="$errors->get('id_number')" />
+        </div>
 
         <div class="space-y-2">
             <x-form.label
@@ -35,7 +70,7 @@
                 type="text"
                 class="block w-full"
                 :value="old('name', $user->name)"
-                required
+
                 autofocus
                 autocomplete="name"
             />
@@ -55,12 +90,30 @@
                 type="text"
                 class="block w-full"
                 :value="old('contact', $user->contact)"
-                required
+
                 autofocus
                 autocomplete="contact"
             />
 
             <x-form.error :messages="$errors->get('name')" />
+        </div>
+
+
+
+        <div class="space-y-2">
+            <x-form.label for="gender" :value="__('Gender')" />
+
+            <x-form.select
+                id="gender"
+                name="gender"
+                class="block w-full"
+                autofocus
+                autocomplete="gender"
+            >
+                <option value="male" {{ old('gender', $user->gender) === 'male' ? 'selected' : '' }}>Male</option>
+                <option value="female" {{ old('gender', $user->gender) === 'female' ? 'selected' : '' }}>Female</option>
+                <option value="other" {{ old('gender', $user->gender) === 'other' ? 'selected' : '' }}>Other</option>
+            </x-form.select>
         </div>
 
 
@@ -76,7 +129,7 @@
                 type="text"
                 class="block w-full"
                 :value="old('grade_level', $user->grade_level)"
-                required
+
                 autofocus
                 autocomplete="grade_level"
             />
@@ -141,3 +194,58 @@
         </div>
     </form>
 </section>
+<style>
+      .success-message-container {
+        position: relative;
+    }
+
+    .success-message {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s, transform 0.3s;
+    }
+    .loadingBar{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background-color: #00af2cab;
+        transition: width 3s linear;
+    }
+
+</style>
+
+
+<script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.style.opacity = '1';
+                successMessage.style.transform = 'translateY(0)';
+            }, 100);
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const successMessageContainer = document.querySelector('.success-message-container');
+        const successMessage = document.querySelector('.success-message');
+        const loadingBar = document.querySelector('.loadingBar');
+
+        if (successMessage) {
+            setTimeout(() => {
+                loadingBar.style.width = '100%';
+            }, 100);
+
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+                successMessage.style.opacity = '0';
+                successMessage.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    successMessageContainer.remove();
+                }, 300);
+            }, 3000); // 3 seconds for the loading bar to animate, then 100 milliseconds for the success message to disappear
+        }
+    });
+</script>

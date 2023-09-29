@@ -14,7 +14,6 @@
                   <form action="{{ route('student') }}" method="GET" class="search-bar">
                       <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
                           <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="ID Number, Name">
-                          {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
                       </div>
                   </form>
               </div>
@@ -114,14 +113,14 @@
         .search-button {
             padding: 10px;
         }
-            @media (max-width: 1000px) and (max-height: 640px) {
+            @media (max-width: 1000px) and (max-height: 2000px) {
             .studentCenter{
         display: flex;
         place-content: center;
     }
     }
 
-    @media (max-width: 600px) and (max-height: 640px) {
+    @media (max-width: 600px) and (max-height: 2000px) {
         .studentCenter{
         display: flex;
         place-content: center;

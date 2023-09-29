@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('contact')->nullable();
             $table->string('grade_level')->nullable();
+            $table->string('gender')->nullable();
             $table->string('password');
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_disabled')->default(false);
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('image')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -17,6 +17,22 @@
                 <div class="loadingBar"></div>
             </div>
         @endif
+        <div class="text-right mb-5">
+            <div>
+                <div class="" style="display: grid; place-content: center;">
+                    <form action="{{ route('transactions') }}" method="GET" class="search-bar">
+                        <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
+                            <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="ID Number, Name">
+                            {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
+
+                        </div>
+
+                    </form>
+                </div>
+                <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
+
+            </div>
+        </div>
 
         <div class="">
             <div class="transactCenter">
@@ -116,6 +132,22 @@
    {{-- Loading Screen --}}
    <div id="loading-bar" class="loading-bar"></div>
   <style>
+            .search-bar {
+            display: block;
+            max-height: 0;
+            overflow: hidden;
+            transition: 1s;
+        }
+
+        /* Style for the search bar */
+        .searchInpt {
+            color: black;
+        }
+
+        /* Style for the submit button */
+        .search-button {
+            padding: 10px;
+        }
     .success-message-container {
         position: relative;
     }
@@ -136,14 +168,14 @@
         transition: width 3s linear;
     }
 
-            @media (max-width: 1000px) and (max-height: 640px) {
+            @media (max-width: 1000px) and (max-height: 2000px) {
             .transactCenter{
         display: grid;
 
     }
     }
 
-    @media (max-width: 600px) and (max-height: 640px) {
+    @media (max-width: 600px) and (max-height: 2000px) {
         .transactCenter{
         display: grid;
         place-content: center;
@@ -165,6 +197,17 @@
 
     </style>
 <script>
+               // JavaScript to toggle the search bar visibility with sliding effect
+   const showSearchButton = document.getElementById('showSearchButton');
+    const searchForm = document.querySelector('.search-bar');
+
+    showSearchButton.addEventListener('click', () => {
+        if (searchForm.style.maxHeight === '0px' || searchForm.style.maxHeight === '') {
+            searchForm.style.maxHeight = '200px'; // Adjust the value as needed
+        } else {
+            searchForm.style.maxHeight = '0';
+        }
+    });
 // JavaScript to show and hide the loading bar
 window.addEventListener('beforeunload', function () {
   document.getElementById('loading-bar').style.width = '100%';

@@ -24,8 +24,8 @@ class AcceptRequestController extends Controller
         $acceptedRequest->borrower_id = $user->id;
         $acceptedRequest->date_borrow = now();
          // Retrieve the values from the form and format them as datetime values
-         $acceptedRequest->date_pickup = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_pickup'));
-         $acceptedRequest->date_return = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_return'));
+        $acceptedRequest->date_pickup = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_pickup'));
+        $acceptedRequest->date_return = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_return'));
 
          $currentDate = \Carbon\Carbon::now();
         $fines = $request->input('fines');
