@@ -20,16 +20,19 @@ class book extends Model
     ];
 
     public function requestedByUsers()
-{
-    return $this->belongsToMany(User::class, 'book_requests', 'book_id', 'user_id')
-        ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(User::class, 'book_requests', 'book_id', 'user_id')
+            ->withTimestamps();
+    }
 
 
-public function acceptedRequests()
-{
-    return $this->hasMany(AcceptedRequest::class);
-}
-
+    public function acceptedRequests()
+    {
+        return $this->hasMany(AcceptedRequest::class);
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
 }

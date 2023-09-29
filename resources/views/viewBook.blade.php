@@ -10,43 +10,165 @@
     </x-slot>
 
 <div style="display: grid; place-content: center;">
-    <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-        <!-- Success Message Container -->
-        @if(session('success'))
-            <div class="success-message-container">
-                <div class="success-message bg-green-100  text-green-700 p-4 mb-4">
-                    {{ session('success') }}
+    <div class="viewAndComment overflow-hidden">
+        <div class="p-6 overflow-hidden ">
+            <!-- Success Message Container -->
+            @if(session('success'))
+                <div class="success-message-container">
+                    <div class="success-message bg-green-100  text-green-700 p-4 mb-4">
+                        {{ session('success') }}
+                    </div>
+                    <div class="loadingBar"></div>
                 </div>
-                <div class="loadingBar"></div>
-            </div>
-            @endif
-
-        <div class="viewFlex">
-           <div class="marginTwo">
-                @if (isset($book))
-                    <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 352px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" ></div>
                 @endif
 
-           </div>
+            <div class="viewFlex rounded-md bg-white shadow-md dark:bg-dark-eval-1 mb-5">
+               <div class="marginTwo">
+                    @if (isset($book))
+                        <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 352px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" ></div>
+                    @endif
 
-            <div class="marginTwo" style="width: 250px;">
-                <h1><b><i class="fa-solid fa-book"></i> Title</b></h1>
-                {{$book->title}} <br> <hr> <br>
-                <h1><b><i class="fa-solid fa-user"></i> Author</b></h1>
-                {{$book->author}} <br> <hr> <br>
-                <h1><b><i class="fa-solid fa-bars-staggered"></i> Subject</b></h1>
-                {{$book->subject}} <br> <hr> <br>
-                <h1><b><i class="fa-solid fa-location-pin"></i> ISBN</b></h1>
-                {{$book->isbn}} <br> <hr> <br>
-                <h1><b><i class="fa-solid fa-chart-line"></i> Availability</b> </h1>
-                <b style="color: {{ $book->availability === 'Not Available' ? 'red' : 'rgb(0, 255, 0)' }}">{{ $book->availability }}</b>
-                <br> <hr>
+               </div>
+
+                <div class="marginTwo" style="width: 250px;">
+                    <h1><b><i class="fa-solid fa-book"></i> Title</b></h1>
+                    {{$book->title}} <br> <hr> <br>
+                    <h1><b><i class="fa-solid fa-user"></i> Author</b></h1>
+                    {{$book->author}} <br> <hr> <br>
+                    <h1><b><i class="fa-solid fa-bars-staggered"></i> Subject</b></h1>
+                    {{$book->subject}} <br> <hr> <br>
+                    <h1><b><i class="fa-solid fa-location-pin"></i> ISBN</b></h1>
+                    {{$book->isbn}} <br> <hr> <br>
+                    <h1><b><i class="fa-solid fa-chart-line"></i> Availability</b> </h1>
+                    <b style="color: {{ $book->availability === 'Not Available' ? 'red' : 'rgb(0, 255, 0)' }}">{{ $book->availability }}</b>
+                    <br> <hr>
+                </div>
+
+            </div>
+            <h1><b><i class="fa-solid fa-paragraph"></i> Description</b></h1>
+            <div style="display: grid; place-content: center">
+                <textarea style="resize: none" class="justDescription p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="" id="" rows="4">{{$book->description}}</textarea>
             </div>
 
         </div>
-        <h1><b><i class="fa-solid fa-paragraph"></i> Description</b></h1>
-        <div style="display: grid; place-content: center">
-            <textarea style="resize: none" class="justDescription p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="" id="" rows="4">{{$book->description}}</textarea>
+
+        <div class="m-5" style="">
+            <div style="">
+                <div style="">
+                    <h1><b><i class="fa-solid fa-comment"></i> Add a Comment</b></h1>
+                    <form action="{{ route('comments.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="book_id" value="{{ $book->id }}">
+                        <div style="display: grid; place-content: center">
+                            <textarea style="resize: none" class="p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="comment" id="comment" rows="1" cols="75" placeholder="Enter your comment here"></textarea>
+                        </div>
+                        <div class="p-5">
+                            <button type="submit" class="bg-slate-600 p-3 ps-5 pe-5 rounded-md hover:bg-slate-700 duration-100 text-white"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="p-5" style="display: grid; place-content: center;">
+                    <h1><b><i class="fa-solid fa-comment"></i> Comments</b></h1>
+                    @if ($book->comments->count() > 0)
+                        <ul>
+                            @foreach ($book->comments as $comment)
+                                <li>
+                                    <div class="text-black p-2 rounded-md shadow-md m-5 forcomments" style="margin-bottom: 50px;">
+                                        <div class="">
+                                            <strong>{{ $comment->user->name }}</strong> <br>
+                                            <textarea disabled style="resize: none;" class="p-6 comments overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="comment" id="comment" rows="1" >{{ $comment->comment }}</textarea>
+                                            <div id="replies-section-{{ $comment->id }}" class="replies-section">
+                                                <div class="m-5">
+                                                    <h1><b><i class="fa-solid fa-comment"></i> Replies</b></h1>
+
+                                                    <div class="m-3">
+                                                        @isset($comment->replies)
+                                                            @foreach ($comment->replies as $reply)
+                                                                <div class="reply">
+                                                                    <strong>{{ $reply->user->name }}</strong> <br>
+                                                                    <textarea name="" id="" disabled style="resize: none;" class="replies border-none shadow-md rounded-md">{{ $reply->reply }}</textarea>
+                                                                </div>
+                                                            @endforeach
+                                                        @endisset
+
+                                                            <form action="{{ route('replies.store') }}" method="POST" class="reply-form" data-comment-id="{{ $comment->id }}">
+                                                                @csrf
+                                                                <div>
+                                                                    <input type="hidden" name="comment_id" value="{{ $comment->id }}">
+                                                                    <textarea placeholder="Type your reply here!" name="reply" style="resize: none;" class="replies border-none shadow-md rounded-md reply-textarea"></textarea>
+                                                                </div>
+                                                                <div class="float-right mb-5">
+                                                                    <button type="submit" class="text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 ">
+                                                                        <i class="fa-solid fa-paper-plane"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div>
+
+
+                                            <div class="text-center">
+                                                <button class="p-2 ps-5 pe-5 text-blue-600 rounded-md hover:text-blue-700 duration-100" onclick="toggleReplies('{{ $comment->id }}')"><i class="fa-solid fa-reply"></i> </button>
+                                                @if (auth()->check() && auth()->user()->id === $comment->user_id)
+
+                                                    <button type="button" class="p-2 ps-5 pe-5 text-green-600 rounded-md hover:text-green-700 duration-100" data-toggle="modal" data-target="#editCommentModal{{$comment->id}}">
+                                                                <i class="fa-solid fa-edit"></i>
+                                                    </button>
+
+                                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="p-2 ps-5 pe-5 text-red-600 rounded-md hover:text-red-700 duration-100">
+                                                            <i class="fa-solid fa-remove"></i> </button>
+                                                    </form>
+                                                @endif
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>No comments yet.</p>
+                    @endif
+                                    {{-- <!-- Modal -->
+                    <div class="modal fade" id="editCommentModal{{$comment->id}}" tabindex="-1" role="dialog" aria-labelledby="editCommentModalLabel{{$comment->id}}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editCommentModalLabel{{$comment->id}}">Edit Comment</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('comments.edit', $comment->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="form-group">
+                                            <label for="editedComment">Edit Your Comment:</label>
+                                            <textarea class="form-control" id="editedComment" name="editedComment" rows="4">{{ $comment->comment }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+                </div>
+
+            </div>
+
         </div>
 
     </div>
@@ -74,7 +196,9 @@
         </div>
     @endif
     </div>
+
 </div>
+
     <div id="confirmDeleteModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
         <div class="acceptModal" style="background-color: white; border-radius: 5px; margin: 100px auto; padding: 20px; text-align: center;">
             <div class="flex justify-between">
@@ -117,6 +241,29 @@
     {{-- Loading Screen --}}
     <div id="loading-bar" class="loading-bar"></div>
 <style>
+    .replies{
+        width: 475px;
+    }
+    .comments{
+        width: 525px;
+    }
+    .forcomments{
+        width: 550px;
+    }
+    .viewAndComment{
+        display: flex;
+    }
+    /* Add a transition for the 'max-height' property */
+    .replies-section {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out; /* Adjust duration and easing as needed */
+    }
+
+    /* Define a class to show the replies */
+    .replies-section.show {
+        max-height: 1000px; /* Adjust to a suitable value that accommodates your content */
+    }
     .success-message-container {
         position: relative;
     }
@@ -173,6 +320,16 @@
     }
 
     @media (max-width: 1000px) and (max-height: 640px) {
+
+        .comments{
+        width: 450px;
+    }
+        .forcomments{
+        width: 500px;
+    }
+        .viewAndComment{
+        display: block;
+    }
         .justDescription{
         width: 600px;
     }
@@ -191,6 +348,18 @@
     }
 
     @media (max-width: 600px) and (max-height: 640px) {
+        .replies{
+        width: 225px;
+    }
+        .comments{
+        width: 275px;
+    }
+        .forcomments{
+            width: 300px;
+    }
+        .viewAndComment{
+        display: block;
+    }
         .justDescription{
             width: 300px;
     }
@@ -274,6 +443,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
             }, 3000); // 3 seconds for the loading bar to animate, then 100 milliseconds for the success message to disappear
         }
     });
-
+    function toggleReplies(commentId) {
+        var repliesSection = document.getElementById(`replies-section-${commentId}`);
+        repliesSection.classList.toggle('show');
+    }
 </script>
+
 </x-app-layout>

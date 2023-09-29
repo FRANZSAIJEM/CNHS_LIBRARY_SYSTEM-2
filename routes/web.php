@@ -7,6 +7,9 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookListController;
 use App\Http\Controllers\AcceptRequestController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\RepliesController;
+
 
 use App\Http\Controllers\Controller;
 
@@ -42,6 +45,11 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 Route::post('/requestBook/{id}', [StudentController::class, 'requestBook'])->name('requestBook');
 Route::get('/requests', [StudentController::class, 'requestIndex'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('requests');
 
+
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+Route::post('/replies', [RepliesController::class, 'store'])->name('replies.store');
 
 
 

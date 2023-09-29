@@ -40,6 +40,7 @@
             @endif
           </div>
        <div style="">
+
             <div class="bookCenter">
                 <div class="bookDisplay flex flex-wrap">
                     @foreach ($bookList as $bookLists)

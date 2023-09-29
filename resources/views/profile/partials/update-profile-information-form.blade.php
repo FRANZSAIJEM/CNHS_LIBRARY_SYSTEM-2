@@ -95,7 +95,7 @@
                 autocomplete="contact"
             />
 
-            <x-form.error :messages="$errors->get('name')" />
+            <x-form.error :messages="$errors->get('contact')" />
         </div>
 
 
@@ -110,32 +110,34 @@
                 autofocus
                 autocomplete="gender"
             >
-                <option value="male" {{ old('gender', $user->gender) === 'male' ? 'selected' : '' }}>Male</option>
-                <option value="female" {{ old('gender', $user->gender) === 'female' ? 'selected' : '' }}>Female</option>
-                <option value="other" {{ old('gender', $user->gender) === 'other' ? 'selected' : '' }}>Other</option>
+                <option value="Male" {{ old('gender', $user->gender) === 'Male' ? 'selected' : '' }}>Male</option>
+                <option value="Female" {{ old('gender', $user->gender) === 'Female' ? 'selected' : '' }}>Female</option>
+                <option value="Other" {{ old('gender', $user->gender) === 'Other' ? 'selected' : '' }}>Other</option>
             </x-form.select>
         </div>
 
 
-        <div class="space-y-2">
-            <x-form.label
-                for="grade_level"
-                :value="__('Grade Level')"
-            />
+        @if (!Auth::user()->is_admin)
+            <div class="space-y-2">
+                <x-form.label
+                    for="grade_level"
+                    :value="__('Grade Level')"
+                />
 
-            <x-form.input
-                id="grade_level"
-                name="grade_level"
-                type="text"
-                class="block w-full"
-                :value="old('grade_level', $user->grade_level)"
+                <x-form.input
+                    id="grade_level"
+                    name="grade_level"
+                    type="text"
+                    class="block w-full"
+                    :value="old('grade_level', $user->grade_level)"
 
-                autofocus
-                autocomplete="grade_level"
-            />
+                    autofocus
+                    autocomplete="grade_level"
+                />
 
-            <x-form.error :messages="$errors->get('name')" />
-        </div>
+                <x-form.error :messages="$errors->get('grade_level')" />
+            </div>
+        @endif
 
 
         <div class="space-y-2">

@@ -51,9 +51,9 @@ class ProfileUpdateRequest extends FormRequest
                 $gender = $this->input('gender');
                 $user = $this->user();
 
-                if ($gender === 'male') {
+                if ($gender === 'Male') {
                     $user->image = 'Male.png'; // Replace with the actual path for the male default image
-                } elseif ($gender === 'female') {
+                } elseif ($gender === 'Female') {
                     $user->image = 'Female.png'; // Replace with the actual path for the female default image
                 } else {
                     $user->image = 'Other.png'; // Default image for other genders

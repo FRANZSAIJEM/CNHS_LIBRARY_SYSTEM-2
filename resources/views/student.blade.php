@@ -35,6 +35,8 @@
                                 {{$student->email}} <br> <hr> <br>
                                 <h1><b><i class="fa-solid fa-phone"></i> Contact Number</b></h1>
                                 {{$student->contact}} <br> <hr> <br>
+                                <h1><b><i class="fa-solid fa-venus-mars"></i> Gender</b></h1>
+                                {{$student->gender}} <br> <hr> <br>
                                 <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
                                 {{$student->grade_level}} <br> <hr> <br>
                                 <h1><b><i class="fa-solid fa-money-check-dollar"></i> Total Fines</b></h1>
