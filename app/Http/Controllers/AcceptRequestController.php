@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Comment;
+
+use App\Models\Reply;
 use App\Models\Book; // Import your Book model
 use App\Models\AcceptedRequest; // Import your Book model
 use App\Models\Notification;
@@ -147,18 +150,42 @@ class AcceptRequestController extends Controller
 
     }
 
+
     public function notifications()
     {
         // Get the ID of the logged-in user
         $loggedInUserId = auth()->id();
 
+        // Retrieve comments with the same user_id as the logged-in user
+        $comments = Comment::where('user_id', $loggedInUserId)->get();
+
+        // Retrieve replies associated with these comments, excluding the user's own replies
+        $replies = $comments->flatMap(function ($comment) use ($loggedInUserId) {
+            return $comment->replies->where('user_id', '!=', $loggedInUserId);
+        });
+
         // Retrieve accepted requests for the logged-in user
         $acceptedRequests = AcceptedRequest::where('user_id', $loggedInUserId)->get();
 
+        // Retrieve book information for each comment
+        $commentsWithBooks = $comments->map(function ($comment) {
+            $book = $comment->book;
+            return [
+                'comment' => $comment,
+                'book' => $book,
+            ];
+        });
+
         return view('notifications', [
             'acceptedRequests' => $acceptedRequests,
+            'replies' => $replies,
             'loggedInUser' => auth()->user(),
+            'commentsWithBooks' => $commentsWithBooks,
         ]);
     }
+
+
+
+
 
 }

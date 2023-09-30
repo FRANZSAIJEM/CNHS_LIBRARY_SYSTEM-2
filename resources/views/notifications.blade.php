@@ -8,6 +8,9 @@
     </x-slot>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+
+
+
         <div class="">
             <div>
                 <!-- Additional content when fines are present -->
@@ -15,6 +18,16 @@
                     $totalFines = 0; // Initialize a variable to store the total fines
                     $hasNotifications = false;
                 @endphp
+
+                @foreach($replies as $reply)
+
+                    @php
+                        $hasNotifications = true;
+                    @endphp
+
+                @endforeach
+
+
 
                 @foreach($acceptedRequests as $request)
                     @if ($request->fines !== null)
@@ -77,6 +90,23 @@
                 <!-- Message for no notifications -->
                 <p>You have no notifications.</p>
             @endif
+
+
+
+            @foreach ($replies as $reply)
+            <a href="{{ route('viewBook', ['id' => $reply->comment->book->id]) }}" class="block">
+                <div class="p-5 mb-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
+                    <div class="reply">
+                        <p>{{ $reply->user->name }} replied to your comment "{{$reply->reply}}" about the book "{{ $reply->comment->book ? $reply->comment->book->title : 'Unknown Book' }}"
+                        </p>
+                    </div>
+                </div>
+            </a>
+        @endforeach
+
+
+
+
 
                 @foreach($acceptedRequests as $request)
                 <div class="p-5 rounded-md shadow-md dark:bg-dark-eval-1">

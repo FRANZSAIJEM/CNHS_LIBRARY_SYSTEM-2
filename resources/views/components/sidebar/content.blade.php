@@ -54,7 +54,7 @@
 
 
 
-    @if (!Auth::user()->is_admin)
+
 
     @php
     $loggedInUserId = Auth::id();
@@ -78,7 +78,7 @@
         </x-slot>
     </x-sidebar.link>
 
-    @endif
+
 
 
 

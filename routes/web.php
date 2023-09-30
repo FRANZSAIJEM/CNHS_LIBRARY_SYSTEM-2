@@ -54,7 +54,7 @@ Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('c
 Route::post('/replies', [RepliesController::class, 'store'])->name('replies.store');
 Route::delete('/replies/{reply}', [RepliesController::class, 'destroy'])->name('replies.destroy');
 Route::put('/replies/{reply}', [RepliesController::class, 'update'])->name('replies.update');
-
+Route::get('/replies', [AcceptRequestController::class, 'replies'])->name('replies.replies');;
 
 
 
@@ -76,6 +76,7 @@ Route::get('/history', [AcceptRequestController::class, 'history'])->name('histo
 Route::delete('/clearNotification/{id}', [AcceptRequestController::class, 'clearNotification'])->name('clearNotification');
 
 Route::get('/notifications', [AcceptRequestController::class, 'notifications'])->name('notifications');
+
 
 
 Route::get('/bookList', [BookListController::class, 'index'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('bookList');
