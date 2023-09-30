@@ -7,6 +7,14 @@ use App\Models\Comment;
 
 class CommentController extends Controller
 {
+    public function countReplies($commentId)
+    {
+        $comment = Comment::findOrFail($commentId);
+        $replyCount = $comment->replies->count();
+
+        return $replyCount;
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -27,6 +35,7 @@ class CommentController extends Controller
     {
         // Check if the logged-in user is authorized to delete the comment
         if (auth()->user()->id === $comment->user_id) {
+            $comment->replies()->delete();
             $comment->delete();
             return redirect()->back()->with('success', 'Comment deleted successfully!');
         } else {
@@ -34,13 +43,23 @@ class CommentController extends Controller
         }
     }
 
-    public function edit(Comment $comment)
+    public function update(Request $request, Comment $comment)
     {
-        // Check if the logged-in user is authorized to edit the comment
+        // Check if the logged-in user is authorized to update the reply
         if (auth()->user()->id === $comment->user_id) {
-            return view('comments.edit', compact('comment'));
+            // Validate the request data
+            $request->validate([
+                'comment' => 'required|string',
+            ]);
+
+            // Update the comment
+            $comment->update([
+                'comment' => $request->input('comment'),
+            ]);
+
+            return redirect()->back()->with('success', 'Comment updated successfully');
         } else {
-            return redirect()->back()->with('error', 'You are not authorized to edit this comment.');
+            return redirect()->back()->with('error', 'You are not authorized to update this comment.');
         }
     }
 

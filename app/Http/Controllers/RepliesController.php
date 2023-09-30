@@ -25,4 +25,35 @@ class RepliesController extends Controller
         // Redirect back or to a specific page
         return redirect()->back()->with('success', 'Reply added successfully');
     }
+
+    public function destroy(Reply $reply)
+    {
+        // Check if the logged-in user is authorized to delete the reply
+        if (auth()->user()->id === $reply->user_id) {
+            $reply->delete();
+            return redirect()->back()->with('success', 'Reply deleted successfully!');
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to delete this reply.');
+        }
+    }
+    public function update(Request $request, Reply $reply)
+    {
+        // Check if the logged-in user is authorized to update the reply
+        if (auth()->user()->id === $reply->user_id) {
+            // Validate the request data
+            $request->validate([
+                'reply' => 'required|string',
+            ]);
+
+            // Update the reply
+            $reply->update([
+                'reply' => $request->input('reply'),
+            ]);
+
+            return redirect()->back()->with('success', 'Reply updated successfully');
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to update this reply.');
+        }
+    }
+
 }

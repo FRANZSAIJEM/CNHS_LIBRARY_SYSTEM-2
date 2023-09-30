@@ -74,9 +74,21 @@
                             @foreach ($book->comments as $comment)
                                 <li>
                                     <div class="text-black p-2 rounded-md shadow-md m-5 forcomments" style="margin-bottom: 50px;">
-                                        <div class="">
-                                            <strong>{{ $comment->user->name }}</strong> <br>
-                                            <textarea disabled style="resize: none;" class="p-6 comments overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="comment" id="comment" rows="1" >{{ $comment->comment }}</textarea>
+                                        <div class="reply">
+
+                                        <strong>{{ $comment->user->name }}</strong> <br>
+                                        <div class="comment-content">
+                                            <form method="POST" action="{{ route('comments.update', ['comment' => $comment->id])}}">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="float-right" style="z-index: 2; margin-bottom: -50px; transform: translateY(75px);">
+                                                    <button type="submit" class="hidden text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 " id="comment-button-{{ $comment->id }}"><b><i class="fa-solid fa-square-arrow-up-right"></i> Update</b>
+                                                    </button>
+                                                </div>
+                                                <textarea name="comment" id="edit-comment-{{ $comment->id }}" disabled style="resize: none;" class="p-6 comments overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" rows="1" >{{ $comment->comment }}</textarea>
+
+                                            </form>
+                                        </div>
                                             <div id="replies-section-{{ $comment->id }}" class="replies-section">
                                                 <div class="m-5">
                                                     <h1><b><i class="fa-solid fa-comment"></i> Replies</b></h1>
@@ -86,7 +98,35 @@
                                                             @foreach ($comment->replies as $reply)
                                                                 <div class="reply">
                                                                     <strong>{{ $reply->user->name }}</strong> <br>
-                                                                    <textarea name="" id="" disabled style="resize: none;" class="replies border-none shadow-md rounded-md">{{ $reply->reply }}</textarea>
+                                                                    {{-- <textarea name="" id="" disabled style="resize: none;" class="replies border-none shadow-md rounded-md">{{ $reply->reply }}</textarea> --}}
+                                                                    <div class="reply-content">
+                                                                        <form method="POST" action="{{ route('replies.update', ['reply' => $reply->id]) }}">
+                                                                            @csrf
+                                                                            @method('PUT')
+                                                                            <div class="float-right" style="z-index: 2; margin-bottom: -50px; transform: translateY(67px);">
+                                                                                <button type="submit" class="hidden text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 " id="reply-button-{{ $reply->id }}"><b><i class="fa-solid fa-square-arrow-up-right"></i> Update</b>
+                                                                                </button>
+                                                                            </div>
+                                                                            <textarea name="reply" id="edit-reply-{{ $reply->id }}" disabled style="resize: none;" class="replies border-none shadow-md rounded-md">{{ $reply->reply }}</textarea>
+
+                                                                        </form>
+                                                                    </div>
+
+                                                                    {{-- Delete and Edit Button and Form --}}
+                                                                    <div class="" style="">
+                                                                        @if(auth()->id() === $reply->user->id)
+                                                                        <div class="flex">
+                                                                            <button class="edit-button text-green-600 p-2 ps-5 pe-5 rounded-md hover:text-green-700 duration-100" data-reply-id="{{ $reply->id }}">  <i class="fa-solid fa-edit"></i></button>
+                                                                            <form method="POST" action="{{ route('replies.destroy', ['reply' => $reply->id]) }}">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit" class="text-red-600 p-2 ps-5 pe-5 rounded-md hover:text-red-700 duration-100">
+                                                                                    <i class="fa-solid fa-remove"></i>
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                             @endforeach
                                                         @endisset
@@ -114,11 +154,16 @@
                                         <div>
 
 
-                                            <div class="text-center">
-                                                <button class="p-2 ps-5 pe-5 text-blue-600 rounded-md hover:text-blue-700 duration-100" onclick="toggleReplies('{{ $comment->id }}')"><i class="fa-solid fa-reply"></i> </button>
+                                            <div class="">
+
+                                                <button class="p-2 ps-5 pe-5 text-blue-600 rounded-md hover:text-blue-700 duration-100"
+                                                        onclick="toggleReplies('{{ $comment->id }}')">
+                                                        <i class="fa-solid fa-comment-dots"></i>
+                                                    {{ $comment->replies->count() }} <!-- Display the reply count here -->
+                                                </button>
                                                 @if (auth()->check() && auth()->user()->id === $comment->user_id)
 
-                                                    <button type="button" class="p-2 ps-5 pe-5 text-green-600 rounded-md hover:text-green-700 duration-100" data-toggle="modal" data-target="#editCommentModal{{$comment->id}}">
+                                                    <button type="button" class="edit-button text-green-600 p-2 ps-5 pe-5 rounded-md hover:text-green-700 duration-100" data-comment-id="{{ $comment->id }}">
                                                                 <i class="fa-solid fa-edit"></i>
                                                     </button>
 
@@ -447,6 +492,38 @@ window.addEventListener('DOMContentLoaded', (event) => {
         var repliesSection = document.getElementById(`replies-section-${commentId}`);
         repliesSection.classList.toggle('show');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const replyId = this.getAttribute('data-reply-id');
+                const textarea = document.querySelector(`#edit-reply-${replyId}`);
+                const updateButton = document.querySelector(`#reply-button-${replyId}`);
+                textarea.disabled = !textarea.disabled; // Toggle disabled attribute
+                textarea.focus(); // Focus the textarea
+                updateButton.classList.toggle('hidden'); // Toggle hidden class
+
+
+            });
+        });
+    });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const commentId = this.getAttribute('data-comment-id'); // Corrected variable name
+                const textarea = document.querySelector(`#edit-comment-${commentId}`);
+                const updateButton = document.querySelector(`#comment-button-${commentId}`);
+                textarea.disabled = !textarea.disabled; // Toggle disabled attribute
+                textarea.focus(); // Focus the textarea
+                updateButton.classList.toggle('hidden'); // Toggle hidden class
+            });
+        });
+    });
+
 </script>
 
 </x-app-layout>

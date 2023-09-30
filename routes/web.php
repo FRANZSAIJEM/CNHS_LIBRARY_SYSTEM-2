@@ -48,8 +48,13 @@ Route::get('/requests', [StudentController::class, 'requestIndex'])->middleware(
 
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+
 
 Route::post('/replies', [RepliesController::class, 'store'])->name('replies.store');
+Route::delete('/replies/{reply}', [RepliesController::class, 'destroy'])->name('replies.destroy');
+Route::put('/replies/{reply}', [RepliesController::class, 'update'])->name('replies.update');
+
 
 
 

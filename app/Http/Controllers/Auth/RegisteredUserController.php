@@ -63,9 +63,9 @@ class RegisteredUserController extends Controller
         } else {
             // Set a default image path based on gender
             $gender = $request->input('gender'); // Assuming 'gender' is the name of the select input
-            if ($gender === 'male') {
+            if ($gender === 'Male') {
                 $user->image = 'Male.png'; // Replace with the actual path for the male default image
-            } elseif ($gender === 'female') {
+            } elseif ($gender === 'Female') {
                 $user->image = 'Female.png'; // Replace with the actual path for the female default image
             } else {
                 $user->image = 'Other.png';
