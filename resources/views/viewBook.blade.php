@@ -9,7 +9,7 @@
         </div>
     </x-slot>
 
-<div style="display: grid; place-content: center;">
+<div style="display: grid; place-content: center;" class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
     <div class="viewAndComment overflow-hidden">
         <div class="p-6 overflow-hidden ">
             <!-- Success Message Container -->
@@ -22,7 +22,7 @@
                 </div>
                 @endif
 
-            <div class="viewFlex rounded-md bg-white shadow-md dark:bg-dark-eval-1 mb-5">
+            <div class="viewFlex rounded-md mb-5">
                <div class="marginTwo">
                     @if (isset($book))
                         <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 352px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" ></div>
@@ -55,59 +55,79 @@
         <div class="m-5" style="">
             <div style="">
                 <div style="">
-                    <h1><b><i class="fa-solid fa-comment"></i> Add a Comment</b></h1>
+                    <h1 class="ms-5"><b><i class="fa-solid fa-comment"></i> Add a Comment</b></h1>
                     <form action="{{ route('comments.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="book_id" value="{{ $book->id }}">
                         <div style="display: grid; place-content: center">
                             <textarea style="resize: none" class="p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="comment" id="comment" rows="1" cols="75" placeholder="Enter your comment here"></textarea>
                         </div>
-                        <div class="p-5">
+                        <div class="p-5 text-right">
                             <button type="submit" class="bg-slate-600 p-3 ps-5 pe-5 rounded-md hover:bg-slate-700 duration-100 text-white"><i class="fa-solid fa-paper-plane"></i></button>
                         </div>
                     </form>
                 </div>
                 <div class="p-5" style="display: grid; place-content: center;">
-                    <h1><b><i class="fa-solid fa-comment"></i> Comments</b></h1>
                     @if ($book->comments->count() > 0)
                         <ul>
+                    <h1 style="margin-left: 20px;"><b><i class="fa-solid fa-comment"></i> Comments</b></h1>
                             @foreach ($book->comments as $comment)
                                 <li>
-                                    <div class="text-black p-2 rounded-md shadow-md m-5 forcomments" style="margin-bottom: 50px;">
+                                    <div class="text-black p-2 rounded-md shadow-md bg-slate-200 m-5 forcomments" style="margin-bottom: 50px;">
                                         <div class="reply">
 
-                                        <strong>{{ $comment->user->name }}</strong> <br>
+                                        <div class="flex justify-between">
+                                            <strong class="ms-1" style="font-size: 13px;">{{ $comment->user->name }}</strong> <br>
+                                            @if (auth()->check() && auth()->user()->id === $comment->user_id)
+                                            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="me-3 text-red-600 rounded-md hover:text-red-700 duration-100">
+                                                    <i class="fa-solid fa-remove"></i> </button>
+                                            </form>
+                                            @endif
+                                        </div>
+
                                         <div class="comment-content">
                                             <form method="POST" action="{{ route('comments.update', ['comment' => $comment->id])}}">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="float-right" style="z-index: 2; margin-bottom: -50px; transform: translateY(75px);">
-                                                    <button type="submit" class="hidden text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 " id="comment-button-{{ $comment->id }}"><b><i class="fa-solid fa-square-arrow-up-right"></i> Update</b>
+                                                    <button type="submit" class="hidden text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 " id="comment-button-{{ $comment->id }}"><b>Save</b>
                                                     </button>
                                                 </div>
-                                                <textarea name="comment" id="edit-comment-{{ $comment->id }}" disabled style="resize: none;" class="p-6 comments overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" rows="1" >{{ $comment->comment }}</textarea>
+                                                <textarea name="comment" id="edit-comment-{{ $comment->id }}" disabled style="resize: none;" class="p-6 comments overflow-hidden border-none bg-white rounded-md dark:bg-dark-eval-1" rows="1" >{{ $comment->comment }}</textarea>
 
                                             </form>
                                         </div>
-                                            <div id="replies-section-{{ $comment->id }}" class="replies-section">
-                                                <div class="m-5">
-                                                    <h1><b><i class="fa-solid fa-comment"></i> Replies</b></h1>
 
-                                                    <div class="m-3">
+                                            <div id="replies-section-{{ $comment->id }}" class="replies-section">
+                                                <div class="mt-5">
+                                                    <h1 style=""><b><i class="fa-solid fa-comment"></i> Replies</b></h1>
+
+                                                    <div class="mt-5">
                                                         @isset($comment->replies)
                                                             @foreach ($comment->replies as $reply)
-                                                                <div class="reply">
-                                                                    <strong>{{ $reply->user->name }}</strong> <br>
+                                                                <div class="reply shadow-md mb-10 rounded-md">
+
+                                                                    <div class="flex justify-between">
+                                                                        <strong class="ms-1" style="font-size: 13px;">{{ $reply->user->name }}</strong>
+                                                                        <h6 class="me-3" style="font-size: 13px;">{{ \Carbon\Carbon::parse($reply->created_at)->shortRelativeDiff() }}</h6>
+
+
+
+                                                                    </div>
+
                                                                     {{-- <textarea name="" id="" disabled style="resize: none;" class="replies border-none shadow-md rounded-md">{{ $reply->reply }}</textarea> --}}
                                                                     <div class="reply-content">
                                                                         <form method="POST" action="{{ route('replies.update', ['reply' => $reply->id]) }}">
                                                                             @csrf
                                                                             @method('PUT')
-                                                                            <div class="float-right" style="z-index: 2; margin-bottom: -50px; transform: translateY(67px);">
-                                                                                <button type="submit" class="hidden text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 " id="reply-button-{{ $reply->id }}"><b><i class="fa-solid fa-square-arrow-up-right"></i> Update</b>
+                                                                            <div class="float-right" style="z-index: 2; margin-bottom: -50px; transform: translateY(75px) translateX(15px);">
+                                                                                <button type="submit" class="hidden text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 " id="reply-button-{{ $reply->id }}"><b>Save</b>
                                                                                 </button>
                                                                             </div>
-                                                                            <textarea name="reply" id="edit-reply-{{ $reply->id }}" disabled style="resize: none;" class="replies border-none shadow-md rounded-md">{{ $reply->reply }}</textarea>
+                                                                            <textarea name="reply" id="edit-reply-{{ $reply->id }}" disabled style="resize: none;" class="p-3 ms-1 replies border-none rounded-md">{{ $reply->reply }}</textarea>
 
                                                                         </form>
                                                                     </div>
@@ -154,7 +174,20 @@
                                         <div>
 
 
-                                            <div class="">
+                                            <div class="flex">
+                                                  <!-- Like button with a form -->
+                                           <!-- Like button with a form -->
+                                       <!-- Like button with a form -->
+                                                <form method="POST" action="{{ route('comments.like', ['comment' => $comment]) }}" class="like-form">
+                                                    @csrf
+                                                    <button type="submit" class="like-button p-2 ps-5 pe-5 rounded-md duration-100
+                                                        @if (auth()->check() && auth()->user()->hasLikedComment($comment)) text-red-600 hover:text-red-700 @else text-gray-400 hover:text-gray-600 @endif">
+                                                        <i class="fa-solid fa-heart"></i> {{ $comment->likes->count() }}
+                                                    </button>
+                                                </form>
+
+
+
 
                                                 <button class="p-2 ps-5 pe-5 text-blue-600 rounded-md hover:text-blue-700 duration-100"
                                                         onclick="toggleReplies('{{ $comment->id }}')">
@@ -167,19 +200,17 @@
                                                                 <i class="fa-solid fa-edit"></i>
                                                     </button>
 
-                                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="p-2 ps-5 pe-5 text-red-600 rounded-md hover:text-red-700 duration-100">
-                                                            <i class="fa-solid fa-remove"></i> </button>
-                                                    </form>
+
                                                 @endif
 
                                             </div>
+                                            <h6 class="me-3 text-right" style="font-size: 13px;">{{ \Carbon\Carbon::parse($comment->created_at)->shortRelativeDiff() }}</h6>
+
                                         </div>
 
 
                                     </div>
+
                                 </li>
                             @endforeach
                         </ul>
@@ -287,7 +318,7 @@
     <div id="loading-bar" class="loading-bar"></div>
 <style>
     .replies{
-        width: 475px;
+        width: 525px;
     }
     .comments{
         width: 525px;
@@ -364,10 +395,12 @@
         display: flex;
     }
 
-    @media (max-width: 1000px) and (max-height: 640px) {
-
+    @media (max-width: 1000px) and (max-height: 1000px) {
+        .replies{
+        width: 475px;
+    }
         .comments{
-        width: 450px;
+        width: 480px;
     }
         .forcomments{
         width: 500px;
@@ -392,15 +425,15 @@
 
     }
 
-    @media (max-width: 600px) and (max-height: 640px) {
+    @media (max-width: 600px) and (max-height: 1000px) {
         .replies{
-        width: 225px;
+        width: 245px;
     }
         .comments{
-        width: 275px;
+        width: 255px;
     }
         .forcomments{
-            width: 300px;
+            width: 270px;
     }
         .viewAndComment{
         display: block;
@@ -416,8 +449,8 @@
     }
 
     .marginTwo{
-    margin: 20px;
-    margin-right: 20px;
+        margin-top: 20px;
+
 }
     }
 .loading-bar {
@@ -523,6 +556,37 @@ window.addEventListener('DOMContentLoaded', (event) => {
             });
         });
     });
+    document.querySelectorAll('.like-form').forEach(form => {
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        axios.post(form.action, new FormData(form))
+            .then(response => {
+                if (response.data.success) {
+                    const likeButton = form.querySelector('.like-button');
+                    const likeCount = response.data.likes_count;
+
+                    if (response.data.liked) {
+                        // User has liked the comment, update button style and count
+                        likeButton.classList.remove('text-gray-400', 'hover:text-gray-600');
+                        likeButton.classList.add('text-red-600', 'hover:text-red-700');
+                    } else {
+                        // User has unliked the comment, update button style and count
+                        likeButton.classList.remove('text-red-600', 'hover:text-red-700');
+                        likeButton.classList.add('text-gray-400', 'hover:text-gray-600');
+                    }
+
+                    // Update the like count
+                    likeButton.innerHTML = `<i class="fa-solid fa-heart"></i> ${likeCount}`;
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+});
+
+
 
 </script>
 

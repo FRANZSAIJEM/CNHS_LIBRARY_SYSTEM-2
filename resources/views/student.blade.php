@@ -156,6 +156,7 @@ window.addEventListener('load', function () {
 
 const toggleButtons = document.querySelectorAll('.toggle-button');
 
+
 toggleButtons.forEach(button => {
     button.addEventListener('click', async () => {
         const form = button.closest('.toggle-form');

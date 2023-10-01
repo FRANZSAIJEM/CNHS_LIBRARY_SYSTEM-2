@@ -83,4 +83,23 @@ class User extends Authenticatable
         return $this->belongsToMany(Notification::class)->withTimestamps();
     }
 
+    public function isAdmin()
+    {
+        return $this->is_admin === 1;
+    }
+
+    public function hasLikedComment(Comment $comment)
+    {
+        // Check if the user has liked the given comment.
+        return $this->commentLikes()->where('comment_id', $comment->id)->exists();
+    }
+
+    public function commentLikes()
+    {
+        // Define the relationship between User and CommentLike models.
+        return $this->hasMany(CommentLike::class);
+    }
+
+
+
 }

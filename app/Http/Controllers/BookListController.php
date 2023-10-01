@@ -40,23 +40,33 @@ class BookListController extends Controller
         // Find the book by its ID
         $book = Book::findOrFail($id);
 
+        // Delete the replies associated with the comments
+        foreach ($book->comments as $comment) {
+            $comment->replies()->delete(); // Delete associated replies
+            $comment->likes()->delete(); // Delete likes associated with the comment
+        }
+
+        // Delete the comments associated with the book
+        $book->comments()->delete(); // Delete associated comments
+
         // Delete the records in accepted_requests table that reference the book
-        $book->acceptedRequests()->delete();
+        $book->acceptedRequests()->delete(); // Delete associated accepted requests
 
         // Get the users who have requested this book
         $users = $book->requestedByUsers;
 
         // Detach the book from all users who requested it
         foreach ($users as $user) {
-            $user->requestedBooks()->detach($book->id);
+            $user->requestedBooks()->detach($book->id); // Remove book from user's requested books
         }
 
         // Delete the book
-        $book->delete();
+        $book->delete(); // Delete the book itself
 
         // Redirect back to the book list page or any other page you prefer
-        return redirect()->route('bookList')->with('success', 'Book and associated requests deleted successfully');
+        return redirect()->route('bookList')->with('success', 'Book and associated data deleted successfully');
     }
+
 
 
 

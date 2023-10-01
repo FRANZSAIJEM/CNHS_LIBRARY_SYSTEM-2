@@ -65,4 +65,27 @@
         </div>
     </div>
 </body>
+<style>
+    /* Add a smooth scroll animation */
+    body {
+        scroll-behavior: smooth;
+    }
+</style>
+<script>
+    window.addEventListener('beforeunload', function () {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+    });
+
+    window.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            const scrollPosition = sessionStorage.getItem('scrollPosition');
+            if (scrollPosition !== null) {
+                window.scrollTo({
+                    top: parseInt(scrollPosition),
+                    behavior: 'smooth', // Add smooth scrolling behavior
+                });
+            }
+        }, 0); // Use a minimal timeout
+    });
+</script>
 </html>

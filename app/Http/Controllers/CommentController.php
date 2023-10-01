@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comment;
+use App\Models\CommentLike;
 
 class CommentController extends Controller
 {
@@ -62,5 +63,28 @@ class CommentController extends Controller
             return redirect()->back()->with('error', 'You are not authorized to update this comment.');
         }
     }
+
+    public function like(Comment $comment)
+    {
+        $user = auth()->user();
+
+        if (!$user->hasLikedComment($comment)) {
+            // Create a new CommentLike record.
+            $like = new CommentLike();
+            $like->user_id = $user->id;
+            $like->comment_id = $comment->id;
+            $like->save();
+
+            return response()->json(['success' => true, 'liked' => true, 'likes_count' => $comment->likes()->count()]);
+        } else {
+            dd('Reached the else block');
+            // Remove the existing like
+            $user->likes()->where('comment_id', $comment->id)->delete();
+
+            return response()->json(['success' => true, 'liked' => false, 'likes_count' => $comment->likes()->count()]);
+        }
+    }
+
+
 
 }

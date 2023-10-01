@@ -58,7 +58,7 @@
                 <button
                     class="flex items-center p-2 text-sm font-medium text-gray-500 rounded-md transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark-eval-1 dark:text-gray-400 dark:hover:text-gray-200"
                 >
-                    <img class="rounded-full" width="50px" height="50px" src="{{ Auth::user()->image}}" alt="">
+                <img class="rounded-full" width="50px" height="50px" src="{{ asset(Auth::user()->image) }}" alt="">
 
                     <div class="ml-1">
                         <svg
@@ -118,7 +118,7 @@
     </x-button> --}}
 
     <a href="{{ route('dashboard') }}">
-        <img src="logo.png" alt="" aria-hidden="true" class="w-10 h-10">
+        <img src="{{ asset('logo.png') }}" alt="" aria-hidden="true" class="w-10 h-10">
         {{-- <x-application-logo aria-hidden="true" class="w-10 h-10" /> --}}
 
         <span class="sr-only">Dashboard</span>

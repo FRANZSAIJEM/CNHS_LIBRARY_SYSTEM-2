@@ -42,6 +42,10 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 });
 
 
+Route::post('/comments/like/{comment}', [CommentController::class, 'like'])->name('comments.like');
+
+
+
 Route::post('/requestBook/{id}', [StudentController::class, 'requestBook'])->name('requestBook');
 Route::get('/requests', [StudentController::class, 'requestIndex'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('requests');
 
@@ -70,7 +74,7 @@ Route::delete('/remove-request/{user_id}/{book_id}', [BookController::class, 're
 
 Route::delete('/acceptedRequests/{id}', [AcceptRequestController::class, 'destroy'])->name('acceptedRequests.destroy');
 Route::post('/acceptRequest/{user}/{book}', [AcceptRequestController::class, 'acceptRequest'])->name('acceptRequest');
-Route::get('/transactions', [AcceptRequestController::class, 'transactions'])->name('transactions');
+Route::get('/transactions', [AcceptRequestController::class, 'transactions'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('transactions');
 Route::get('/history', [AcceptRequestController::class, 'history'])->name('history');
 
 Route::delete('/clearNotification/{id}', [AcceptRequestController::class, 'clearNotification'])->name('clearNotification');

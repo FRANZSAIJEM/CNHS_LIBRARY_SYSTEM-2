@@ -56,6 +56,6 @@ class RepliesController extends Controller
         }
     }
 
-  
+
 
 }

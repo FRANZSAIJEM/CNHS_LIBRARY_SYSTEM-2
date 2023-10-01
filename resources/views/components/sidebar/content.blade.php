@@ -4,7 +4,7 @@
     class="flex flex-col flex-1 gap-4 px-3"
 >
 
-
+        @if (Auth::user()->is_admin)
         <x-sidebar.link
             title='Dashboard'
             href="{{ route('dashboard') }}"
@@ -16,6 +16,8 @@
         </x-slot>
 
         </x-sidebar.link>
+        @endif
+
 
         <x-sidebar.link
             title="Books"
