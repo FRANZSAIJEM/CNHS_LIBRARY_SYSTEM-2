@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div  id="confirmAcceptModal-{{ $requestedBook->id }}" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
-                        <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
+                        <div class="modalWidth" style="transform: translateY(35px); background-color: white; border-radius: 5px; margin: 100px auto; padding: 20px; text-align: left;">
                             <div class="flex justify-between">
                                 <h2><b><i class="fa-solid fa-calendar-days"></i> Set Date</b></h2>
                                 <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})"><i class="fa-solid fa-xmark"></i></button>

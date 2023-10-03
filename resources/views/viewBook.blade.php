@@ -47,7 +47,7 @@
             </div>
             <h1><b><i class="fa-solid fa-paragraph"></i> Description</b></h1>
             <div style="display: grid; place-content: center">
-                <textarea style="resize: none" class="justDescription p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="" id="" rows="4">{{$book->description}}</textarea>
+                <textarea disabled style="resize: none" class="justDescription p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="" id="" rows="4">{{$book->description}}</textarea>
             </div>
 
         </div>
@@ -60,7 +60,7 @@
                         @csrf
                         <input type="hidden" name="book_id" value="{{ $book->id }}">
                         <div style="display: grid; place-content: center">
-                            <textarea style="resize: none" class="p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="comment" id="comment" rows="1" cols="75" placeholder="Enter your comment here"></textarea>
+                            <textarea required style="resize: none" class="p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="comment" id="comment" rows="1" cols="75" placeholder="Enter your comment here"></textarea>
                         </div>
                         <div class="p-5 text-right">
                             <button type="submit" class="bg-slate-600 p-3 ps-5 pe-5 rounded-md hover:bg-slate-700 duration-100 text-white"><i class="fa-solid fa-paper-plane"></i></button>
@@ -77,7 +77,12 @@
                                         <div class="reply">
 
                                         <div class="flex justify-between">
-                                            <strong class="ms-1" style="font-size: 13px;">{{ $comment->user->name }}</strong> <br>
+                                            <div class="flex mb-2">
+                                                <img width="40" height="40" src="{{ asset($comment->user->image) }}" alt="">
+                                                <strong class="ms-2 mt-3" style="font-size: 13px;"> {{ $comment->user->name }}</strong>
+                                            </div>
+
+                                            <br>
                                             @if (auth()->check() && auth()->user()->id === $comment->user_id)
                                             <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="inline">
                                                 @csrf
@@ -111,11 +116,19 @@
                                                                 <div class="reply shadow-md mb-10 rounded-md">
 
                                                                     <div class="flex justify-between">
-                                                                        <strong class="ms-1" style="font-size: 13px;">{{ $reply->user->name }}</strong>
-                                                                        <h6 class="me-3" style="font-size: 13px;">{{ \Carbon\Carbon::parse($reply->created_at)->shortRelativeDiff() }}</h6>
-
-
-
+                                                                       <div class="mb-2 flex">
+                                                                        <img width="40" height="40" src="{{ asset($reply->user->image) }}" alt="">
+                                                                        <strong class="ms-2 mt-3" style="font-size: 13px;">{{ $reply->user->name }}</strong>
+                                                                       </div>
+                                                                        @if(auth()->id() === $reply->user->id)
+                                                                        <form method="POST" action="{{ route('replies.destroy', ['reply' => $reply->id]) }}">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <button type="submit" class="text-red-600 p-2 ps-5 pe-5 rounded-md hover:text-red-700 duration-100">
+                                                                                <i class="fa-solid fa-remove"></i>
+                                                                            </button>
+                                                                        </form>
+                                                                        @endif
                                                                     </div>
 
                                                                     {{-- <textarea name="" id="" disabled style="resize: none;" class="replies border-none shadow-md rounded-md">{{ $reply->reply }}</textarea> --}}
@@ -137,25 +150,20 @@
                                                                         @if(auth()->id() === $reply->user->id)
                                                                         <div class="flex">
                                                                             <button class="edit-button text-green-600 p-2 ps-5 pe-5 rounded-md hover:text-green-700 duration-100" data-reply-id="{{ $reply->id }}">  <i class="fa-solid fa-edit"></i></button>
-                                                                            <form method="POST" action="{{ route('replies.destroy', ['reply' => $reply->id]) }}">
-                                                                                @csrf
-                                                                                @method('DELETE')
-                                                                                <button type="submit" class="text-red-600 p-2 ps-5 pe-5 rounded-md hover:text-red-700 duration-100">
-                                                                                    <i class="fa-solid fa-remove"></i>
-                                                                                </button>
-                                                                            </form>
                                                                         </div>
                                                                         @endif
                                                                     </div>
+                                                                    <h6 class="me-3 text-right" style="font-size: 13px;">{{ \Carbon\Carbon::parse($reply->created_at)->shortRelativeDiff() }}</h6>
+
                                                                 </div>
                                                             @endforeach
                                                         @endisset
 
-                                                            <form action="{{ route('replies.store') }}" method="POST" class="reply-form" data-comment-id="{{ $comment->id }}">
+                                                            <form action="{{ route('replies.store') }}" method="POST" class="reply-form" class=" data-comment-id="{{ $comment->id }}">
                                                                 @csrf
                                                                 <div>
                                                                     <input type="hidden" name="comment_id" value="{{ $comment->id }}">
-                                                                    <textarea placeholder="Type your reply here!" name="reply" style="resize: none;" class="replies border-none shadow-md rounded-md reply-textarea"></textarea>
+                                                                    <textarea required placeholder="Type your reply here!" name="reply" style="resize: none;" class="replies border-none shadow-md rounded-md reply-textarea"></textarea>
                                                                 </div>
                                                                 <div class="float-right mb-5">
                                                                     <button type="submit" class="text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 ">
@@ -529,6 +537,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.addEventListener('DOMContentLoaded', function () {
         const editButtons = document.querySelectorAll('.edit-button');
         editButtons.forEach(function (button) {
+
             button.addEventListener('click', function () {
                 const replyId = this.getAttribute('data-reply-id');
                 const textarea = document.querySelector(`#edit-reply-${replyId}`);

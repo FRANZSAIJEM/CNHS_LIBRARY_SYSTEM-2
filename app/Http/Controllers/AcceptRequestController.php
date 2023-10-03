@@ -41,6 +41,12 @@ class AcceptRequestController extends Controller
                 $calculatedFines = (float) number_format($fines, 2, '.', '');
                 $acceptedRequest->fines = $calculatedFines;
 
+                                // Update the timestamp to the current time
+                $acceptedRequest->updated_at = now();
+
+                // Store the calculated fines in the session
+                $request->session()->put('fines', $calculatedFines);
+
                 // Store the calculated fines in the session
                 $request->session()->put('fines', $calculatedFines);
             } else {
@@ -164,6 +170,12 @@ class AcceptRequestController extends Controller
             return $comment->replies->where('user_id', '!=', $loggedInUserId);
         });
 
+          // Retrieve replies associated with these comments, excluding the user's own replies
+          $likes = $comments->flatMap(function ($comment) use ($loggedInUserId) {
+            return $comment->likes->where('user_id', '!=', $loggedInUserId);
+        });
+
+
         // Retrieve accepted requests for the logged-in user
         $acceptedRequests = AcceptedRequest::where('user_id', $loggedInUserId)->get();
 
@@ -179,6 +191,7 @@ class AcceptRequestController extends Controller
         return view('notifications', [
             'acceptedRequests' => $acceptedRequests,
             'replies' => $replies,
+            'likes' => $likes,
             'loggedInUser' => auth()->user(),
             'commentsWithBooks' => $commentsWithBooks,
         ]);

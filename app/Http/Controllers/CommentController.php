@@ -37,6 +37,8 @@ class CommentController extends Controller
         // Check if the logged-in user is authorized to delete the comment
         if (auth()->user()->id === $comment->user_id) {
             $comment->replies()->delete();
+            $comment->likes()->delete();
+
             $comment->delete();
             return redirect()->back()->with('success', 'Comment deleted successfully!');
         } else {

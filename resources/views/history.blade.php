@@ -7,6 +7,12 @@
         </div>
     </x-slot>
 
+
+    @php
+        session(['visited_history_page' => true]);
+    @endphp
+
+
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="">
             <div>
@@ -18,9 +24,16 @@
                             <div>
                                 <!-- Display the notification text -->
                                 {{ $userNotification->notification->notification_text }}
+                            </div> <br>
+                            <div class="me-5">
+                                <h6 class="me-3 text-right" style="font-size: 13px;"></h6>
+                                {{ \Carbon\Carbon::parse( $userNotification->created_at )->shortRelativeDiff() }}
+
                             </div>
+
                             <!-- Add a Clear button with a form to delete the notification -->
                         </div>
+
                         <div>
                             <form action="{{ route('clearNotification', ['id' => $userNotification->id]) }}" method="POST">
                                 @csrf
@@ -29,6 +42,7 @@
                             </form>
                         </div>
                     </div>
+
                 </div>
             @endforeach
             @else

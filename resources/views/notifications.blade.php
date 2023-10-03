@@ -26,7 +26,13 @@
                     @endphp
 
                 @endforeach
+                @foreach($likes as $like)
 
+                @php
+                    $hasNotifications = true;
+                @endphp
+
+            @endforeach
 
 
                 @foreach($acceptedRequests as $request)
@@ -94,15 +100,34 @@
 
 
             @foreach ($replies as $reply)
-            <a href="{{ route('viewBook', ['id' => $reply->comment->book->id]) }}" class="block">
+                <a href="{{ route('viewBook', ['id' => $reply->comment->book->id]) }}" class="block">
+                    <div class="p-5 mb-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
+                        <div class="reply">
+                            <p>{{ $reply->user->name }} replied to your comment "{{$reply->reply}}" about the book "{{ $reply->comment->book ? $reply->comment->book->title : 'Unknown Book' }}"
+                            <h6 class="me-3 text-right" style="font-size: 13px;">{{ \Carbon\Carbon::parse($reply->created_at)->shortRelativeDiff() }}</h6>
+
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+
+
+
+
+            @foreach ($likes as $like)
+            <a href="{{ route('viewBook', ['id' => $like->comment->book->id]) }}" class="block">
                 <div class="p-5 mb-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
                     <div class="reply">
-                        <p>{{ $reply->user->name }} replied to your comment "{{$reply->reply}}" about the book "{{ $reply->comment->book ? $reply->comment->book->title : 'Unknown Book' }}"
+                        <p>{{ $like->user->name }} reacted <i class="fa-solid fa-heart text-red-600"></i>  to your comment "{{$like->comment->comment}}" about the book "{{ $like->comment->book ? $like->comment->book->title : 'Unknown Book' }}"
+                            <h6 class="me-3 text-right" style="font-size: 13px;">{{ \Carbon\Carbon::parse($like->created_at)->shortRelativeDiff() }}</h6>
+
                         </p>
                     </div>
                 </div>
             </a>
         @endforeach
+
 
 
 
@@ -117,18 +142,40 @@
                     <hr>
                      <br>
 
+                     @php
+                        $carbonDate1 = \Carbon\Carbon::parse($request->date_borrow);
+                        $carbonDate2 = \Carbon\Carbon::parse($request->date_pickup);
+                        $carbonDate3 = \Carbon\Carbon::parse($request->date_return);
+
+                        $formattedDate1 = $carbonDate1->format('l, F jS, Y');
+                        $formattedDate2 = $carbonDate2->format('l, F jS, Y');
+                        $formattedDate3 = $carbonDate3->format('l, F jS, Y');
+
+                    @endphp
+
                     <div>
                         <b>Date Borrowed</b> <br>
-                        {{$request->date_borrow}}
+                        {{ $formattedDate1 }}
+
+                        {{-- {{ \Carbon\Carbon::parse($request->date_borrow)->shortRelativeDiff() }} --}}
+
                     </div> <br>
+
                     <div>
                         <b>Date Pick-up</b> <br>
-                        {{$request->date_pickup}}
+                        {{ $formattedDate2 }}
+
                     </div> <br>
                     <div>
                         <b>Date Return</b> <br>
-                        {{$request->date_return}}
+                        {{ $formattedDate3 }}
+
                     </div>
+                    <div class="text-right">
+                        {{ \Carbon\Carbon::parse($request->created_at)->shortRelativeDiff() }}
+
+                    </div>
+
                     </p>
                 </div>
                 @endforeach

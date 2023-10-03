@@ -18,21 +18,21 @@ class CarbonServiceProvider extends ServiceProvider
      * Bootstrap services.
      */
         public function boot()
-    {
-        // Set the Carbon configuration to use a shorter format
-        Carbon::setLocale('en'); // You can change 'en' to your desired locale.
+        {
+            // Set the Carbon configuration to use a shorter format
+            Carbon::setLocale('en'); // You can change 'en' to your desired locale.
 
-        // Customize the short format settings
-        Carbon::setShortRelativeDiffOptions([
-            'now' => 'now',
-            'second' => 's',
-            'minute' => 'm',
-            'hour' => 'h',
-            'day' => 'd',
-            'week' => 'w',
-            'month' => 'mo',
-            'year' => 'y',
-        ]);
-    }
+            // Customize the short format settings
+            Carbon::setShortRelativeDiffOptions([
+                'now' => 'now',
+                'second' => 's',
+                'minute' => 'm',
+                'hour' => 'h',
+                'day' => 'd',
+                'week' => 'w',
+                'month' => 'mo',
+                'year' => 'y',
+            ]);
+        }
 
 }
