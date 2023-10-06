@@ -19,21 +19,32 @@ class DashboardController extends Controller
     {
         $totalStudents = User::where('is_admin', false)->count();
         $totalBooks = Book::count();
-
-        // Calculate the total number of distinct user-book pairs
         $totalRequests = DB::table('book_requests')->count();
-        $totalFines = $this->calculateTotalFines(Auth::id()); // Calculate total fines
+        $totalFines = $this->calculateTotalFines(Auth::id());
+
+        // Fetch the accepted request for the authenticated user (assuming there is one)
+        $acceptedRequest = AcceptedRequest::where('user_id', Auth::id())->first();
+
+        // Check if there is an accepted request for the user
+        $date_pickup = $date_return = null;
+
+        if ($acceptedRequest) {
+            $date_pickup = $acceptedRequest->date_pickup;
+            $date_return = $acceptedRequest->date_return;
+        }
 
         return view('dashboard')
             ->with('totalStudents', $totalStudents)
             ->with('totalBooks', $totalBooks)
             ->with('totalRequests', $totalRequests)
-            ->with('totalFines', $totalFines);
+            ->with('totalFines', $totalFines)
+            ->with('date_pickup', $date_pickup)
+            ->with('date_return', $date_return)
+            ->with('acceptedRequest', $acceptedRequest); // Pass $acceptedRequest to the view
     }
 
     private function calculateTotalFines($userId)
     {
-        // Calculate the total fines for a user based on their user ID
         return AcceptedRequest::where('user_id', $userId)->sum('fines');
     }
 }

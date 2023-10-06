@@ -39,7 +39,7 @@
                 @if (count($users) > 0)
                 @foreach ($users as $user)
                     @foreach ($user->requestedBooks as $requestedBook)
-                    <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px;">
+                    <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                         <div style="width: 300px; height: 350px;">
                             <div class="p-5">
                                 <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>

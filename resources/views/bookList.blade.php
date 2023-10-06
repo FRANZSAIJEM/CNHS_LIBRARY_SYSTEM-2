@@ -11,7 +11,6 @@
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
        <div style="display: grid; place-items: center;">
-
             @if(session('success'))
                <div class="success-message-container">
                    <div class="success-message bg-white rounded-lg shadow-md text-green-700 p-4">
@@ -20,7 +19,6 @@
                    </div>
                </div>
            @endif
-
        </div>
 
         <div class="text-right mb-5">
@@ -47,7 +45,7 @@
             <div class="bookCenter">
                 <div class="bookDisplay flex flex-wrap">
                     @foreach ($bookList as $bookLists)
-                    <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px;">
+                    <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px; ">
                         <a href="{{ route('viewBook', ['id' => $bookLists->id]) }}" style="text-decoration: none;">
                             <div class="bookImage" style="background-position: center center; border-radius: 5px; background-size: cover; background-image: url('{{ asset('storage/' . $bookLists->image) }}');">
                                 <div style="color: white; text-align: center; padding: 10px; text-shadow: 0px 0px 5px black">

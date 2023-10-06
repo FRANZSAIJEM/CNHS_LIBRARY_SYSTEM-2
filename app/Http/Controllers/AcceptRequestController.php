@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Comment;
 
 use App\Models\Reply;
+use App\Models\TimeDuration;
+
 use App\Models\Book; // Import your Book model
 use App\Models\AcceptedRequest; // Import your Book model
 use App\Models\Notification;
@@ -30,30 +32,30 @@ class AcceptRequestController extends Controller
         $acceptedRequest->date_pickup = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_pickup'));
         $acceptedRequest->date_return = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_return'));
 
-         $currentDate = \Carbon\Carbon::now();
-        $fines = $request->input('fines');
-        if ($acceptedRequest->date_return->isFuture()) {
-            $acceptedRequest->fines = 0.00; // Set fines to 0.00 if return date is in the future
-        } else {
-            $fines = $request->input('fines');
-            if (!empty($fines)) {
-                // Calculate the fines and store them with two decimal places
-                $calculatedFines = (float) number_format($fines, 2, '.', '');
-                $acceptedRequest->fines = $calculatedFines;
+            // Create a TimeDuration record
+        $timeDuration = new TimeDuration();
+        $timeDuration->date_pickup_seconds = $acceptedRequest->date_pickup->timestamp;
+        $timeDuration->date_return_seconds = $acceptedRequest->date_return->timestamp;
 
-                                // Update the timestamp to the current time
-                $acceptedRequest->updated_at = now();
 
-                // Store the calculated fines in the session
-                $request->session()->put('fines', $calculatedFines);
+                // Always set fines to 100.00
+        $acceptedRequest->fines = 100.00;
 
-                // Store the calculated fines in the session
-                $request->session()->put('fines', $calculatedFines);
-            } else {
-                $acceptedRequest->fines = 0.00; // If no fines are provided, set it to null.
-            }
-        }
+        // Update the timestamp to the current time
+        $acceptedRequest->updated_at = now();
+
+        // Store the default fines in the session
+        $request->session()->put('fines', $acceptedRequest->fines);
+
+
         $acceptedRequest->save();
+
+            // Create a TimeDuration record
+        $timeDuration = new TimeDuration();
+        $timeDuration->accepted_request_id = $acceptedRequest->id;
+        $timeDuration->date_pickup_seconds = $acceptedRequest->date_pickup->timestamp;
+        $timeDuration->date_return_seconds = $acceptedRequest->date_return->timestamp;
+        $timeDuration->save();
 
         // Detach the book from the user's requestedBooks relationship since it's been accepted.
         $user->requestedBooks()->detach($book);
@@ -147,14 +149,31 @@ class AcceptRequestController extends Controller
         }
     }
 
+
+
     public function destroy($id){
+        // Find the AcceptedRequest record
         $transaction = AcceptedRequest::find($id);
 
+        // Check if the record exists
+        if (!$transaction) {
+            return redirect()->back()->with('error', 'Transaction not found');
+        }
+
+        // Find the related TimeDuration record
+        $timeDuration = TimeDuration::where('accepted_request_id', $id)->first();
+
+        // Delete the TimeDuration record first
+        if ($timeDuration) {
+            $timeDuration->delete();
+        }
+
+        // Delete the AcceptedRequest record
         $transaction->delete();
 
         return redirect()->back()->with('success', 'Returned successfully');
-
     }
+
 
 
     public function notifications()

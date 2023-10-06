@@ -49,8 +49,9 @@
                                 {{$student->gender}} <br> <hr> <br>
                                 <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
                                 {{$student->grade_level}} <br> <hr> <br>
-                                <h1><b><i class="fa-solid fa-money-check-dollar"></i> Total Fines</b></h1>
-                                ₱ &nbsp;{{ number_format($student->totalFines, 2) ?? '0.00' }}  <br> <hr> <br>
+
+                                {{-- <h1><b><i class="fa-solid fa-money-check-dollar"></i> Total Fines</b></h1>
+                                ₱ &nbsp;{{ number_format($student->totalFines, 2) ?? '0.00' }}  <br> <hr> <br> --}}
                             </div>
                             <div class="text-center">
                                 <form class="toggle-form" data-student-id="{{ $student->id }}" style="display: inline;">

@@ -39,7 +39,7 @@
             <div class="transactCenter">
                 <div class="flex flex-wrap">
                     @if (count($acceptedRequests) > 0)
-                    @foreach ($acceptedRequests as $acceptedRequest)
+                    @foreach ($acceptedRequests as $index => $acceptedRequest)
                         <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                             <div style="width: 300px; height: 550px;">
                                 <div class="p-5">
@@ -54,16 +54,23 @@
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Pickup Date</b></h1>
                                     {{ $acceptedRequest->date_pickup->format('Y-m-d H:i A') }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Return Date</b></h1>
-                                    {{ $acceptedRequest->date_return->format('Y-m-d H:i A') }} <br> <hr> <br>
-                                    <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
-                                    @if (!is_null($acceptedRequest->fines) && $acceptedRequest->fines > 0.00)
-                                        ₱ {{ $acceptedRequest->fines }} <b style="font-size: 10px;">Additional {{$acceptedRequest->fines}} for another day passes</b>
-                                    @else
-                                        <b style="font-size: 10px;">No fines before return date expires</b>
-                                    @endif <br> <hr>
+
+
+                                    <div >
+                                        <h1><b><i class="fa-solid fa-hourglass-start"></i> Time Remaining</b></h1>
+                                        <div class="countdown-timer" data-target="{{ $acceptedRequest->timeDuration->date_return_seconds }}">
+                                            <!-- Countdown timer will be updated here using JavaScript -->
+                                        </div>
+                                    </div>
+
+                                        {{ $acceptedRequest->date_return->format('Y-m-d H:i A') }} <br> <hr> <br>
+                                        <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
+
+                                        <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->fines }}</div></div>
+
+                                        <hr>
 
                                 </div>
-
                             </div>
                           <div class="text-center">
                             <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">
@@ -80,8 +87,8 @@
                         </div>
                     @endforeach
                     @else
-
-                        <p>There is no transactions.</p>
+{{--
+                        <p>There is no transactions.</p> --}}
                     @endif
                 </div>
             </div>
@@ -248,6 +255,44 @@ window.addEventListener('DOMContentLoaded', (event) => {
             }, 3000); // 3 seconds for the loading bar to animate, then 100 milliseconds for the success message to disappear
         }
     });
+
+
+    function initializeCountdown() {
+    const countdownElements = document.querySelectorAll('.countdown-timer');
+    countdownElements.forEach((element, index) => {
+        const targetTimestamp = parseInt(element.getAttribute('data-target'), 10);
+        updateCountdown(element, targetTimestamp, index);
+    });
+}
+
+function updateCountdown(element, targetTimestamp, index) {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const remainingTime = targetTimestamp - currentTimestamp;
+
+    if (remainingTime > 0) {
+        const hours = Math.floor(remainingTime / 3600);
+        const minutes = Math.floor((remainingTime % 3600) / 60);
+        const seconds = remainingTime % 60;
+        element.innerHTML = hours + "h " + minutes + "m " + seconds + "s";
+
+        // Get the unique fines container for this transaction
+        const finesContainer = document.getElementById(`fines-container-${index}`);
+        finesContainer.style.display = 'block';
+        finesContainer.innerHTML = '0.00';
+
+        setTimeout(() => updateCountdown(element, targetTimestamp, index), 1000);
+    } else {
+        element.innerHTML = "Expired";
+
+        // Show the fines container when the countdown expires
+        const finesContainer = document.getElementById(`fines-container-${index}`);
+        finesContainer.style.display = 'block';
+    }
+}
+
+// Initialize the countdown timers when the page loads
+window.addEventListener('DOMContentLoaded', initializeCountdown);
+
 
     </script>
 </x-app-layout>

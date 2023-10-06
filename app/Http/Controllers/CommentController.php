@@ -30,7 +30,7 @@ class CommentController extends Controller
         $comment->comment = $validatedData['comment'];
         $comment->save();
 
-        return redirect()->back()->with('success', 'Added successfully!');
+        return redirect()->back()->with('success', 'Commented successfully');
     }
     public function destroy(Comment $comment)
     {
@@ -40,7 +40,7 @@ class CommentController extends Controller
             $comment->likes()->delete();
 
             $comment->delete();
-            return redirect()->back()->with('success', 'Deleted successfully!');
+            return redirect()->back()->with('success', 'Comment deleted');
         } else {
             return redirect()->back()->with('error', 'You are not authorized to delete this comment.');
         }
@@ -59,7 +59,7 @@ class CommentController extends Controller
                 'comment' => $request->input('comment'),
             ]);
 
-            return redirect()->back()->with('success', 'Comment updated successfully');
+            return redirect()->back()->with('success', 'Comment updated');
         } else {
             return redirect()->back()->with('error', 'You are not authorized to update this comment.');
         }

@@ -16,6 +16,7 @@ class AcceptedRequest extends Model
         'date_borrow',
         'date_pickup',
         'date_return',
+        'fines'
     ];
 
     public function user()
@@ -27,4 +28,9 @@ class AcceptedRequest extends Model
     {
         return $this->belongsTo(Book::class);
     }
+    public function timeDuration()
+    {
+        return $this->hasOne(TimeDuration::class);
+    }
+
 }

@@ -20,30 +20,52 @@
                 @endphp
 
                 @foreach($replies as $reply)
-
                     @php
                         $hasNotifications = true;
                     @endphp
 
                 @endforeach
-                @foreach($likes as $like)
 
+                @foreach($likes as $like)
                 @php
                     $hasNotifications = true;
                 @endphp
 
-            @endforeach
-                @foreach($acceptedRequests as $request)
-                    @if ($request->fines !== null)
-                        @php
-                            $totalFines += $request->fines; // Add fines to the total
-                            $hasNotifications = true;
-                        @endphp
-                    @endif
+
+                @endforeach
+                    @foreach($acceptedRequests as $request)
+                        @if ($request->fines !== null)
+                            @php
+                                $totalFines += $request->fines; // Add fines to the total
+                                $hasNotifications = true;
+                            @endphp
+                        @endif
+                        <div style="display: none;">
+                            <h1><b><i class="fa-solid fa-hourglass-start"></i> Time Remaining</b></h1>
+                            @if ($request)
+                                <div class="countdown-timer" data-target="{{ $request->timeDuration->date_return_seconds }}">
+                                    <!-- Countdown timer will be updated here using JavaScript -->
+                                </div>
+                            @else
+                                <p>No accepted request found.</p>
+                            @endif
+                        </div>
+
+                        {{-- {{$request->date_pickup}}
+                        {{$request->date_return}} --}}
                 @endforeach
             </div>
 
-            @if ($hasNotifications)
+
+
+
+
+
+
+
+
+            <div id="fines-container" style="display: none;">
+                @if ($hasNotifications)
                 @if ($totalFines > 0)
                 <a href="{{ route('viewBook', ['id' => $request->book->id]) }}">
                 <div class="mb-5 p-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
@@ -61,6 +83,11 @@
                         has passed. As per our policy, a late fee of
 
                         @foreach ($acceptedRequests as $request)
+
+
+
+
+
                             @if ($request->book && $request->fines > 0)
                                 {{$request->fines}} pesos for the "{{ $request->book->title }}"
                                 @if (!$loop->last)
@@ -92,10 +119,33 @@
 
             @endif
 
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             @if (!$hasNotifications)
-                <!-- Message for no notifications -->
-                <p>You have no notifications.</p>
+                {{-- <!-- Message for no notifications -->
+                <p>You have no notifications.</p> --}}
             @endif
+
+
+
+
+
 
 
 
@@ -103,9 +153,14 @@
                 <a href="{{ route('viewBook', ['id' => $reply->comment->book->id]) }}" class="block">
                     <div class="p-5 mb-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
                         <div class="reply">
+                            <div>
                             <p>{{ $reply->user->name }} replied to your comment "{{$reply->reply}}" about the book "{{ $reply->comment->book ? $reply->comment->book->title : 'Unknown Book' }}"
-                            <h6 class="me-3 text-right" style="font-size: 13px;">{{ \Carbon\Carbon::parse($reply->created_at)->shortRelativeDiff() }}</h6>
 
+                            </div> <br>
+                            <div class="me-5">
+                                <h6 class="me-3" style="font-size: 13px;"></h6>
+                                {{ \Carbon\Carbon::parse($reply->created_at)->shortRelativeDiff() }}
+                            </div>
                             </p>
                         </div>
                     </div>
@@ -235,6 +290,43 @@ function clearSearchInput() {
             }
         });
     });
+
+
+    function initializeCountdown() {
+    const countdownElements = document.querySelectorAll('.countdown-timer');
+    countdownElements.forEach(element => {
+        const targetTimestamp = parseInt(element.getAttribute('data-target'), 10);
+        updateCountdown(element, targetTimestamp);
+    });
+}
+
+function updateCountdown(element, targetTimestamp) {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const remainingTime = targetTimestamp - currentTimestamp;
+
+    if (remainingTime > 0) {
+        const hours = Math.floor(remainingTime / 3600);
+        const minutes = Math.floor((remainingTime % 3600) / 60);
+        const seconds = remainingTime % 60;
+        element.innerHTML = hours + "h " + minutes + "m " + seconds + "s";
+
+        // Show "0.00" in the fines container
+        const finesContainer = document.getElementById('fines-container');
+        finesContainer.style.display = 'block';
+        finesContainer.innerHTML = '';
+
+        setTimeout(() => updateCountdown(element, targetTimestamp), 1000);
+    } else {
+        element.innerHTML = "Expired";
+
+        // Show the fines container when the countdown expires
+        const finesContainer = document.getElementById('fines-container');
+        finesContainer.style.display = 'block';
+    }
+}
+
+// Initialize the countdown timers when the page loads
+window.addEventListener('DOMContentLoaded', initializeCountdown);
 
     </script>
 </x-app-layout>

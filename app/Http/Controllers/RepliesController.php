@@ -23,7 +23,7 @@ class RepliesController extends Controller
         ]);
 
         // Redirect back or to a specific page
-        return redirect()->back()->with('success', 'Replied');
+        return redirect()->back()->with('success', 'Replied successfully');
     }
 
     public function destroy(Reply $reply)
@@ -50,7 +50,7 @@ class RepliesController extends Controller
                 'reply' => $request->input('reply'),
             ]);
 
-            return redirect()->back()->with('success', 'Reply updated ');
+            return redirect()->back()->with('success', 'Reply updated');
         } else {
             return redirect()->back()->with('error', 'You are not authorized to update this reply.');
         }

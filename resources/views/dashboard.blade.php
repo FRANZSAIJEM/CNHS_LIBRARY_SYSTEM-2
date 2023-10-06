@@ -27,18 +27,35 @@
     </div>
     <br>
 
+
+    <div style="display: none;">
+        <h1><b><i class="fa-solid fa-hourglass-start"></i> Time Remaining</b></h1>
+        @if ($acceptedRequest)
+        <div class="countdown-timer" data-target="{{ $acceptedRequest->timeDuration->date_return_seconds }}">
+            <!-- Countdown timer will be updated here using JavaScript -->
+        </div>
+        @else
+        <p>No accepted request found.</p>
+        @endif
+    </div>
+
+
+
     @if (!Auth::user()->is_admin)
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="text-center ">
             <h1><b><i class="fa-solid fa-circle-dollar-to-slot"></i> Total Fines</b></h1>
-            <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">₱ &nbsp;{{ number_format($totalFines, 2) ?? '0.00' }}</h3>
+            <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"><div class="flex justify-center">₱ &nbsp; <div id="fines-container" style="display: none;">{{ number_format($totalFines, 2)}}</div></div></h3>
+{{--
+            {{$date_pickup}}
+            {{$date_return}} --}}
+
             <x-nav-link  :href="route('notifications')" :active="request()->routeIs('notifications')">
                 <b style="width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-circle-info"></i> {{ __('Details') }}</b>
             </x-nav-link>
         </div>
     </div>
     @endif
-
 
     @if (Auth::user()->is_admin)
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
@@ -89,6 +106,45 @@ window.addEventListener('beforeunload', function () {
 window.addEventListener('load', function () {
   document.getElementById('loading-bar').style.width = '0';
 });
+
+
+
+function initializeCountdown() {
+    const countdownElements = document.querySelectorAll('.countdown-timer');
+    countdownElements.forEach(element => {
+        const targetTimestamp = parseInt(element.getAttribute('data-target'), 10);
+        updateCountdown(element, targetTimestamp);
+    });
+}
+
+function updateCountdown(element, targetTimestamp) {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const remainingTime = targetTimestamp - currentTimestamp;
+
+    if (remainingTime > 0) {
+        const hours = Math.floor(remainingTime / 3600);
+        const minutes = Math.floor((remainingTime % 3600) / 60);
+        const seconds = remainingTime % 60;
+        element.innerHTML = hours + "h " + minutes + "m " + seconds + "s";
+
+        // Show "0.00" in the fines container
+        const finesContainer = document.getElementById('fines-container');
+        finesContainer.style.display = 'block';
+        finesContainer.innerHTML = '0.00';
+
+        setTimeout(() => updateCountdown(element, targetTimestamp), 1000);
+    } else {
+        element.innerHTML = "Expired";
+
+        // Show the fines container when the countdown expires
+        const finesContainer = document.getElementById('fines-container');
+        finesContainer.style.display = 'block';
+    }
+}
+
+// Initialize the countdown timers when the page loads
+window.addEventListener('DOMContentLoaded', initializeCountdown);
+
 
     </script>
 </x-app-layout>

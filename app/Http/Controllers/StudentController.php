@@ -24,10 +24,12 @@ class StudentController extends Controller
 
 
 
+
     public function index(Request $request)
     {
         $query = User::where('is_admin', false);
         $fines = $request->session()->get('fines');
+
 
         if ($request->has('id_number_search')) {
             $idNumberSearch = $request->input('id_number_search');
@@ -35,6 +37,13 @@ class StudentController extends Controller
                 $subquery->where('id_number', 'LIKE', '%' . $idNumberSearch . '%')
                     ->orWhere('name', 'LIKE', '%' . $idNumberSearch . '%');
             });
+        }
+
+        $acceptedRequest = AcceptedRequest::where('user_id', Auth::id())->first();
+        $date_pickup = $date_return = null;
+        if ($acceptedRequest) {
+            $date_pickup = $acceptedRequest->date_pickup;
+            $date_return = $acceptedRequest->date_return;
         }
 
         $students = $query->get();
@@ -45,8 +54,13 @@ class StudentController extends Controller
             $student->totalFines = $this->calculateTotalFines($student->id);
         }
 
-        return view('student', ['students' => $students, 'fines' => $fines]);
+        return view('student', ['students' => $students, 'fines' => $fines])
+        ->with('date_pickup', $date_pickup)
+        ->with('date_return', $date_return)
+        ->with('acceptedRequest', $acceptedRequest);
     }
+
+
 
 
     public function disableAccount($id)

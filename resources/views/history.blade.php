@@ -18,8 +18,8 @@
             <div>
                 @if (count($userNotifications) > 0)
                 @foreach ($userNotifications as $userNotification)
-                <div>
-                    <div class="flex justify-between shadow-md bg-white dark:bg-dark-eval-1" style="margin: 13px; border-radius: 10px; background-color: rgb(255, 255, 255); padding: 20px">
+
+                    <div class="flex justify-between p-5 mb-5 rounded-md shadow-md bg-white dark:bg-dark-eval-1">
                         <div class="historyList">
                             <div>
                                 <!-- Display the notification text -->
@@ -42,12 +42,10 @@
                             </form>
                         </div>
                     </div>
-
-                </div>
             @endforeach
             @else
                 <!-- Message for no notifications in history -->
-                <p>You have no history.</p>
+                {{-- <p>You have no history.</p> --}}
             @endif
             </div>
         </div>
