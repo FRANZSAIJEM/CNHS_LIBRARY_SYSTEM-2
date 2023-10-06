@@ -46,7 +46,7 @@ class BookController extends Controller
 
         Book::create($validatedData);
 
-        return redirect()->route('bookList')->with('success', 'A new book added successfully!');
+        return redirect()->route('bookList')->with('success', 'Added successfully!');
     }
 
     public function edit($id)
@@ -92,7 +92,7 @@ class BookController extends Controller
         $book->save();
 
         // Step 5: Redirect to a relevant page
-        return redirect()->route('bookList')->with('success', 'Book updated successfully');
+        return redirect()->route('bookList')->with('success', 'Updated successfully');
     }
 
     public function viewBook($id)
@@ -127,7 +127,7 @@ class BookController extends Controller
         // Detach the request for the specific book and user
         $user->requestedBooks()->wherePivot('book_id', $bookId)->detach();
 
-        return redirect()->back()->with('success', 'Request removed successfully.');
+        return redirect()->back()->with('success', 'Removed successfully.');
     }
 
 }

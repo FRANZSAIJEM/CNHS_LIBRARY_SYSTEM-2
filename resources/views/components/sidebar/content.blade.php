@@ -54,9 +54,9 @@
             @endphp
 
             @if (!$visitedHistoryPage && $historyCount > 0)
-            <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
+            {{-- <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
                 {{ $historyCount }}
-            </span>
+            </span> --}}
             @endif
         </x-slot>
     </x-sidebar.link>
@@ -101,65 +101,6 @@
 
 
 
-@php
-$loggedInUserId = Auth::id();
-
-// Check if the user has visited the notifications page
-$visitedNotificationsPage = session('visited_notifications_page', false);
-
-// Count accepted requests with fines greater than 0
-$acceptedRequestsWithFinesCount = App\Models\AcceptedRequest::where('user_id', $loggedInUserId)
-    ->where('fines', '>', 0.00)
-    ->count();
-
-$acceptedRequestsCount = App\Models\AcceptedRequest::where('user_id', $loggedInUserId)->count();
-
-// Count replies received by the logged-in user, excluding their own replies
-$repliesCount = App\Models\Reply::whereHas('comment', function ($query) use ($loggedInUserId) {
-    $query->where('user_id', $loggedInUserId);
-})
-->where('user_id', '!=', $loggedInUserId) // Exclude own replies
-->count();
-
-// Count likes received by the logged-in user, excluding their own likes
-$reactsCount = App\Models\CommentLike::whereHas('comment', function ($query) use ($loggedInUserId) {
-    $query->where('user_id', $loggedInUserId);
-})
-->where('user_id', '!=', $loggedInUserId) // Exclude own likes
-->count();
-
-$currentRouteIsNotifications = request()->routeIs('notifications');
-
-// Check if the user is on the notifications page and set the session
-if ($currentRouteIsNotifications) {
-    session(['visited_notifications_page' => true]);
-}
-
-@endphp
-
-<x-sidebar.link
-    title="Notification"
-    href="{{ route('notifications') }}"
-    :isActive="request()->routeIs('notifications')"
->
-    <x-slot name="icon">
-        <x-heroicon-o-bell class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
-
-        @php
-        $totalNotifications = $visitedNotificationsPage ? 0 : ($acceptedRequestsWithFinesCount + $acceptedRequestsCount + $repliesCount + $reactsCount);
-        @endphp
-        <!-- Conditionally display the badge -->
-        @if ($totalNotifications > 0)
-        <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-50 right-1">
-            {{ $totalNotifications }}
-        </span>
-        @endif
-
-    </x-slot>
-</x-sidebar.link>
-
-
-
 
 
     @if (Auth::user()->is_admin)
@@ -186,12 +127,14 @@ if ($currentRouteIsNotifications) {
         @endphp
 
         @if (!$visitedRequestsPage && $totalRequests > 0)
-        <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
+        {{-- <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
             {{ $totalRequests }}
-        </span>
+        </span> --}}
         @endif
     </x-slot>
 </x-sidebar.link>
+
+
 
 
         <x-sidebar.link

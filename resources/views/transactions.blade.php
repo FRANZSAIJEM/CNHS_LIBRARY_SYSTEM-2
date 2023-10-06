@@ -8,15 +8,16 @@
     </x-slot>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-        <!-- Success Message Container -->
-        @if(session('success'))
-            <div class="success-message-container">
-                <div class="success-message bg-green-100  text-green-700 p-4 mb-4">
-                    {{ session('success') }}
-                </div>
-                <div class="loadingBar"></div>
-            </div>
-        @endif
+        <div style="display: grid; place-items: center;">
+            @if(session('success'))
+               <div class="success-message-container">
+                   <div class="success-message bg-white rounded-lg shadow-md text-green-700 p-4">
+                    <span class="rounded-full p-1 ps-2 pe-2 bg-green-200 text-slate-500" ><i class="fa-solid fa-check"></i></span> {{ session('success') }}
+                        <div class="loadingBar"></div>
+                   </div>
+               </div>
+           @endif
+       </div>
         <div class="text-right mb-5">
             <div>
                 <div class="" style="display: grid; place-content: center;">
@@ -39,7 +40,7 @@
                 <div class="flex flex-wrap">
                     @if (count($acceptedRequests) > 0)
                     @foreach ($acceptedRequests as $acceptedRequest)
-                        <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px;">
+                        <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                             <div style="width: 300px; height: 550px;">
                                 <div class="p-5">
                                     <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>
@@ -79,9 +80,9 @@
                         </div>
                     @endforeach
                     @else
-                    <!-- Message for no requests -->
-                    <p>There is no transactios.</p>
-                @endif
+
+                        <p>There is no transactions.</p>
+                    @endif
                 </div>
             </div>
             {{-- <div>
@@ -148,13 +149,14 @@
         .search-button {
             padding: 10px;
         }
-    .success-message-container {
-        position: relative;
+        .success-message-container {
+        position: fixed;
     }
 
     .success-message {
+        text-align: right;
+        margin-bottom: 150px;
         opacity: 0;
-        transform: translateY(-20px);
         transition: opacity 0.3s, transform 0.3s;
     }
 

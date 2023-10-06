@@ -24,11 +24,7 @@ class BookListController extends Controller
         }
 
 
-        // if ($request->has('request_search')) {
-        //     $requestSearch = $request->input('request_search');
-        //     $query->orWhere('name', 'LIKE', '%' . $requestSearch . '%')
-        //           ->orWhere('id_number', 'LIKE', '%' . $requestSearch . '%');
-        // }
+
 
         $bookLists = $query->paginate(4);
 
@@ -64,7 +60,7 @@ class BookListController extends Controller
         $book->delete(); // Delete the book itself
 
         // Redirect back to the book list page or any other page you prefer
-        return redirect()->route('bookList')->with('success', 'Book and associated data deleted successfully');
+        return redirect()->route('bookList')->with('success', 'Deleted successfully');
     }
 
 

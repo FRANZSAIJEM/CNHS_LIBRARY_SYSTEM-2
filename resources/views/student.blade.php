@@ -8,6 +8,16 @@
     </x-slot>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+        <div style="display: grid; place-items: center;">
+            @if(session('success'))
+               <div class="success-message-container">
+                   <div class="success-message bg-white rounded-lg shadow-md text-green-700 p-4">
+                    <span class="rounded-full p-1 ps-2 pe-2 bg-green-200 text-slate-500" ><i class="fa-solid fa-check"></i></span> {{ session('success') }}
+                        <div class="loadingBar"></div>
+                   </div>
+               </div>
+           @endif
+       </div>
         <div class="text-right mb-5">
             <div>
               <div class="" style="display: grid; place-content: center;">
@@ -24,7 +34,7 @@
             <div class="studentCenter">
                 <div class="flex flex-wrap">
                     @foreach ($students as $student)
-                    <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px;">
+                    <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                         <div style="width: 300px; height: 550px;">
                             <div class="p-5">
                                 <h1><b><i class="fa-solid fa-file-signature"></i> Full Name</b></h1>
@@ -99,6 +109,16 @@
    {{-- Loading Screen --}}
    <div id="loading-bar" class="loading-bar"></div>
   <style>
+        .success-message-container {
+        position: fixed;
+    }
+
+    .success-message {
+        text-align: right;
+        margin-bottom: 150px;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+    }
         .search-bar {
             display: block;
             max-height: 0;

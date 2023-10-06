@@ -79,7 +79,7 @@ class AcceptRequestController extends Controller
         }
 
         // Redirect back to the previous page or wherever you want.
-        return redirect()->back()->with('success', 'Request accepted and saved.')
+        return redirect()->back()->with('success', 'Accepted and saved.')
         ->with('notification', $notificationText);
     }
 
@@ -140,7 +140,7 @@ class AcceptRequestController extends Controller
             $userNotification->delete();
 
             // Redirect back to the history page or wherever you prefer
-            return redirect()->back()->with('success', 'Notification cleared successfully');
+            return redirect()->back()->with('success', 'Cleared successfully');
         } else {
             // Handle the case where the record does not exist (e.g., show an error message)
             return redirect()->back()->with('error', 'Notification not found');
@@ -152,7 +152,7 @@ class AcceptRequestController extends Controller
 
         $transaction->delete();
 
-        return redirect()->back()->with('success', 'New book returned successfully');
+        return redirect()->back()->with('success', 'Returned successfully');
 
     }
 

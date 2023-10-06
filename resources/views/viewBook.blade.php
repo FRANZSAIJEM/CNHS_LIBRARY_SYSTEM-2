@@ -10,17 +10,19 @@
     </x-slot>
 
 <div style="display: grid; place-content: center;" class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+    <div style="display: grid; place-items: center;">
+        @if(session('success'))
+           <div class="success-message-container">
+               <div class="success-message bg-white rounded-lg shadow-md text-green-700 p-4">
+                <span class="rounded-full p-1 ps-2 pe-2 bg-green-200 text-slate-500" ><i class="fa-solid fa-check"></i></span> {{ session('success') }}
+                    <div class="loadingBar"></div>
+               </div>
+           </div>
+       @endif
+   </div>
     <div class="viewAndComment overflow-hidden">
         <div class="p-6 overflow-hidden ">
-            <!-- Success Message Container -->
-            @if(session('success'))
-                <div class="success-message-container">
-                    <div class="success-message bg-green-100  text-green-700 p-4 mb-4">
-                        {{ session('success') }}
-                    </div>
-                    <div class="loadingBar"></div>
-                </div>
-                @endif
+
 
             <div class="viewFlex rounded-md mb-5">
                <div class="marginTwo">
@@ -349,12 +351,13 @@
         max-height: 1000px; /* Adjust to a suitable value that accommodates your content */
     }
     .success-message-container {
-        position: relative;
+        position: fixed;
     }
 
     .success-message {
+        text-align: right;
+        margin-bottom: 150px;
         opacity: 0;
-        transform: translateY(-20px);
         transition: opacity 0.3s, transform 0.3s;
     }
 

@@ -33,8 +33,6 @@
                 @endphp
 
             @endforeach
-
-
                 @foreach($acceptedRequests as $request)
                     @if ($request->fines !== null)
                         @php
@@ -47,7 +45,8 @@
 
             @if ($hasNotifications)
                 @if ($totalFines > 0)
-                <div class="mb-5 p-5 rounded-md shadow-md dark:bg-dark-eval-1 ">
+                <a href="{{ route('viewBook', ['id' => $request->book->id]) }}">
+                <div class="mb-5 p-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
                     <h1><b>Hello</b> {{ $loggedInUser->name }},</h1>
                     <p>
                         We hope this message finds you well. We would like to bring to your attention that the return date for the book(s) you borrowed,
@@ -88,6 +87,7 @@
                         </div>
                     </p>
                 </div>
+            </a>
                 @endif
 
             @endif
@@ -132,53 +132,50 @@
 
 
 
+        @foreach($acceptedRequests as $request)
+        <a href="{{ route('viewBook', ['id' => $request->book_id]) }}">
+        <div class="p-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
+            <h1><b>Hello</b> {{ $loggedInUser->name }},</h1>
+            <p>
+                We are pleased to inform you that your book request for
+                "{{$request->book_title}}"
+                has been confirmed. We have scheduled a pick-up time and date for your convenience. <br> <br>
+                <hr>
+                 <br>
 
-                @foreach($acceptedRequests as $request)
-                <div class="p-5 rounded-md shadow-md dark:bg-dark-eval-1">
-                    <h1><b>Hello</b> {{ $loggedInUser->name }},</h1>
-                    <p>
-                        We are pleased to inform you that your book request for "{{$request->book_title}}" has been confirmed. We have scheduled a pick-up
-                    time and date for your convenience. <br> <br>
-                    <hr>
-                     <br>
+                 @php
+                    $carbonDate1 = \Carbon\Carbon::parse($request->date_borrow);
+                    $carbonDate2 = \Carbon\Carbon::parse($request->date_pickup);
+                    $carbonDate3 = \Carbon\Carbon::parse($request->date_return);
 
-                     @php
-                        $carbonDate1 = \Carbon\Carbon::parse($request->date_borrow);
-                        $carbonDate2 = \Carbon\Carbon::parse($request->date_pickup);
-                        $carbonDate3 = \Carbon\Carbon::parse($request->date_return);
+                    $formattedDate1 = $carbonDate1->format('l, F jS, Y');
+                    $formattedDate2 = $carbonDate2->format('l, F jS, Y');
+                    $formattedDate3 = $carbonDate3->format('l, F jS, Y');
 
-                        $formattedDate1 = $carbonDate1->format('l, F jS, Y');
-                        $formattedDate2 = $carbonDate2->format('l, F jS, Y');
-                        $formattedDate3 = $carbonDate3->format('l, F jS, Y');
+                @endphp
 
-                    @endphp
+                <div>
+                    <b>Date Borrowed</b> <br>
+                    {{ $formattedDate1 }}
+                </div> <br>
 
-                    <div>
-                        <b>Date Borrowed</b> <br>
-                        {{ $formattedDate1 }}
-
-                        {{-- {{ \Carbon\Carbon::parse($request->date_borrow)->shortRelativeDiff() }} --}}
-
-                    </div> <br>
-
-                    <div>
-                        <b>Date Pick-up</b> <br>
-                        {{ $formattedDate2 }}
-
-                    </div> <br>
-                    <div>
-                        <b>Date Return</b> <br>
-                        {{ $formattedDate3 }}
-
-                    </div>
-                    <div class="text-right">
-                        {{ \Carbon\Carbon::parse($request->created_at)->shortRelativeDiff() }}
-
-                    </div>
-
-                    </p>
+                <div>
+                    <b>Date Pick-up</b> <br>
+                    {{ $formattedDate2 }}
+                </div> <br>
+                <div>
+                    <b>Date Return</b> <br>
+                    {{ $formattedDate3 }}
                 </div>
-                @endforeach
+                <div class="text-right mt-5">
+                    {{ \Carbon\Carbon::parse($request->created_at)->shortRelativeDiff() }}
+                </div>
+            </p>
+        </div>
+    </a>
+        @endforeach
+
+
         </div>
     </div>
 
