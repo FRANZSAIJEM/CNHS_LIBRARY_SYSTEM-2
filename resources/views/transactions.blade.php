@@ -35,11 +35,22 @@
             </div>
         </div>
 
+
         <div class="">
             <div class="transactCenter">
                 <div class="flex flex-wrap">
                     @if (count($acceptedRequests) > 0)
                     @foreach ($acceptedRequests as $index => $acceptedRequest)
+                    @php
+                        $carbonDate1 = \Carbon\Carbon::parse($acceptedRequest->date_borrow);
+                        $carbonDate2 = \Carbon\Carbon::parse($acceptedRequest->date_pickup);
+                        $carbonDate3 = \Carbon\Carbon::parse($acceptedRequest->date_return);
+
+                        $formattedDate1 = $carbonDate1->format('l, F jS, Y');
+                        $formattedDate2 = $carbonDate2->format('l, F jS, Y');
+                        $formattedDate3 = $carbonDate3->format('l, F jS, Y');
+
+                    @endphp
                         <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                             <div style="width: 300px; height: 550px;">
                                 <div class="p-5">
@@ -50,9 +61,13 @@
                                     <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
                                     {{ $acceptedRequest->book_title }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Borrowed On</b></h1>
-                                    {{ $acceptedRequest->date_borrow->format('Y-m-d H:i A') }} <br> <hr> <br>
+                                    {{ $formattedDate1}} <br> <hr> <br>
+
+
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Pickup Date</b></h1>
-                                    {{ $acceptedRequest->date_pickup->format('Y-m-d H:i A') }} <br> <hr> <br>
+                                    {{ $formattedDate2 }} <br> <hr> <br>
+
+
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Return Date</b></h1>
 
 
@@ -63,7 +78,7 @@
                                         </div>
                                     </div>
 
-                                        {{ $acceptedRequest->date_return->format('Y-m-d H:i A') }} <br> <hr> <br>
+                                        {{ $formattedDate3 }} <br> <hr> <br>
                                         <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
 
                                         <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->fines }}</div></div>
