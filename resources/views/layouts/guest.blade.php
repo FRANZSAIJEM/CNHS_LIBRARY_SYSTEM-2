@@ -24,6 +24,7 @@
 </head>
 
 <body>
+
     <div style="font-family: 'Poppins', sans-serif;"
         x-data="mainState"
         class="antialiased"

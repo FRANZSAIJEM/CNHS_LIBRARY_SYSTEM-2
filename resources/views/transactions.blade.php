@@ -57,8 +57,8 @@
 
 
                                     <div >
-                                        <h1><b><i class="fa-solid fa-hourglass-start"></i> Time Remaining</b></h1>
-                                        <div class="countdown-timer" data-target="{{ $acceptedRequest->timeDuration->date_return_seconds }}">
+                                        {{-- <h1><b><i class="fa-solid fa-hourglass-start"></i> Time Remaining</b></h1> --}}
+                                        <div style="display: none;" class="countdown-timer" data-target="{{ $acceptedRequest->timeDuration->date_return_seconds }}">
                                             <!-- Countdown timer will be updated here using JavaScript -->
                                         </div>
                                     </div>

@@ -8,49 +8,11 @@
     }">
 
     <div class="flex items-center gap-3">
-        {{-- <x-button
-            type="button"
-            class="md:hidden"
-            icon-only
-            variant="secondary"
-            sr-text="Toggle dark mode"
-            x-on:click="toggleTheme"
-        >
-            <x-heroicon-o-moon
-                x-show="!isDarkMode"
-                aria-hidden="true"
-                class="w-6 h-6"
-            />
 
-            <x-heroicon-o-sun
-                x-show="isDarkMode"
-                aria-hidden="true"
-                class="w-6 h-6"
-            />
-        </x-button> --}}
     </div>
 
     <div class="flex items-center gap-3">
-        {{-- <x-button
-            type="button"
-            class="hidden md:inline-flex"
-            icon-only
-            variant="secondary"
-            sr-text="Toggle dark mode"
-            x-on:click="toggleTheme"
-        >
-            <x-heroicon-o-moon
-                x-show="!isDarkMode"
-                aria-hidden="true"
-                class="w-6 h-6"
-            />
 
-            <x-heroicon-o-sun
-                x-show="isDarkMode"
-                aria-hidden="true"
-                class="w-6 h-6"
-            />
-        </x-button> --}}
 
         @php
         $loggedInUserId = Auth::id();
@@ -88,9 +50,45 @@
 
         @endphp
 
+    <?php
+    $loggedInUserId = Auth::id(); // Get the logged-in user's ID
+    $acceptedRequestCount = App\Models\AcceptedRequest::where('user_id', $loggedInUserId)->count();
+    ?>
 
-
-
+        @if (!Auth::user()->is_admin)
+        <div>
+            @if ($acceptedRequestCount > 0)
+                <a href="{{ route('navbar') }}">
+                    <b style="display: inline-block; transform-origin: center; animation: rotate 2s linear infinite;">&#8987;</b>
+                </a>
+            @else
+                <span>
+                    <b style="display: inline-block;">&#8987;</b>
+                </span>
+            @endif
+        </div>
+        @endif
+    <style>
+        @if ($acceptedRequestCount == 0)
+            @keyframes rotate {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(0deg);
+                }
+            }
+        @else
+            @keyframes rotate {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        @endif
+    </style>
 
 
 
@@ -116,8 +114,6 @@
 
             </x-slot>
         </x-sidebar.link>
-
-
 
 
         <x-dropdown align="right" width="48" style="z-index: 0;">
@@ -176,18 +172,6 @@
         'translate-y-0': scrollingUp,
     }"
 >
-    {{-- <x-button
-        type="button"
-        icon-only
-        variant="secondary"
-        sr-text="Search"
-    >
-        <x-heroicon-o-search aria-hidden="true" class="w-6 h-6" />
-    </x-button> --}}
-
-
-
-
 
 
     <a href="{{ route('dashboard') }}">

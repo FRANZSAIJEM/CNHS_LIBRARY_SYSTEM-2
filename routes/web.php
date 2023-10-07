@@ -9,6 +9,8 @@ use App\Http\Controllers\BookListController;
 use App\Http\Controllers\AcceptRequestController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RepliesController;
+use App\Http\Controllers\NavbarController;
+
 
 
 use App\Http\Controllers\Controller;
@@ -40,6 +42,9 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
     Route::get('/student', [StudentController::class, 'index'])->name('student');
 
 });
+
+
+Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar');
 
 
 Route::post('/comments/like/{comment}', [CommentController::class, 'like'])->name('comments.like');
