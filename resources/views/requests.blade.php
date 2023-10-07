@@ -84,10 +84,10 @@
                                         <input class="border-none"  type="datetime-local" id="date_return" name="date_return" required>
                                     </div>
                                     <br>
-                                    <div>
+                                    {{-- <div>
                                         <label for="fines"><b><i class="fa-solid fa-money-check-dollar"></i> Fines (optional)</b></label> <br>
                                         <input class="border-none"  type="number" step="0.01" id="fines" name="fines" placeholder="Enter fine amount">
-                                    </div> <br>
+                                    </div> --}} <br>
                                         <hr>
                                         <br>
                                     <div class="flex justify-end">

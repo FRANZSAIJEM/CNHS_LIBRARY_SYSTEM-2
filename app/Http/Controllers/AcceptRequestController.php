@@ -115,15 +115,15 @@ class AcceptRequestController extends Controller
         return view('transactions', compact('acceptedRequests', 'idNumberSearch'));
     }
 
-
     public function history()
     {
         // Get the currently authenticated user
         $user = Auth::user();
 
-        // Retrieve the user's notifications from the database
+        // Retrieve the user's notifications from the database and sort them in ascending order by the created_at timestamp
         $userNotifications = UserNotification::where('user_id', $user->id)
             ->with('notification')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('history', compact('userNotifications'));

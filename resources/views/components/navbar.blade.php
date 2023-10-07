@@ -58,12 +58,12 @@
         @if (!Auth::user()->is_admin)
         <div>
             @if ($acceptedRequestCount > 0)
-                <a href="{{ route('navbar') }}">
-                    <b style="display: inline-block; transform-origin: center; animation: rotate 2s linear infinite;">&#8987;</b>
+                <a style="padding: 10px;" class="rounded-lg hover:bg-slate-100 duration-100"  href="{{ route('navbar') }}">
+                    <b style="font-size: 20px; display: inline-block; transform-origin: center; animation: rotate 2s linear infinite;"><i class="fa-solid fa-clock"></i></b>
                 </a>
             @else
                 <span>
-                    <b style="display: inline-block;">&#8987;</b>
+                    <b style="font-size: 20px; display: inline-block; opacity: 50%;"><i class="fa-solid fa-clock"></i></b>
                 </span>
             @endif
         </div>
@@ -115,6 +115,7 @@
             </x-slot>
         </x-sidebar.link>
 
+        
 
         <x-dropdown align="right" width="48" style="z-index: 0;">
 

@@ -210,16 +210,16 @@
                 @endphp
 
                 <div>
-                    <b>Date Borrowed</b> <br>
+                    <b><i class="fa-solid fa-calendar-days"></i> Date Borrowed</b> <br>
                     {{ $formattedDate1 }}
                 </div> <br>
 
                 <div>
-                    <b>Date Pick-up</b> <br>
+                    <b><i class="fa-solid fa-calendar-days"></i> Date Pick-up</b> <br>
                     {{ $formattedDate2 }}
                 </div> <br>
                 <div>
-                    <b>Date Return</b> <br>
+                    <b><i class="fa-solid fa-calendar-days"></i> Date Return</b> <br>
                     {{ $formattedDate3 }}
                 </div>
                 <div class="text-right mt-5">
