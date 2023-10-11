@@ -32,5 +32,9 @@ class AcceptedRequest extends Model
     {
         return $this->hasOne(TimeDuration::class);
     }
+    public function defaultFine()
+    {
+        return $this->belongsTo(DefaultFine::class, 'default_fine_id');
+    }
 
 }

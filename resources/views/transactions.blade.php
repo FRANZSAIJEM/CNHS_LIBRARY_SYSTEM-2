@@ -59,7 +59,7 @@
                                     <h1><b><i class="fa-solid fa-id-card"></i> ID Number</b></h1>
                                     {{ $acceptedRequest->user->id_number }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
-                                    {{ $acceptedRequest->book_title }} <br> <hr> <br>
+                                    {{ $acceptedRequest->book->title }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Borrowed On</b></h1>
                                     {{ $formattedDate1}} <br> <hr> <br>
 
@@ -81,7 +81,7 @@
                                         {{ $formattedDate3 }} <br> <hr> <br>
                                         <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
 
-                                        <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->fines }}</div></div>
+                                        <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->defaultFineAmount  }}</div></div>
 
                                         <hr>
 

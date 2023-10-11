@@ -56,7 +56,8 @@
                             <div class="text-center">
                                 <form class="toggle-form" data-student-id="{{ $student->id }}" style="display: inline;">
                                     @csrf
-                                    <i id="i" class="fa-regular fa-address-card"></i><button class="toggle-button" type="button"
+                                    <i id="i" class="fa-regular fa-address-card"></i>
+                                    <button class="toggle-button " type="button"
                                             style="font-weight: 1000; padding: 10px; border-radius: 5px; color: {{ $student->is_disabled ? 'red' : 'green' }};">
                                              {{ $student->is_disabled ? 'Account Disabled' : 'Account Enabled' }}
                                     </button>

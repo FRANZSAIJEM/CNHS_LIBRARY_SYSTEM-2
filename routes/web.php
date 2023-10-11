@@ -10,6 +10,8 @@ use App\Http\Controllers\AcceptRequestController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\NavbarController;
+use App\Http\Controllers\DefaultFineController;
+
 
 
 
@@ -43,6 +45,7 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 
 });
 
+Route::post('/setDefaultFine', [DefaultFineController::class, 'store'])->name('setDefaultFine');
 
 Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar');
 

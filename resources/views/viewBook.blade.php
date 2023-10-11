@@ -103,7 +103,7 @@
                                                     <button type="submit" class="hidden text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 " id="comment-button-{{ $comment->id }}"><b>Save</b>
                                                     </button>
                                                 </div>
-                                                <textarea name="comment" id="edit-comment-{{ $comment->id }}" disabled style="resize: none;" class="p-6 comments overflow-hidden border-none bg-white rounded-md dark:bg-dark-eval-1" rows="1" >{{ $comment->comment }}</textarea>
+                                                <textarea style="resize: none; min-height: 50px; max-height: 500px; overflow-y: auto; border: 1px solid #ccc;" name="comment" id="edit-comment-{{ $comment->id }}" disabled class="p-6 comments overflow-hidden border-none bg-white rounded-md dark:bg-dark-eval-1" rows="1" >{{ $comment->comment }}</textarea>
 
                                             </form>
                                         </div>
@@ -258,30 +258,35 @@
         </div>
 
     </div>
+
+
+
     <div style="display: grid; place-content: center;" class="mt-5">
         @if (!Auth::user()->is_admin)
-        <div >
-            <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook ||  auth()->user()->hasRequestedBookAny() ? 'disabled' : '' }}"
-                onclick="showConfirmationModal({{ $book->id }})"
-                type="submit"
-                {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook ||  auth()->user()->hasRequestedBookAny()  ? 'disabled' : '' }}
-            >
-                <b>
-                    @if ($book->requestedByUsers->count() > 0)
-                        @if (auth()->user()->hasRequestedBook($book->id))
-                            <i class="fa-solid fa-code-pull-request"></i> Requested
+            <div >
+                <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || auth()->user()->hasAcceptedBook() || $userHasAcceptedRequest || $userHasRequestedThisBook ||  auth()->user()->hasRequestedBookAny() ? 'disabled' : '' }}"
+                    onclick="showConfirmationModal({{ $book->id }})"
+                    type="submit"
+                    {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || auth()->user()->hasAcceptedBook() || $userHasAcceptedRequest || $userHasRequestedThisBook ||  auth()->user()->hasRequestedBookAny()  ? 'disabled' : '' }}
+                >
+                    <b>
+                        @if ($book->requestedByUsers->count() > 0)
+                            @if (auth()->user()->hasRequestedBook($book->id))
+                                <i class="fa-solid fa-code-pull-request"></i> Requested
+                            @else
+                                <i class="fa-solid fa-code-pull-request"></i> Requested by {{ $book->requestedByUsers[0]->name }}
+                            @endif
                         @else
-                            <i class="fa-solid fa-code-pull-request"></i> Requested by {{ $book->requestedByUsers[0]->name }}
+                            <i class="fa-solid fa-code-pull-request"></i> Request
                         @endif
-                    @else
-                        <i class="fa-solid fa-code-pull-request"></i> Request
-                    @endif
-                </b>
-            </button>
+                    </b>
+                </button>
 
-        </div>
-    @endif
+            </div>
+        @endif
     </div>
+
+
 
 </div>
 

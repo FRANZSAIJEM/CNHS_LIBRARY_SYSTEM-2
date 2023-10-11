@@ -1,3 +1,8 @@
+<?php
+use App\Models\DefaultFine;
+
+$defFine = DefaultFine::first();
+?>
 <x-app-layout>
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -7,7 +12,7 @@
         </div>
     </x-slot>
 
-    <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+    <div class="p-6 bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div style="display: grid; place-items: center;">
             @if(session('success'))
                <div class="success-message-container">
@@ -30,7 +35,32 @@
 
                     </form>
                 </div>
-                <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
+
+
+
+                <div style="position: relative">
+                    <button id="showSearchButton" class="text-slate-600 hover:text-slate-900 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
+                    <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
+
+                    <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50;">
+                        <div class="p-5 rounded-lg shadow-md bg-slate-50">
+                            <h1 class="text-center"><b>Set Default Fines</b>
+
+                            </h1> <br>
+
+                            <div class="text-end">
+                                <form action="{{ route('setDefaultFine') }}" method="POST">
+                                    @csrf
+
+                                    ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{$defFine->amount}}" type="text" name="amount" placeholder="Enter default fine amount" required> <br>
+                                    <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 
             </div>
         </div>
@@ -64,6 +94,10 @@
                             </form>
                         </div>
                     </div>
+
+
+
+
                     <div  id="confirmAcceptModal-{{ $requestedBook->id }}" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
                         <div class="modalWidth" style="transform: translateY(35px); background-color: white; border-radius: 5px; margin: 100px auto; padding: 20px; text-align: left;">
                             <div class="flex justify-between">
@@ -99,6 +133,9 @@
 
                         </div>
                     </div>
+
+
+
                     @endforeach
                 @endforeach
                     @else
@@ -270,6 +307,16 @@ window.addEventListener('load', function () {
   document.getElementById('loading-bar').style.width = '0';
 });
 
+document.getElementById('showFormButton').addEventListener('click', function() {
+        var form = document.getElementById('defaultFineForm');
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    });
+
+
 
 function showAcceptanceModal(requestedBook) {
             var modal = document.getElementById(`confirmAcceptModal-${requestedBook}`);
@@ -279,6 +326,7 @@ function showAcceptanceModal(requestedBook) {
             var form = modal.querySelector('form');
             form.action = form.action.replace('__REQUESTEDBOOK_ID__', requestedBook);
         }
+
 
         function hideConfirmationModal() {
             var modal = document.getElementById('confirmAddModal');

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\DefaultFine;
+
 
 use App\Models\Reply;
 use App\Models\TimeDuration;
@@ -28,6 +30,21 @@ class AcceptRequestController extends Controller
         $acceptedRequest->book_title = $book->title;
         $acceptedRequest->borrower_id = $user->id;
         $acceptedRequest->date_borrow = now();
+
+
+        $latestDefaultFine = DefaultFine::orderBy('updated_at', 'desc')->first();
+
+
+        // Check if a default fine record exists
+        if ($latestDefaultFine) {
+            $acceptedRequest->default_fine_id = $latestDefaultFine->id;
+        } else {
+            // Handle the case where there is no default fine record (provide a default value or error handling)
+            // You can set a default value or handle this case as needed.
+        }
+
+
+
          // Retrieve the values from the form and format them as datetime values
         $acceptedRequest->date_pickup = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_pickup'));
         $acceptedRequest->date_return = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_return'));
@@ -37,9 +54,6 @@ class AcceptRequestController extends Controller
         $timeDuration->date_pickup_seconds = $acceptedRequest->date_pickup->timestamp;
         $timeDuration->date_return_seconds = $acceptedRequest->date_return->timestamp;
 
-
-                // Always set fines to 100.00
-        $acceptedRequest->fines = 100.00;
 
         // Update the timestamp to the current time
         $acceptedRequest->updated_at = now();
@@ -101,6 +115,21 @@ class AcceptRequestController extends Controller
         }
 
         $acceptedRequests = $query->get();
+
+            // Retrieve the default fine amount for each accepted request
+        foreach ($acceptedRequests as $acceptedRequest) {
+            $defaultFine = DefaultFine::find($acceptedRequest->default_fine_id);
+
+            // If a default fine record exists, set the 'defaultFineAmount' attribute
+            if ($defaultFine) {
+                $acceptedRequest->defaultFineAmount = $defaultFine->amount;
+            } else {
+                // Handle the case where there is no default fine record (provide a default value or error handling)
+                // You can set a default value or handle this case as needed.
+                $acceptedRequest->defaultFineAmount = 0;
+            }
+        }
+
 
         // Convert date_borrow and date_return fields to DateTime objects
         $acceptedRequests->each(function ($acceptedRequest) {
@@ -198,6 +227,8 @@ class AcceptRequestController extends Controller
         // Retrieve accepted requests for the logged-in user
         $acceptedRequests = AcceptedRequest::where('user_id', $loggedInUserId)->get();
 
+        $defaultFine = DefaultFine::orderBy('updated_at', 'desc')->first();
+
         // Retrieve book information for each comment
         $commentsWithBooks = $comments->map(function ($comment) {
             $book = $comment->book;
@@ -213,6 +244,7 @@ class AcceptRequestController extends Controller
             'likes' => $likes,
             'loggedInUser' => auth()->user(),
             'commentsWithBooks' => $commentsWithBooks,
+            'defaultFine' => $defaultFine,
         ]);
     }
 

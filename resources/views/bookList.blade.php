@@ -85,6 +85,8 @@
        </div>
        </div>
     </div>
+
+    
     {{-- Add Modal --}}
     <div id="confirmAddModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
         <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
@@ -148,6 +150,8 @@
         </div>
     </div>
 
+
+
     {{-- Delete Modal --}}
     <div id="confirmDeleteModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
         <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
@@ -174,6 +178,11 @@
             </div>
         </div>
     </div>
+
+
+
+
+
        {{-- Loading Screen --}}
        <div id="loading-bar" class="loading-bar"></div>
 </div>

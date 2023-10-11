@@ -56,15 +56,22 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function hasAcceptedBook()
+    {
+        return $this->acceptedRequests()->exists();
+    }
+
     public function hasRequestedBookAny()
     {
         return $this->requestedBooks()->exists();
     }
 
+
     public function hasRequestedBook($bookId)
-{
-    return $this->requestedBooks()->where('book_id', $bookId)->exists();
-}
+    {
+        return $this->requestedBooks()->where('book_id', $bookId)->exists();
+    }
+
 
     public function acceptedRequests()
     {

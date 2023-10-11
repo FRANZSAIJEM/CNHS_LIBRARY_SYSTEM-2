@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\book;
+use App\Models\DefaultFine;
+
 use App\Models\AcceptedRequest;
 
 use Illuminate\Support\Facades\View;
@@ -33,6 +35,8 @@ class DashboardController extends Controller
             $date_return = $acceptedRequest->date_return;
         }
 
+        $defaultFine = DefaultFine::first();
+
         return view('dashboard')
             ->with('totalStudents', $totalStudents)
             ->with('totalBooks', $totalBooks)
@@ -40,7 +44,8 @@ class DashboardController extends Controller
             ->with('totalFines', $totalFines)
             ->with('date_pickup', $date_pickup)
             ->with('date_return', $date_return)
-            ->with('acceptedRequest', $acceptedRequest); // Pass $acceptedRequest to the view
+            ->with('acceptedRequest', $acceptedRequest)
+            ->with('defaultFine', $defaultFine); // Pass $acceptedRequest to the view
     }
 
     private function calculateTotalFines($userId)
