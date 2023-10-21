@@ -103,7 +103,8 @@
                                                     <button type="submit" class="hidden text-slate-600 p-3 ps-5 pe-5 rounded-md hover:text-slate-700 duration-100 " id="comment-button-{{ $comment->id }}"><b>Save</b>
                                                     </button>
                                                 </div>
-                                                <textarea style="resize: none; min-height: 50px; max-height: 500px; overflow-y: auto; border: 1px solid #ccc;" name="comment" id="edit-comment-{{ $comment->id }}" disabled class="p-6 comments overflow-hidden border-none bg-white rounded-md dark:bg-dark-eval-1" rows="1" >{{ $comment->comment }}</textarea>
+
+                                                <textarea style="resize: none; min-height: 50px; max-height: 500px; overflow-y: auto; border: 1px solid #ccc;" name="comment" id="edit-comment-{{ $comment->id }}" disabled class="p-3 comments overflow-hidden border-none bg-white rounded-md dark:bg-dark-eval-1">{{ $comment->comment }}</textarea>
 
                                             </form>
                                         </div>

@@ -44,15 +44,13 @@ $defFine = DefaultFine::first();
 
                     <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50;">
                         <div class="p-5 rounded-lg shadow-md bg-slate-50">
-                            <h1 class="text-center"><b>Set Default Fines</b>
-
-                            </h1> <br>
+                            <h1 class="text-center"><b>Set Default Fines</b></h1><br>
 
                             <div class="text-end">
                                 <form action="{{ route('setDefaultFine') }}" method="POST">
                                     @csrf
 
-                                    ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{$defFine->amount}}" type="text" name="amount" placeholder="Enter default fine amount" required> <br>
+                                    ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defFine ? $defFine->amount : '' }}" type="text" name="amount" placeholder="Enter default fine amount" required><br>
                                     <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
                                 </form>
                             </div>
@@ -66,7 +64,7 @@ $defFine = DefaultFine::first();
         </div>
         <div class="requestCenter">
             <div class="flex flex-wrap">
-                @if (count($users) > 0)
+                @if ($totalRequests > 0)
                 @foreach ($users as $user)
                     @foreach ($user->requestedBooks as $requestedBook)
                     <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
@@ -133,14 +131,11 @@ $defFine = DefaultFine::first();
 
                         </div>
                     </div>
-
-
-
                     @endforeach
                 @endforeach
                     @else
                     <!-- Message for no requests -->
-                    <p>You have no requests.</p>
+                    <p style="tra">You have no requests.</p>
                 @endif
             </div>
         </div>

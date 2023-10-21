@@ -56,6 +56,7 @@
     ?>
 
         @if (!Auth::user()->is_admin)
+
         <div>
             @if ($acceptedRequestCount > 0)
                 <a style="padding: 10px;" class="rounded-lg hover:bg-slate-100 duration-100"  href="{{ route('navbar') }}">
@@ -115,7 +116,7 @@
             </x-slot>
         </x-sidebar.link>
 
-        
+
 
         <x-dropdown align="right" width="48" style="z-index: 0;">
 

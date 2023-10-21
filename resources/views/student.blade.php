@@ -49,9 +49,6 @@
                                 {{$student->gender}} <br> <hr> <br>
                                 <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
                                 {{$student->grade_level}} <br> <hr> <br>
-
-                                {{-- <h1><b><i class="fa-solid fa-money-check-dollar"></i> Total Fines</b></h1>
-                                ₱ &nbsp;{{ number_format($student->totalFines, 2) ?? '0.00' }}  <br> <hr> <br> --}}
                             </div>
                             <div class="text-center">
                                 <form class="toggle-form" data-student-id="{{ $student->id }}" style="display: inline;">
@@ -59,13 +56,17 @@
                                     <i id="i" class="fa-regular fa-address-card"></i>
                                     <button class="toggle-button " type="button"
                                             style="font-weight: 1000; padding: 10px; border-radius: 5px; color: {{ $student->is_disabled ? 'red' : 'green' }};">
-                                             {{ $student->is_disabled ? 'Account Disabled' : 'Account Enabled' }}
+                                        {{ $student->is_disabled ? 'Account Disabled' : 'Account Enabled' }}
                                     </button>
                                 </form>
-                              </div>
+
+                                <!-- Add a button to start a chat with the student using their user ID -->
+                                <a href="/start-chat/{{$student->id}}" class="btn btn-primary">Start Chat</a>
+                            </div>
                         </div>
                     </div>
                     @endforeach
+
                 </div>
             </div>
 

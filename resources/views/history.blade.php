@@ -45,7 +45,7 @@
             @endforeach
             @else
                 <!-- Message for no notifications in history -->
-                {{-- <p>You have no history.</p> --}}
+                <p>You have no history.</p>
             @endif
             </div>
         </div>

@@ -102,8 +102,8 @@
                         </div>
                     @endforeach
                     @else
-{{--
-                        <p>There is no transactions.</p> --}}
+
+                        <p>There is no transactions.</p>
                     @endif
                 </div>
             </div>

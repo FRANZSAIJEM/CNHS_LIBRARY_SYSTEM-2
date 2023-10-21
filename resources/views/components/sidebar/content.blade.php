@@ -62,7 +62,16 @@
     </x-sidebar.link>
 
 
+    {{-- <x-sidebar.link
+        title="My Chat"
+        :href="route('mychat')"
+        :isActive="request()->routeIs('mychat')"
+    >
 
+    <x-slot name="icon">
+        <x-heroicon-o-chat class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+    </x-slot>
+    </x-sidebar.link> --}}
 
 
 
@@ -152,15 +161,18 @@
 
 
         <x-sidebar.link
-        title="Students"
-        href="{{ route('student') }}"
-        :isActive="request()->routeIs('student')"
-    >
+            title="Students"
+            href="{{ route('student') }}"
+            :isActive="request()->routeIs('student')"
+        >
 
-    <x-slot name="icon">
-        <x-heroicon-o-users class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
-    </x-slot>
-    </x-sidebar.link>
+        <x-slot name="icon">
+            <x-heroicon-o-users class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+        </x-slot>
+        </x-sidebar.link>
+
+
+
 
     @endif
 </x-perfect-scrollbar>

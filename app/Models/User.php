@@ -107,6 +107,8 @@ class User extends Authenticatable
         return $this->hasMany(CommentLike::class);
     }
 
-
-
+    public function chatMessages()
+    {
+        return $this->hasMany(ChatMessage::class);
+    }
 }

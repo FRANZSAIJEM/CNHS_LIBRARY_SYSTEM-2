@@ -46,7 +46,18 @@
         <div class="text-center ">
             <h1><b><i class="fa-solid fa-circle-dollar-to-slot"></i> Total Fines</b></h1>
             {{-- <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"><div class="flex justify-center">₱ &nbsp; <div id="fines-container" style="display: none;">{{ number_format($totalFines, 2)}}</div></div></h3> --}}
-            <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"><div class="flex justify-center">₱ &nbsp; <div id="fines-container" style="display: none;">{{ number_format($defaultFine->amount, 2)}}</div></div></h3>
+            <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">
+                <div class="flex justify-center">
+                    ₱ &nbsp;
+                    <div id="fines-container" style="display: none;">
+                        @if ($defaultFine)
+                            {{ number_format($defaultFine->amount, 2) }}
+                        @else
+                            Default Fine not available
+                        @endif
+                    </div>
+                </div>
+            </h3>
 
 {{--
             {{$date_pickup}}

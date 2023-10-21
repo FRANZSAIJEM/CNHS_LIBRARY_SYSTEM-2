@@ -11,6 +11,10 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\DefaultFineController;
+use App\Http\Controllers\ChatController;
+
+
+
 
 
 
@@ -44,6 +48,12 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
     Route::get('/student', [StudentController::class, 'index'])->name('student');
 
 });
+
+
+Route::get('/start-chat/{studentId}', [ChatController::class, 'startChat'])->name('startChat');
+Route::post('/send-chat-message/{student}', [ChatController::class , 'sendChatMessage'])->name('sendChatMessage');
+
+
 
 Route::post('/setDefaultFine', [DefaultFineController::class, 'store'])->name('setDefaultFine');
 
