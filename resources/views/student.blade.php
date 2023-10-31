@@ -36,6 +36,11 @@
                     @foreach ($students as $student)
                     <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                         <div style="width: 300px; height: 550px;">
+                                <!-- Add a "Start Chat" button that routes to the chat page -->
+                                <form action="{{ route('startChat', $student->id) }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="p-2 ps-3 pe-3 text-slate-500 bg-slate-300 hover:bg-slate-500 hover:text-slate-100 duration-100 btn btn-primary float-right start_Chat rounded-lg shadow-lg"><i class="fa-brands fa-rocketchat"></i></button>
+                                </form>
                             <div class="p-5">
                                 <h1><b><i class="fa-solid fa-file-signature"></i> Full Name</b></h1>
                                 {{$student->name}} <br> <hr><br>
@@ -60,8 +65,6 @@
                                     </button>
                                 </form>
 
-                                <!-- Add a button to start a chat with the student using their user ID -->
-                                <a href="/start-chat/{{$student->id}}" class="btn btn-primary">Start Chat</a>
                             </div>
                         </div>
                     </div>
@@ -69,49 +72,18 @@
 
                 </div>
             </div>
-
-            {{-- <div>
-                @foreach ($students as $student)
-                <div style="margin: 30px; border-radius: 10px; box-shadow: 10px 10px 20px 5px rgba(0, 0, 0, 0.298); background-color: rgb(4, 51, 71); padding: 20px">
-                    <div style="background-position: center center; border-radius: 5px; width: 211px; ">
-                        <div style="margin-bottom: 20px;">
-                            <b>Full Name</b> <br> {{$student->name}} <br>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <b>ID Number</b> <br> {{$student->id_number}} <br>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <b>Email</b> <br> {{$student->email}} <br>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <b>Contact Number</b> <br> {{$student->contact}} <br>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <b>Grade Level </b> <br> {{$student->grade_level}} <br>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <b>Total Fines</b> <br>₱ &nbsp;{{ number_format($student->totalFines, 2) ?? '0.00' }} <br>
-                        </div>
-
-                        <div>
-                            <form class="toggle-form" data-student-id="{{ $student->id }}" style="display: inline;">
-                                @csrf
-                                <button class="toggle-button" type="button"
-                                        style="width: 210px; padding: 10px; border-radius: 5px; background-color: {{ $student->is_disabled ? 'red' : 'green' }}; color: white;">
-                                    {{ $student->is_disabled ? 'Account Disabled' : 'Account Enabled' }}
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-        @endforeach
-            </div> --}}
         </div>
     </div>
 
    {{-- Loading Screen --}}
    <div id="loading-bar" class="loading-bar"></div>
   <style>
+    .start_Chat{
+
+        transform: translateY(-5px);
+
+
+    }
         .success-message-container {
         position: fixed;
     }

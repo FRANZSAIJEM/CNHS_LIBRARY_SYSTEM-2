@@ -4,42 +4,53 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\ChatMessage;
+use App\Models\Chat;
+use Illuminate\Support\Facades\Auth;
+
+
 
 
 class ChatController extends Controller
 {
-
-
-
-    public function startChat($studentId)
+    public function startChat($userId)
     {
-        // Retrieve the student based on the provided studentId
-        $student = User::find($studentId);
-        $chatMessages = ChatMessage::where('student_id', $studentId)->get();
+        $user = User::find($userId);
 
-        if (!$student) {
-            // Handle the case where the student is not found
-            return redirect()->back()->with('error', 'Student not found');
-        }
-
-        // Here, you can implement the logic to start a chat with the student
-
-        return view('chat', compact('student', 'chatMessages'));
+        return view('chat', compact('user'));
     }
 
-    public function sendChatMessage($studentId)
+
+
+    public function startChatStud()
     {
-        $data = request()->validate([
-            'message' => 'required',
+
+        $user = Auth::user();
+
+        return view('chat', compact('user'));
+    }
+
+
+
+    public function sendMessage(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'message_content' => 'required',
+            'receiver_id' => 'required|exists:users,id',
         ]);
 
-        $chatMessage = new ChatMessage();
-        $chatMessage->message = $data['message'];
-        $chatMessage->student_id = $studentId; // Set the student's ID
+        $message = new Chat;
+        $message->sender_id = Auth::id();
+        $message->receiver_id = $request->input('receiver_id');
+        $message->message_content = $request->input('message_content');
+        $message->save();
 
-        $chatMessage->save();
+        // Return to the same chat page with the user's data
+        $user = User::find($request->input('receiver_id'));
 
-        return back()->with('success', 'Message sent successfully');
+        return view('chat', compact('user'));
     }
+
+
+
 }

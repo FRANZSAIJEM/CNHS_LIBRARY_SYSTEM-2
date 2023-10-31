@@ -19,6 +19,8 @@ use App\Http\Controllers\ChatController;
 
 
 
+
+
 use App\Http\Controllers\Controller;
 
 
@@ -49,9 +51,14 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 
 });
 
+Route::get('/startChatStud', [ChatController::class, 'startChatStud'])->name('startChatStud');
 
-Route::get('/start-chat/{studentId}', [ChatController::class, 'startChat'])->name('startChat');
-Route::post('/send-chat-message/{student}', [ChatController::class , 'sendChatMessage'])->name('sendChatMessage');
+
+Route::post('/startChat/{userId}', [ChatController::class, 'startChat'])->name('startChat');
+
+Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('sendMessage');
+
+
 
 
 

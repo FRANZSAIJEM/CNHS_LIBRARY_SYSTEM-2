@@ -19,6 +19,7 @@
 
 
 
+
         <x-sidebar.link
             title="Books"
             href="{{ route('bookList') }}"
@@ -29,6 +30,10 @@
             </x-slot>
 
         </x-sidebar.link>
+
+
+
+
 
 
         <x-sidebar.link
@@ -62,17 +67,18 @@
     </x-sidebar.link>
 
 
-    {{-- <x-sidebar.link
-        title="My Chat"
-        :href="route('mychat')"
-        :isActive="request()->routeIs('mychat')"
-    >
+    @if (!Auth::user()->is_admin)
+    <x-sidebar.link
+        title="Chat"
+        href="{{ route('startChatStud') }}"
+        :isActive="request()->routeIs('startChatStud')"
+        >
+        <x-slot name="icon">
+            <x-heroicon-o-chat class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+        </x-slot>
 
-    <x-slot name="icon">
-        <x-heroicon-o-chat class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
-    </x-slot>
-    </x-sidebar.link> --}}
-
+    </x-sidebar.link>
+    @endif
 
 
     @php

@@ -20,15 +20,16 @@
                     <p>
                         We hope this message finds you well. We would like to bring to your attention that the return date for the book(s) you borrowed,
                         "{{$request->book_title}}"
-                        has passed. As per our policy, a late fee of {{$defaultFine->amount}} has been applied to your account.<br> <br>
+                        has passed. As per our policy, a late fee of {{ $defaultFine->amount ?? 0 }} has been applied to your account.<br> <br>
                         <hr>
                         <br>
 
                         <div class="text-red-600" style="font-size: 50px;">
-                            Total Fines: ₱ {{$defaultFine->amount}}
+                            Total Fines: ₱ {{ $defaultFine->amount ?? 0 }}
                         </div>
                     </p>
                 </div>
+
             </a>
             <div style="display: none;">
                 <h1><b><i class="fa-solid fa-hourglass-start"></i> Time Remaining</b></h1>

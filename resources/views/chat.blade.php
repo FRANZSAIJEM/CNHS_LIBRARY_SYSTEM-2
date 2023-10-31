@@ -2,7 +2,7 @@
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
-                <i class="fa-solid fa-message"></i> {{$student->name}}
+                <i class="fa-solid fa-message"></i> {{ __('Chat') }}
             </h2>
         </div>
     </x-slot>
@@ -13,32 +13,35 @@
     @endphp
 
 
+
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-        <div class="">
-            <div style="">
-                @foreach($chatMessages as $message)
-                    <div class="bg-blue-500 p-5 rounded-lg shadow-sm text-white mb-3" style="min-width: min-content;">
-                        <p>{{ $message->message }}</p>
-                        <p>{{ $message->created_at }}</p>
+        <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+            @foreach($user->messages as $message)
+                <div class="message">
 
-                    </div>
-                @endforeach
-            </div>
+                    @if(auth()->check() && $message->sender->id === auth()->user()->id)
+                        <div style="display: grid;" class="justify-end">
+                            <div class="bg-blue-500 text-white p-3 rounded-lg mb-1" style="display: inline-block;">
+                                <span>{{ $message->message_content }}</span>
+                            </div>
+                        </div>
+                    @else
+                        <div class="bg-gray-200 text-black p-3 rounded-lg mb-1" style="display: inline-block;">
+                            <span>{{ $message->message_content }}</span>
+                        </div>
+                    @endif
+                </div>
+            @endforeach
 
-            <div>
-                <form method="POST" action="{{ route('sendChatMessage', $student->id) }}">
-                    @csrf
-                    <div class="mb-4">
-                        <textarea name="message" class="w-full p-2 rounded-lg" style="resize: none;" rows="3" placeholder="Type your message"></textarea>
-                    </div>
-                    <div class="text-right">
-                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Send</button>
-                    </div>
-                </form>
-
-            </div>
+            <form action="{{ route('sendMessage') }}" method="post">
+                @csrf
+                <input class="border-1 rounded-lg  p-5 mt-10 w-full" type="text" name="message_content" placeholder="Type your message..." required>
+                <input  type="hidden" name="receiver_id" value="{{ $user->id }}"> <!-- Add a hidden input for receiver_id -->
+                <button class="float-right bg-slate-400 p-3 ps-5 pe-5 mt-3 text-white hover:bg-slate-500 duration-100 rounded-lg" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
         </div>
     </div>
+
 
    {{-- Loading Screen --}}
    <div id="loading-bar" class="loading-bar"></div>
