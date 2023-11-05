@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
+
     public function startChat($userId)
     {
         $user = User::find($userId);
@@ -23,9 +24,7 @@ class ChatController extends Controller
 
     public function startChatStud()
     {
-
         $user = Auth::user();
-
         return view('chat', compact('user'));
     }
 
@@ -46,10 +45,23 @@ class ChatController extends Controller
         $message->save();
 
         // Return to the same chat page with the user's data
-        $user = User::find($request->input('receiver_id'));
-
-        return view('chat', compact('user'));
+        return redirect()->route('startChat', ['userId' => $request->input('receiver_id')]);
     }
+
+    public function delete(Chat $message)
+    {
+
+        if (auth()->check() && $message->sender->id === auth()->user()->id) {
+
+            $message->update(['message_content' => 'Unsent a message']);
+
+            return back();
+        } else {
+
+        }
+    }
+
+
 
 
 

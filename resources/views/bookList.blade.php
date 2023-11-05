@@ -86,7 +86,7 @@
        </div>
     </div>
 
-    
+
     {{-- Add Modal --}}
     <div id="confirmAddModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
         <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
@@ -135,7 +135,7 @@
 
                     <div style="">
                         <label for="description"><b><i class="fa-solid fa-image"></i> Choose cover photo</b></label><br>
-                        <input class="shadow-md" type="file" id="image" name="image" accept="image/*" required style="background-color: rgb(230, 230, 230); color:transparent; cursor: pointer; text-align: right; border-radius: 5px; height: 350px; width: 255px;">
+                        <input class="shadow-md" type="file" id="image" name="image" accept="image/*" capture="camera" required style="background-color: rgb(230, 230, 230); color:transparent; cursor: pointer; text-align: right; border-radius: 5px; height: 350px; width: 255px;">
                         <img id="previewImage" src="#" style="height: 350px; width: 255px;">
                     </div> <br>
                     <hr>

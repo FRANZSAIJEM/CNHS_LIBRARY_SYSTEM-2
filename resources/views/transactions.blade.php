@@ -49,10 +49,15 @@
                         $formattedDate1 = $carbonDate1->format('l, F jS, Y');
                         $formattedDate2 = $carbonDate2->format('l, F jS, Y');
                         $formattedDate3 = $carbonDate3->format('l, F jS, Y');
-
                     @endphp
                         <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                             <div style="width: 300px; height: 550px;">
+                                <a href="{{ route('startChat', $acceptedRequest->user->id) }}" class="p-2 ps-3 pe-3 text-slate-500 bg-slate-300 hover:bg-slate-500 hover:text-slate-100 duration-100 btn btn-primary float-right start_Chat rounded-lg shadow-lg">
+                                    <i class="fa-brands fa-rocketchat @if ($acceptedRequest->user->hasChatData()) rotate-3d @endif"></i>
+                                    @if ($acceptedRequest->user->hasChatData())
+                                        <span class="badge-dot badge-dot-red"></span>
+                                    @endif
+                                </a>
                                 <div class="p-5">
                                     <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>
                                     {{ $acceptedRequest->user->name }} <br> <hr> <br>
@@ -82,12 +87,10 @@
                                         <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
 
                                         <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->defaultFineAmount  }}</div></div>
-
                                         <hr>
-
                                 </div>
                             </div>
-                          <div class="text-center">
+                          <div class="text-center flex">
                             <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
@@ -95,16 +98,43 @@
                                     style="width: 150px; border-radius: 5px; padding: 10px;"
                                     type="submit"
                                 >
-                                    <b><i class="fa-solid fa-rotate-left"></i> Return Book</b>
+                                    <b><i class="fa-solid fa-check"></i> End Transaction</b>
                                 </button>
                             </form>
+
+                            <form action="{{ route('returnBook', $acceptedRequest->id) }}" method="POST">
+                                @csrf
+                                @if (!$acceptedRequest->book_returned)
+                                    <button class="text-green-600 hover:text-green-700 duration-100"
+                                        style="width: 150px; border-radius: 5px; padding: 10px;"
+                                        type="submit"
+                                    >
+                                        <b><i class="fa-solid fa-rotate-left"></i> Return Book Only</b>
+                                    </button>
+                                @else
+                                    <button class="text-gray-400"
+                                        style="width: 150px; border-radius: 5px; padding: 10px;"
+                                        type="button"
+                                        disabled
+                                    >
+                                        <b><i class="fa-solid fa-rotate-left"></i> Book Already Returned</b>
+                                    </button>
+                                @endif
+                            </form>
+
+
+
                           </div>
                         </div>
                     @endforeach
                     @else
-
                         <p>There is no transactions.</p>
                     @endif
+
+
+
+
+
                 </div>
             </div>
             {{-- <div>
@@ -155,6 +185,29 @@
    {{-- Loading Screen --}}
    <div id="loading-bar" class="loading-bar"></div>
   <style>
+
+@keyframes rotate3d {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.rotate-3d {
+    animation: rotate3d 2s infinite; /* 4 seconds for one full rotation (2 sec rotation + 2 sec pause) */
+}
+
+
+
+        .start_Chat{
+
+transform: translateY(-5px);
+
+
+}
             .search-bar {
             display: block;
             max-height: 0;

@@ -1,4 +1,5 @@
 
+
 <x-app-layout>
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center">
@@ -262,6 +263,24 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div style="display: grid; place-content: center;" class="mt-5">
         @if (!Auth::user()->is_admin)
             <div >
@@ -277,13 +296,54 @@
                             @else
                                 <i class="fa-solid fa-code-pull-request"></i> Requested by {{ $book->requestedByUsers[0]->name }}
                             @endif
+
+                            @elseif (!$userHasAcceptedRequestForReturnedBook && $user->hasAcceptedRequestForBook($book->id))
+                                <button class="your-button-class"
+                                    onclick="showConfirmationModal({{ $book->id }})"
+                                    type="submit"
+
+
+                                    @if (!$user->hasAcceptedRequestForBook($book->id) || $user->hasAcceptedBook() || !$bookReturnStatus)
+                                        disabled style="color: black;"
+                                    @endif
+                                    >
+
+
+
+                                    @if (!auth()->user()->hasAcceptedRequestForBook($book->id))
+                                    <i class="fa-solid fa-person-walking-arrow-loop-left"></i> Reserved
+                                    @else
+                                        @if (!empty($book->requestedByUsers) && count($book->requestedByUsers) > 0)
+                                        <i class="fa-solid fa-person-walking-arrow-loop-left"></i> Reserved by {{ $book->requestedByUsers[0]->name }}
+
+                                        @else
+                                        <i class="fa-solid fa-person-walking-arrow-loop-left"></i> Reserve
+                                        @endif
+                                    @endif
+                                </button>
                         @else
                             <i class="fa-solid fa-code-pull-request"></i> Request
                         @endif
                     </b>
                 </button>
+                {{-- <p>Book Returned Status: {{ $bookReturnStatus ? 'Returned' : 'Not Returned' }}</p> --}}
+
 
             </div>
+                {{-- put here --}}
+
+                    {{-- @if (!$userHasAcceptedRequestForReturnedBook && $user->hasAcceptedRequestForBook($book->id))
+                        <div>
+                            <button class="your-button-class"
+                                onclick="showConfirmationModal({{ $book->id }})"
+                                type="submit"
+                            >
+                                <b>Reserve book</b>
+                            </button>
+                        </div>
+                    @endif --}}
+
+
         @endif
     </div>
 
@@ -332,6 +392,7 @@
 
     {{-- Loading Screen --}}
     <div id="loading-bar" class="loading-bar"></div>
+
 <style>
     .replies{
         width: 525px;

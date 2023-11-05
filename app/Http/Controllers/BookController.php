@@ -99,7 +99,9 @@ class BookController extends Controller
     {
         $book = Book::find($id);
         $userHasRequestedThisBook = false;
-        $userHasAcceptedRequest = false; // Initialize the variable
+        $userHasAcceptedRequest = false;
+        $userHasAcceptedRequestForReturnedBook = false;
+        $bookReturnStatus = null; // Variable to store book_returned status
 
         if (Auth::check()) {
             $user = Auth::user();
@@ -109,10 +111,25 @@ class BookController extends Controller
 
             // Check if the user has accepted the request for this book (You should define this logic)
             $userHasAcceptedRequest = $user->hasAcceptedRequestForBook($book->id);
+
+            $userHasAcceptedRequestForReturnedBook = $user->hasAcceptedReturnedBookForBook($book->id);
+
+            // Use the hasMany relationship to get accepted requests for the book
+            $acceptedRequests = $book->acceptedRequests;
+
+            // Check if there's an accepted request for the book
+            if ($acceptedRequests->isNotEmpty()) {
+                // Assuming you want the status for the latest accepted request
+                $latestAcceptedRequest = $acceptedRequests->sortByDesc('created_at')->first();
+                $bookReturnStatus = $latestAcceptedRequest->book_returned;
+            }
         }
 
-        return view('viewBook', compact('book', 'userHasRequestedThisBook', 'userHasAcceptedRequest'));
+        return view('viewBook', compact('book', 'userHasRequestedThisBook', 'userHasAcceptedRequest', 'userHasAcceptedRequestForReturnedBook', 'acceptedRequests', 'user', 'bookReturnStatus'));
     }
+
+
+
 
 
     public function removeRequest($userId, $bookId)

@@ -30,9 +30,11 @@ class book extends Model
     {
         return $this->hasMany(AcceptedRequest::class);
     }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
+
 
 }

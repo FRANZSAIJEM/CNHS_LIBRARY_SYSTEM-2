@@ -69,7 +69,7 @@
 
     @if (!Auth::user()->is_admin)
     <x-sidebar.link
-        title="Chat"
+        title="Chat Staff"
         href="{{ route('startChatStud') }}"
         :isActive="request()->routeIs('startChatStud')"
         >

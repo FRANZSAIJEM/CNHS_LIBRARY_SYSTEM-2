@@ -16,7 +16,8 @@ class AcceptedRequest extends Model
         'date_borrow',
         'date_pickup',
         'date_return',
-        'fines'
+        'fines',
+        'book_returned',
     ];
 
     public function user()
@@ -35,6 +36,20 @@ class AcceptedRequest extends Model
     public function defaultFine()
     {
         return $this->belongsTo(DefaultFine::class, 'default_fine_id');
+    }
+
+    // AcceptedRequest.php
+    public function isBookReturned()
+    {
+        return $this->book_returned === 'true'; // Check if it's the string 'true'
+    }
+
+    // Additional method to mark the book as returned
+    public function markBookAsReturned()
+    {
+        $this->update([
+            'book_returned' => 'true', // Update as the string 'true'
+        ]);
     }
 
 }

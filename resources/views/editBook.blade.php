@@ -46,7 +46,7 @@
         <div style="">
             <label for="description"><b><i class="fa-solid fa-image"></i> Change cover photo</b></label><br>
 
-            <input class="shadow-md" type="file" id="image" name="image" accept="image/*" style="background-color: rgb(230, 230, 230); color:transparent; cursor: pointer; text-align: right; border-radius: 5px; height: 350px; width: 255px;">
+            <input class="shadow-md" type="file" id="image" name="image" accept="image/*" capture="camera" style="background-color: rgb(230, 230, 230); color:transparent; cursor: pointer; text-align: right; border-radius: 5px; height: 350px; width: 255px;">
             @if ($book->image)
                 <img src="{{ asset('storage/' . $book->image) }}" id="previewImage" src="#" style="height: 350px; width: 255px;">
             @else

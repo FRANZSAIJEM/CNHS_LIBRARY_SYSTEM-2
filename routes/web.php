@@ -54,10 +54,11 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 Route::get('/startChatStud', [ChatController::class, 'startChatStud'])->name('startChatStud');
 
 
-Route::post('/startChat/{userId}', [ChatController::class, 'startChat'])->name('startChat');
+Route::get('/startChat/{userId}', [ChatController::class, 'startChat'])->name('startChat');
 
 Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('sendMessage');
 
+Route::delete('/messages/{message}', [ChatController::class, 'delete'])->name('delete_message');
 
 
 
@@ -101,6 +102,10 @@ Route::delete('/acceptedRequests/{id}', [AcceptRequestController::class, 'destro
 Route::post('/acceptRequest/{user}/{book}', [AcceptRequestController::class, 'acceptRequest'])->name('acceptRequest');
 Route::get('/transactions', [AcceptRequestController::class, 'transactions'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('transactions');
 Route::get('/history', [AcceptRequestController::class, 'history'])->name('history');
+Route::post('/returnBook/{id}', [AcceptRequestController::class , 'returnBook'])->name('returnBook');
+
+
+
 
 Route::delete('/clearNotification/{id}', [AcceptRequestController::class, 'clearNotification'])->name('clearNotification');
 

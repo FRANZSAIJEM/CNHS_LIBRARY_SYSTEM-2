@@ -84,6 +84,14 @@ class User extends Authenticatable
         return AcceptedRequest::where('book_id', $bookId)->exists();
     }
 
+    // User.php
+    public function hasAcceptedReturnedBookForBook($bookId)
+    {
+        return $this->acceptedRequests()->where('book_id', $bookId)->where('book_returned', true)->exists();
+    }
+
+
+
 
     public function notifications()
     {
@@ -116,5 +124,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Chat::class, 'receiver_id', 'id');
     }
+
+        // Inside your User model (User.php)
+    public function hasChatData()
+    {
+        return $this->messages->count() > 0;
+    }
+
+
 
 }

@@ -179,6 +179,26 @@ class AcceptRequestController extends Controller
     }
 
 
+    public function returnBook($id)
+    {
+        // Find the AcceptedRequest record
+        $transaction = AcceptedRequest::find($id);
+
+        // Check if the record exists
+        if (!$transaction) {
+            return redirect()->back()->with('error', 'Transaction not found');
+        }
+
+        $transaction->update([
+            'book_returned' => true, // Set it as a boolean true
+        ]);
+
+        return redirect()->back()->with('success', 'Book returned successfully');
+    }
+
+
+
+
 
     public function destroy($id){
         // Find the AcceptedRequest record

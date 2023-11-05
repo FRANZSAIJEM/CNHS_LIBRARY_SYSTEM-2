@@ -2,7 +2,14 @@
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
-                <i class="fa-solid fa-message"></i> {{ __('Chat') }}
+
+                @if (!Auth::user()->is_admin)
+                    <i class="fa-brands fa-rocketchat"></i> {{ __('Librarian') }}
+                @endif
+
+                @if (Auth::user()->is_admin)
+                    <i class="fa-brands fa-rocketchat"></i> {{ __() }} {{ $user->name }}
+                @endif
             </h2>
         </div>
     </x-slot>
@@ -18,27 +25,58 @@
         <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
             @foreach($user->messages as $message)
                 <div class="message">
-
                     @if(auth()->check() && $message->sender->id === auth()->user()->id)
-                        <div style="display: grid;" class="justify-end">
-                            <div class="bg-blue-500 text-white p-3 rounded-lg mb-1" style="display: inline-block;">
+                    <div style="display: grid;" class="justify-end">
+                        <div class="flex">
+                            @if($message->message_content !== 'Unsent a message')
+                                <button class="toggleDeleteButton pe-4 ps-4 text-slate-400"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            @endif
+                            <form action="{{ route('delete_message', ['message' => $message->id]) }}" method="POST"
+                                style="display: none; position: absolute; transform: translateY(-30px) translateX(-16px);"
+                                class="deleteForm">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 ml-2 ps-5 pe-5 p-2 bg-slate-100 hover:bg-slate-300 duration-100 rounded-lg shadow-lg"><i class="fa-solid fa-trash"></i></button>
+                            </form>
+
+                            @if($message->message_content === 'Unsent a message')
+                                <div class="bg-none border border-slate-400 text-slate-400 p-3 rounded-2xl mb-1" style="display: inline-block;">
+                                <button style="visibility: hidden;" class="toggleDeleteButton"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+
+                            @else
+                                <div class="bg-orange-400 text-white p-3 rounded-2xl mb-1" style="display: inline-block;">
+                            @endif
                                 <span>{{ $message->message_content }}</span>
+
                             </div>
+
+
                         </div>
-                    @else
-                        <div class="bg-gray-200 text-black p-3 rounded-lg mb-1" style="display: inline-block;">
+                    </div>
+
+
+                        @else
+                            @if($message->message_content === 'Unsent a message')
+                                <div class="bg-none border border-slate-400 text-slate-400 p-3 rounded-2xl mb-1" style="display: inline-block;">
+                            @else
+                                <div class="bg-gray-400 text-white p-3 rounded-2xl mb-1" style="display: inline-block;">
+                            @endif
                             <span>{{ $message->message_content }}</span>
-                        </div>
-                    @endif
+                        @endif
+
+
                 </div>
             @endforeach
 
-            <form action="{{ route('sendMessage') }}" method="post">
-                @csrf
-                <input class="border-1 rounded-lg  p-5 mt-10 w-full" type="text" name="message_content" placeholder="Type your message..." required>
-                <input  type="hidden" name="receiver_id" value="{{ $user->id }}"> <!-- Add a hidden input for receiver_id -->
-                <button class="float-right bg-slate-400 p-3 ps-5 pe-5 mt-3 text-white hover:bg-slate-500 duration-100 rounded-lg" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-            </form>
+
+            <div style="">
+                <form action="{{ route('sendMessage') }}" method="post">
+                    @csrf
+                    <input class="border-1 rounded-lg  p-5 mt-10 w-full" type="text" name="message_content" placeholder="Type your message..." required>
+                    <input  type="hidden" name="receiver_id" value="{{ $user->id }}"> <!-- Add a hidden input for receiver_id -->
+                    <button class="float-right bg-slate-400 p-3 ps-5 pe-5 mt-3 text-white hover:bg-slate-500 duration-100 rounded-lg" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -67,6 +105,21 @@ window.addEventListener('load', function () {
   document.getElementById('loading-bar').style.width = '0';
 });
 
+
+
+
+const toggleButtons = document.querySelectorAll('.toggleDeleteButton');
+    const deleteForms = document.querySelectorAll('.deleteForm');
+
+    toggleButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+            if (deleteForms[index].style.display === 'none') {
+                deleteForms[index].style.display = 'inline';
+            } else {
+                deleteForms[index].style.display = 'none';
+            }
+        });
+    });
 
     </script>
 </x-app-layout>
