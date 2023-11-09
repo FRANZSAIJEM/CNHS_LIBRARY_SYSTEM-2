@@ -27,4 +27,17 @@ class DefaultFineController extends Controller
         // Redirect back with a success message or do something else as needed
         return redirect()->back()->with('success', 'Set successfully!');
     }
+
+    public function storeDaily(Request $request){
+        $validatedData = $request->validate([
+            'set_daily_fines' => 'required|numeric|min:0', // You can add more validation rules if needed
+        ]);
+
+        $totalAmount = DefaultFine::firstOrNew([]);
+        $totalAmount->set_daily_fines = $validatedData['set_daily_fines'];
+
+        // Save the record
+        $totalAmount->save();
+        return redirect()->back()->with('success', 'Set successfully!');
+    }
 }

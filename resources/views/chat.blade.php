@@ -29,7 +29,7 @@
                     <div style="display: grid;" class="justify-end">
                         <div class="flex">
                             @if($message->message_content !== 'Unsent a message')
-                                <button class="toggleDeleteButton pe-4 ps-4 text-slate-400"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                <button class="toggleDeleteButton pe-4 ps-4 text-slate-400" style="transform: translateY(-17px);"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                             @endif
                             <form action="{{ route('delete_message', ['message' => $message->id]) }}" method="POST"
                                 style="display: none; position: absolute; transform: translateY(-30px) translateX(-16px);"
@@ -40,11 +40,11 @@
                             </form>
 
                             @if($message->message_content === 'Unsent a message')
-                                <div class="bg-none border border-slate-400 text-slate-400 p-3 rounded-2xl mb-1" style="display: inline-block;">
-                                <button style="visibility: hidden;" class="toggleDeleteButton"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                <div class="bg-none border-0 border-slate-400 text-slate-400 p-3 rounded-2xl mb-10" style="display: inline-block; box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;">
+                                <button style="visibility: hidden; " class="toggleDeleteButton"><i class="fa-solid fa-ellipsis-vertical"></i></button>
 
                             @else
-                                <div class="bg-orange-400 text-white p-3 rounded-2xl mb-1" style="display: inline-block;">
+                                <div class="bg-orange-400 text-white p-3 mb-10 rounded-2xl " style="display: inline-block; box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;">
                             @endif
                                 <span>{{ $message->message_content }}</span>
 
@@ -57,9 +57,9 @@
 
                         @else
                             @if($message->message_content === 'Unsent a message')
-                                <div class="bg-none border border-slate-400 text-slate-400 p-3 rounded-2xl mb-1" style="display: inline-block;">
+                                <div class="bg-none border-0 border-slate-400 text-slate-400 p-3 rounded-2xl mb-10" style="display: inline-block; box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;">
                             @else
-                                <div class="bg-gray-400 text-white p-3 rounded-2xl mb-1" style="display: inline-block;">
+                                <div class="bg-gray-400 text-white p-3 mb-10 rounded-2xl" style="display: inline-block; box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;">
                             @endif
                             <span>{{ $message->message_content }}</span>
                         @endif

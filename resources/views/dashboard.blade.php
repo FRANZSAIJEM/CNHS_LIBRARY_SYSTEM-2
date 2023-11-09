@@ -13,14 +13,16 @@
             @if (!Auth::user()->is_admin)
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$totalBooks}}</h3>
             <x-nav-link  :href="route('bookList')" :active="request()->routeIs('bookList')">
-                <b style="width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-handshake-angle"></i> {{ __('Borrow Book') }}</b>
+                <b style="box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+                    width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-handshake-angle"></i> {{ __('Borrow Book') }}</b>
             </x-nav-link>
             @endif
 
             @if (Auth::user()->is_admin)
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$totalBooks}}</h3>
             <x-nav-link  :href="route('bookList')" :active="request()->routeIs('bookList')">
-                <b style="width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-eye"></i> {{ __('View All Books') }}</b>
+                <b style="box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+                    width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-eye"></i> {{ __('View All Books') }}</b>
             </x-nav-link>
             @endif
         </div>
@@ -50,8 +52,9 @@
                 <div class="flex justify-center">
                     ₱ &nbsp;
                     <div id="fines-container" style="display: none;">
-                        @if ($defaultFine)
-                            {{ number_format($defaultFine->amount, 2) }}
+                        @if ($totalFine)
+                            {{ number_format($totalFine->total_fines, 2) }}
+
                         @else
                             Default Fine not available
                         @endif
@@ -64,7 +67,8 @@
             {{$date_return}} --}}
 
             <x-nav-link  :href="route('notifications')" :active="request()->routeIs('notifications')">
-                <b style="width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-circle-info"></i> {{ __('Details') }}</b>
+                <b style="box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+                    width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-circle-info"></i> {{ __('Details') }}</b>
             </x-nav-link>
         </div>
     </div>
@@ -76,7 +80,8 @@
             <h1><b><i class="fa-solid fa-bell"></i> Total Requests</b></h1>
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$totalRequests}}</h3>
             <x-nav-link  :href="route('requests')" :active="request()->routeIs('requests')">
-                <b style="width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-code-pull-request"></i> {{ __('Requests') }}</b>
+                <b style="box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+                    width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-code-pull-request"></i> {{ __('Requests') }}</b>
             </x-nav-link>
         </div>
     </div>
@@ -89,7 +94,8 @@
             <h1><b><i class="fa-solid fa-users"></i> Total Students</b></h1>
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$totalStudents}}</h3>
             <x-nav-link  :href="route('student')" :active="request()->routeIs('student')">
-                <b style="width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-graduation-cap"></i> {{ __('Students') }}</b>
+                <b style="box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+                    width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-graduation-cap"></i> {{ __('Students') }}</b>
             </x-nav-link>
         </div>
     </div>

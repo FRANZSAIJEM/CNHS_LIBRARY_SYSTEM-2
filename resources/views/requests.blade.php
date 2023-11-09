@@ -1,7 +1,11 @@
 <?php
 use App\Models\DefaultFine;
+use App\Models\AcceptedRequest;
+
 
 $defFine = DefaultFine::first();
+$defDailyFine = DefaultFine::first();
+
 ?>
 <x-app-layout>
     <x-slot name="header" >
@@ -44,7 +48,7 @@ $defFine = DefaultFine::first();
 
                     <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50;">
                         <div class="p-5 rounded-lg shadow-md bg-slate-50">
-                            <h1 class="text-center"><b>Set Default Fines</b></h1><br>
+                            <h1 class="text-center"><b>Set Starting Fines</b></h1><br>
 
                             <div class="text-end">
                                 <form action="{{ route('setDefaultFine') }}" method="POST">
@@ -53,9 +57,21 @@ $defFine = DefaultFine::first();
                                     ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defFine ? $defFine->amount : '' }}" type="text" name="amount" placeholder="Enter default fine amount" required><br>
                                     <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
                                 </form>
+                            </div> <br>
+
+                            <h1 class="text-center"><b>Set Daily Fines</b></h1><br>
+
+                            <div class="text-end">
+                                <form action="{{ route('setDailyFine') }}" method="POST">
+                                    @csrf
+
+                                    ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defDailyFine ? $defDailyFine->set_daily_fines : '' }}" type="text" name="set_daily_fines" placeholder="Enter default fine amount" required><br>
+                                    <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
+                                </form>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
 

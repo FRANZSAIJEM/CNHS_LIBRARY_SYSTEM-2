@@ -142,7 +142,7 @@
                     <br>
 
                    <div class="flex justify-end">
-                    <button class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                    <button type="button" class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
                     <button class="rounded-lg p-4 text-blue-600 hover:text-blue-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-plus"></i>  Add Book</button>
                    </div>
                     </form>

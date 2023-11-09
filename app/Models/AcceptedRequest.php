@@ -18,6 +18,8 @@ class AcceptedRequest extends Model
         'date_return',
         'fines',
         'book_returned',
+        'daily_fines',
+        'total_fines'
     ];
 
     public function user()

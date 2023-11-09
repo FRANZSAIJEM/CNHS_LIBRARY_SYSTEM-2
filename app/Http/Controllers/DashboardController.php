@@ -37,6 +37,9 @@ class DashboardController extends Controller
 
         $defaultFine = DefaultFine::first();
 
+        $totalFine = AcceptedRequest::select('total_fines')->first();
+
+
         return view('dashboard')
             ->with('totalStudents', $totalStudents)
             ->with('totalBooks', $totalBooks)
@@ -45,7 +48,8 @@ class DashboardController extends Controller
             ->with('date_pickup', $date_pickup)
             ->with('date_return', $date_return)
             ->with('acceptedRequest', $acceptedRequest)
-            ->with('defaultFine', $defaultFine); // Pass $acceptedRequest to the view
+            ->with('defaultFine', $defaultFine)
+            ->with('totalFine', $totalFine);
     }
 
     private function calculateTotalFines($userId)

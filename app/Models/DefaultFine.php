@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class DefaultFine extends Model
 {
     use HasFactory;
-    protected $fillable = ['amount', 'description'];
+    protected $fillable = ['amount', 'description', 'total_fines', 'set_daily_fines'];
 }

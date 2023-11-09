@@ -86,7 +86,7 @@
                                         {{ $formattedDate3 }} <br> <hr> <br>
                                         <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
 
-                                        <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->defaultFineAmount  }}</div></div>
+                                        <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->total_fines  }}</div></div>
                                         <hr>
                                 </div>
                             </div>

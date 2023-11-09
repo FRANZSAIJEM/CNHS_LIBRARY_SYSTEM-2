@@ -18,14 +18,17 @@
                 <div class="p-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
                     <h1><b>Hello</b> {{ $loggedInUser->name }},</h1>
                     <p>
-                        We hope this message finds you well. We would like to bring to your attention that the return date for the book(s) you borrowed,
-                        "{{$request->book_title}}"
-                        has passed. As per our policy, a late fee of {{ $defaultFine->amount ?? 0 }} has been applied to your account.<br> <br>
+                        We hope this message finds you well. We would like to bring to your attention that the return date for the book(s) you borrowed, "{{ $request->book_title }}" has passed. As per our policy, a late fee of ₱ {{ $defaultFine->amount ?? 0 }} has been applied to your account.<br> <br>
+
+                        @if ($request->daily_fines > 0)
+                            Additionally, a daily late fee of ₱ {{ $defaultFine->set_daily_fines }} is being accrued for each day beyond the due date.
+                        @endif
+
                         <hr>
                         <br>
 
                         <div class="text-red-600" style="font-size: 50px;">
-                            Total Fines: ₱ {{ $defaultFine->amount ?? 0 }}
+                            Total Fines: ₱ {{ $request->total_fines ?? 0 }}
                         </div>
                     </p>
                 </div>

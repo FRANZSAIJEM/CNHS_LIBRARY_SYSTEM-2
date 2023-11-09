@@ -64,6 +64,8 @@ Route::delete('/messages/{message}', [ChatController::class, 'delete'])->name('d
 
 
 Route::post('/setDefaultFine', [DefaultFineController::class, 'store'])->name('setDefaultFine');
+Route::post('/setDailyFine', [DefaultFineController::class, 'storeDaily'])->name('setDailyFine');
+
 
 Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar');
 
