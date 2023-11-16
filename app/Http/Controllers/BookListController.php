@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\book;
 use App\Models\AcceptedRequest;
+use App\Models\BorrowCount;
+
 use Illuminate\Pagination\Paginator;
 
 
@@ -22,9 +24,6 @@ class BookListController extends Controller
                         ->orWhere('author', 'LIKE', '%' . $bookSearch . '%');
             });
         }
-
-
-
 
         $bookLists = $query->paginate(4);
 
@@ -64,6 +63,34 @@ class BookListController extends Controller
     }
 
 
+    
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'count' => 'required|integer',
+        ]);
+
+        $defaultStudentId = 1; // Replace with the appropriate default student ID
+
+        $borrowCount = BorrowCount::where('student_id', $defaultStudentId)->first();
+
+        if ($borrowCount) {
+            // Update the existing record
+            $borrowCount->update([
+                'count' => $request->input('count'),
+            ]);
+        } else {
+            // Create a new record
+            BorrowCount::create([
+                'student_id' => $defaultStudentId,
+                'count' => $request->input('count'),
+            ]);
+        }
+
+        // Pass the $borrowCount variable to the view
+        return redirect()->route('bookList')->with('success', 'Updated successfully!');
+    }
 
 
 }

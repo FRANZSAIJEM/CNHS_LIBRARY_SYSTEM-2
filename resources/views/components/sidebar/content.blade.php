@@ -114,40 +114,40 @@
 
 
 
+<x-sidebar.link
+title="Request"
+href="{{ route('requests') }}"
+:isActive="request()->routeIs('requests')"
+>
+<x-slot name="icon">
+    <x-heroicon-o-bell class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
 
+    <!-- Conditionally display the badge for requests -->
+    @php
+    $totalRequests = DB::table('book_requests')->count();
+
+    // Check if the user has visited the requests page
+    $visitedRequestsPage = session('visited_requests_page', false);
+
+    // If the user is on the requests page, mark it as visited
+    if (request()->routeIs('requests') && !$visitedRequestsPage) {
+        session(['visited_requests_page' => true]);
+    }
+    @endphp
+
+    @if (!$visitedRequestsPage && $totalRequests > 0)
+    {{-- <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
+        {{ $totalRequests }}
+    </span> --}}
+    @endif
+</x-slot>
+</x-sidebar.link>
 
 
 
     @if (Auth::user()->is_admin)
 
-<x-sidebar.link
-    title="Request"
-    href="{{ route('requests') }}"
-    :isActive="request()->routeIs('requests')"
->
-    <x-slot name="icon">
-        <x-heroicon-o-bell class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
 
-        <!-- Conditionally display the badge for requests -->
-        @php
-        $totalRequests = DB::table('book_requests')->count();
-
-        // Check if the user has visited the requests page
-        $visitedRequestsPage = session('visited_requests_page', false);
-
-        // If the user is on the requests page, mark it as visited
-        if (request()->routeIs('requests') && !$visitedRequestsPage) {
-            session(['visited_requests_page' => true]);
-        }
-        @endphp
-
-        @if (!$visitedRequestsPage && $totalRequests > 0)
-        {{-- <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
-            {{ $totalRequests }}
-        </span> --}}
-        @endif
-    </x-slot>
-</x-sidebar.link>
 
 
 

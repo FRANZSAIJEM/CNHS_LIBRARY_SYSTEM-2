@@ -37,8 +37,8 @@ class DashboardController extends Controller
 
         $defaultFine = DefaultFine::first();
 
-        $totalFine = AcceptedRequest::select('total_fines')->first();
 
+        $totalFine = $acceptedRequest ? $acceptedRequest->total_fines : null;
 
         return view('dashboard')
             ->with('totalStudents', $totalStudents)

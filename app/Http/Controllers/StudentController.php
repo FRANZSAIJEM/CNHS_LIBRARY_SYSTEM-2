@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserBookRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\book;
@@ -120,6 +121,11 @@ class StudentController extends Controller
 
         // Find the book by ID
         $book = book::findOrFail($bookId);
+
+        // Find or create the user's book request record
+        $userBookRequest = UserBookRequest::firstOrNew(['user_id' => $user->id]);
+        $userBookRequest->request_count++;
+        $userBookRequest->save();
 
         // Store the request information in the database
         $user->requestedBooks()->attach($book);

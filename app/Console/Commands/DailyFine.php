@@ -41,8 +41,12 @@ class DailyFine extends Command
         }
 
         foreach ($requests as $request) {
-            $request->daily_fines += $dailyFine;
-
+            // Check if the book has been returned
+            if (!$request->book_returned) {
+                // Add daily fines only if the book is not returned
+                $request->daily_fines += $dailyFine;
+            }
+            
             if ($defaultFine !== null) {
                 $request->total_fines = $request->daily_fines + $defaultFine;
                 $request->save();

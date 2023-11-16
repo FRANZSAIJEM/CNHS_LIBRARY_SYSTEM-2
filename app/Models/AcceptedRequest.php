@@ -54,4 +54,9 @@ class AcceptedRequest extends Model
         ]);
     }
 
+    public function userBookRequest()
+    {
+        return $this->belongsTo(UserBookRequest::class, 'user_book_request_id');
+    }
+
 }

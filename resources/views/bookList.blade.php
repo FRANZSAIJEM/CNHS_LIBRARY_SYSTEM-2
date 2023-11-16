@@ -1,3 +1,10 @@
+<?php
+
+use App\Models\BorrowCount;
+$borrowCount = BorrowCount::first();
+
+?>
+
 <x-app-layout>
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -37,6 +44,19 @@
                 <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
                 @if (Auth::user()->is_admin)
               <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
+
+              {{-- <form action="{{ route('borrowCounts.store') }}" method="post">
+                @csrf
+                <label for="student_id">Select Student:</label>
+
+
+                <label for="count">Set Borrowing Count:</label>
+                <input type="number" name="count" id="count" value="{{ $borrowCount ? $borrowCount->count : '' }}">
+
+                <button type="submit">Set Borrowing Count</button>
+            </form> --}}
+
+
               </div>
             @endif
           </div>
@@ -144,6 +164,7 @@
                    <div class="flex justify-end">
                     <button type="button" class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
                     <button class="rounded-lg p-4 text-blue-600 hover:text-blue-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-plus"></i>  Add Book</button>
+
                    </div>
                     </form>
             </div>

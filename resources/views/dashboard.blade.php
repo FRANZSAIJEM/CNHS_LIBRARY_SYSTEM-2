@@ -52,9 +52,8 @@
                 <div class="flex justify-center">
                     ₱ &nbsp;
                     <div id="fines-container" style="display: none;">
-                        @if ($totalFine)
-                            {{ number_format($totalFine->total_fines, 2) }}
-
+                        @if ($totalFine !== null)
+                            {{ number_format($totalFine, 2) }}
                         @else
                             Default Fine not available
                         @endif

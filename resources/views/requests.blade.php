@@ -11,7 +11,12 @@ $defDailyFine = DefaultFine::first();
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
+                @if (Auth::user()->is_admin)
                 <i class="fa-solid fa-code-pull-request"></i> {{ __('Requests') }}
+                @endif
+                @if (!Auth::user()->is_admin)
+                <i class="fa-solid fa-code-pull-request"></i> {{ __('Your Request') }}
+                @endif
             </h2>
         </div>
     </x-slot>
@@ -42,37 +47,40 @@ $defDailyFine = DefaultFine::first();
 
 
 
-                <div style="position: relative">
-                    <button id="showSearchButton" class="text-slate-600 hover:text-slate-900 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
-                    <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
+            @if (Auth::user()->is_admin)
+            <div style="position: relative">
+                <button id="showSearchButton" class="text-slate-600 hover:text-slate-900 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
+                <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
 
-                    <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50;">
-                        <div class="p-5 rounded-lg shadow-md bg-slate-50">
-                            <h1 class="text-center"><b>Set Starting Fines</b></h1><br>
+                <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50;">
+                    <div class="p-5 rounded-lg shadow-md bg-slate-50">
+                        <h1 class="text-center"><b>Set Starting Fines</b></h1><br>
 
-                            <div class="text-end">
-                                <form action="{{ route('setDefaultFine') }}" method="POST">
-                                    @csrf
+                        <div class="text-end">
+                            <form action="{{ route('setDefaultFine') }}" method="POST">
+                                @csrf
 
-                                    ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defFine ? $defFine->amount : '' }}" type="text" name="amount" placeholder="Enter default fine amount" required><br>
-                                    <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
-                                </form>
-                            </div> <br>
+                                ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defFine ? $defFine->amount : '' }}" type="text" name="amount" placeholder="Enter default fine amount" required><br>
+                                <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
+                            </form>
+                        </div> <br>
 
-                            <h1 class="text-center"><b>Set Daily Fines</b></h1><br>
+                        <h1 class="text-center"><b>Set Daily Fines</b></h1><br>
 
-                            <div class="text-end">
-                                <form action="{{ route('setDailyFine') }}" method="POST">
-                                    @csrf
+                        <div class="text-end">
+                            <form action="{{ route('setDailyFine') }}" method="POST">
+                                @csrf
 
-                                    ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defDailyFine ? $defDailyFine->set_daily_fines : '' }}" type="text" name="set_daily_fines" placeholder="Enter default fine amount" required><br>
-                                    <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
-                                </form>
-                            </div>
+                                ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defDailyFine ? $defDailyFine->set_daily_fines : '' }}" type="text" name="set_daily_fines" placeholder="Enter default fine amount" required><br>
+                                <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
+                            </form>
                         </div>
                     </div>
-
                 </div>
+
+            </div>
+
+            @endif
 
 
 
@@ -82,36 +90,117 @@ $defDailyFine = DefaultFine::first();
             <div class="flex flex-wrap">
                 @if ($totalRequests > 0)
                 @foreach ($users as $user)
-                    @foreach ($user->requestedBooks as $requestedBook)
-                    <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
-                        <div style="width: 300px; height: 350px;">
-                            <div class="p-5">
-                                <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>
-                                {{ $user->name }} <br> <hr> <br>
-                                <h1><b><i class="fa-solid fa-id-card"></i> ID Number</b></h1>
-                                {{ $user->id_number }} <br> <hr> <br>
-                                <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
-                                {{ $requestedBook->title }} <br> <hr> <br>
-                                <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
-                                {{ $user->grade_level }} <br> <hr>
-                            </div>
-                        </div>
-                        <div class="flex" style="margin-top: 4px;">
-                            <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
+                @if (Auth::user()->is_admin)
+                @foreach ($user->requestedBooks as $requestedBook)
+                <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
+                    @if (Auth::user()->is_admin)
+                    <div style="width: 300px; height: 350px;">
+                         <div class="p-5">
+                             <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>
+                             {{ $user->name }} <br> <hr> <br>
+                             <h1><b><i class="fa-solid fa-id-card"></i> ID Number</b></h1>
+                             {{ $user->id_number }} <br> <hr> <br>
+                             <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
+                             {{ $requestedBook->title }} <br> <hr> <br>
+                             <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
+                             {{ $user->grade_level }} <br> <hr>
+                         </div>
+                     </div>
+                    @endif
+                    @if (!Auth::user()->is_admin)
 
-                            <button type="button" class="open-modal text-green-600 hover:text-green-700 duration-100" onclick="showAcceptanceModal({{ $requestedBook->id }})" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-check"></i> Accept</b></button>
+                         <div class="p-5">
+                             <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
+                             {{ $requestedBook->title }} <br> <hr> <br>
+                         </div>
 
-                            <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Remove</b></button>
-                            </form>
-                        </div>
+                    @endif
+                     @if (Auth::user()->is_admin)
+                     <div class="flex" style="margin-top: 4px;">
+                         <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
+
+                         <button type="button" class="open-modal text-green-600 hover:text-green-700 duration-100" onclick="showAcceptanceModal({{ $requestedBook->id }})" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-check"></i> Accept</b></button>
+
+                         <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
+                             @csrf
+                             @method('DELETE')
+                             <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Remove</b></button>
+                         </form>
+                     </div>
+                     @endif
+
+                    <div class="flex justify-evenly">
+                     @if (!Auth::user()->is_admin)
+                     <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
+
+                     <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
+                             @csrf
+                             @method('DELETE')
+                             <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Cancel Request</b></button>
+                         </form>
+                    @endif
                     </div>
 
+                 </div>
+                @endforeach
+                @endif
 
 
+                @if ($user->id == auth()->id())
+                    @foreach ($user->requestedBooks as $requestedBook)
+                    <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
+                        @if (Auth::user()->is_admin)
+                        <div style="width: 300px; height: 350px;">
+                             <div class="p-5">
+                                 <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>
+                                 {{ $user->name }} <br> <hr> <br>
+                                 <h1><b><i class="fa-solid fa-id-card"></i> ID Number</b></h1>
+                                 {{ $user->id_number }} <br> <hr> <br>
+                                 <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
+                                 {{ $requestedBook->title }} <br> <hr> <br>
+                                 <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
+                                 {{ $user->grade_level }} <br> <hr>
+                             </div>
+                         </div>
+                        @endif
+                        @if (!Auth::user()->is_admin)
 
+                             <div class="p-5">
+                                 <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
+                                 {{ $requestedBook->title }} <br> <hr> <br>
+                             </div>
+
+                        @endif
+                         @if (Auth::user()->is_admin)
+                         <div class="flex" style="margin-top: 4px;">
+                             <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
+
+                             <button type="button" class="open-modal text-green-600 hover:text-green-700 duration-100" onclick="showAcceptanceModal({{ $requestedBook->id }})" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-check"></i> Accept</b></button>
+
+                             <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
+                                 @csrf
+                                 @method('DELETE')
+                                 <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Remove</b></button>
+                             </form>
+                         </div>
+                         @endif
+
+                        <div class="flex justify-evenly">
+                         @if (!Auth::user()->is_admin)
+                         <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
+
+                         <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
+                                 @csrf
+                                 @method('DELETE')
+                                 <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Cancel Request</b></button>
+                             </form>
+                        @endif
+                        </div>
+
+                     </div>
+                    @endforeach
+                @endif
+                    @foreach ($user->requestedBooks as $requestedBook)
                     <div  id="confirmAcceptModal-{{ $requestedBook->id }}" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
                         <div class="modalWidth" style="transform: translateY(35px); background-color: white; border-radius: 5px; margin: 100px auto; padding: 20px; text-align: left;">
                             <div class="flex justify-between">

@@ -12,7 +12,7 @@ use App\Http\Controllers\RepliesController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\DefaultFineController;
 use App\Http\Controllers\ChatController;
-
+use App\Http\Controllers\BorrowCountController;
 
 
 
@@ -51,6 +51,14 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 
 });
 
+
+Route::post('/borrowCounts', [BookListController::class, 'store'])->name('borrowCounts.store');
+
+
+
+
+
+
 Route::get('/startChatStud', [ChatController::class, 'startChatStud'])->name('startChatStud');
 
 
@@ -75,7 +83,7 @@ Route::post('/comments/like/{comment}', [CommentController::class, 'like'])->nam
 
 
 Route::post('/requestBook/{id}', [StudentController::class, 'requestBook'])->name('requestBook');
-Route::get('/requests', [StudentController::class, 'requestIndex'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('requests');
+Route::get('/requests', [StudentController::class, 'requestIndex'])->name('requests');
 
 
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
