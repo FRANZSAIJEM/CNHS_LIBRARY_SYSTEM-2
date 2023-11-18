@@ -61,10 +61,10 @@ class User extends Authenticatable
         return $this->acceptedRequests()->exists();
     }
 
-    public function hasRequestedBookAny()
-    {
-        return $this->requestedBooks()->exists();
-    }
+    // public function hasRequestedBookAny()
+    // {
+    //     return $this->requestedBooks()->exists();
+    // }
 
 
 

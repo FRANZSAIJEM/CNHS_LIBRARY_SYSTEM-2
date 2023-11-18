@@ -15,6 +15,8 @@ use App\Models\Book; // Import your Book model
 use App\Models\AcceptedRequest; // Import your Book model
 use App\Models\Notification;
 use App\Models\UserNotification;
+use App\Models\UserBookRequest;
+
 use Illuminate\Support\Facades\Auth;
 
 
@@ -216,6 +218,15 @@ class AcceptRequestController extends Controller
 
         // Find the related TimeDuration record
         $timeDuration = TimeDuration::where('accepted_request_id', $id)->first();
+
+        // Find the related UserBookRequest record
+        $userBookRequest = UserBookRequest::where('user_id', $transaction->user_id)->first();
+
+        // Decrement the request count by 1 or set to a specific value as needed
+        if ($userBookRequest) {
+            $userBookRequest->request_count--;
+            $userBookRequest->save();
+        }
 
         // Delete the TimeDuration record first
         if ($timeDuration) {

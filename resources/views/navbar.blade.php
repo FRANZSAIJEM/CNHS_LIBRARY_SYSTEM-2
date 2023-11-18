@@ -6,15 +6,13 @@
             </h2>
         </div>
     </x-slot>
-
-    <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-
-
+    @foreach ($acceptedRequests as $acceptedRequest)
+    <div class="p-6 m-5 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div style="display: grid; place-content: center;">
             @if ($acceptedRequest)
                 <div class="text-center">Remaining time</div>
                 <div class="text-center">
-                    for the book you borrowed.
+                    for the book "<b>{{ $acceptedRequest->book_title }}</b>" you borrowed.
                 </div>
                 <div class="text-center" style="font-size: 40px;">
                     <div class="countdown-timer" data-target="{{ $acceptedRequest->timeDuration->date_return_seconds }}">
@@ -28,10 +26,6 @@
             @endif
         </div>
 
-
-        {{-- {{$date_pickup}}
-        {{$date_return}} --}}
-
         <h3 style="display: none; font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"><div class="flex justify-center">₱ &nbsp; <div id="fines-container" style="display: none;"></div></div></h3>
 
         <div class="text-center mt-10">
@@ -40,6 +34,8 @@
             @endif
         </div>
     </div>
+    @endforeach
+
 
     <br>
 

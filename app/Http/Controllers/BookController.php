@@ -11,6 +11,10 @@ use App\Models\BookDecline;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\RequestedBook;
+use App\Models\BorrowCount;
+use App\Models\UserBookRequest;
+
+
 
 
 
@@ -102,6 +106,9 @@ class BookController extends Controller
         $userHasAcceptedRequest = false;
         $userHasAcceptedRequestForReturnedBook = false;
         $bookReturnStatus = null; // Variable to store book_returned status
+        $borrowCount = BorrowCount::first(); // Retrieve the first BorrowCount record
+        $userBookRequest = null; // Variable to store UserBookRequest data
+
 
         if (Auth::check()) {
             $user = Auth::user();
@@ -123,9 +130,11 @@ class BookController extends Controller
                 $latestAcceptedRequest = $acceptedRequests->sortByDesc('created_at')->first();
                 $bookReturnStatus = $latestAcceptedRequest->book_returned;
             }
-        }
 
-        return view('viewBook', compact('book', 'userHasRequestedThisBook', 'userHasAcceptedRequest', 'userHasAcceptedRequestForReturnedBook', 'acceptedRequests', 'user', 'bookReturnStatus'));
+              // Retrieve the UserBookRequest data
+            $userBookRequest = UserBookRequest::where('user_id', $user->id)->first();
+        }
+        return view('viewBook', compact('book', 'userHasRequestedThisBook', 'userHasAcceptedRequest', 'userHasAcceptedRequestForReturnedBook', 'acceptedRequests', 'user', 'bookReturnStatus', 'borrowCount', 'userBookRequest'));
     }
 
 
@@ -141,10 +150,19 @@ class BookController extends Controller
             return redirect()->back()->with('error', 'User not found.');
         }
 
+         // Find the user's book request record
+        $userBookRequest = UserBookRequest::where('user_id', $userId)->first();
+
+        if ($userBookRequest) {
+            // Decrement the request count by 1 or set to a specific value as needed
+            $userBookRequest->request_count--;
+            $userBookRequest->save();
+        }
+
         // Detach the request for the specific book and user
         $user->requestedBooks()->wherePivot('book_id', $bookId)->detach();
 
-        return redirect()->back()->with('success', 'Removed successfully.');
+        return redirect()->back()->with('success', 'Removed successfullyss.');
     }
 
 }

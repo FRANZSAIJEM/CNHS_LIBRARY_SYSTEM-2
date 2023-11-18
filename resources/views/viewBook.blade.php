@@ -284,11 +284,12 @@
     <div style="display: grid; place-content: center;" class="mt-5">
         @if (!Auth::user()->is_admin)
             <div >
-                <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || auth()->user()->hasAcceptedBook() || $userHasAcceptedRequest || $userHasRequestedThisBook ||  auth()->user()->hasRequestedBookAny() ? 'disabled' : '' }}"
+                <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook || ($userBookRequest && $userBookRequest->request_count == $borrowCount->count) ? 'disabled' : '' }}"
                     onclick="showConfirmationModal({{ $book->id }})"
                     type="submit"
-                    {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || auth()->user()->hasAcceptedBook() || $userHasAcceptedRequest || $userHasRequestedThisBook ||  auth()->user()->hasRequestedBookAny()  ? 'disabled' : '' }}
+                    {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook || ($userBookRequest && $userBookRequest->request_count == $borrowCount->count) ? 'disabled' : '' }}
                 >
+
                     <b>
                         @if ($book->requestedByUsers->count() > 0)
                             @if (auth()->user()->hasRequestedBook($book->id))

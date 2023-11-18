@@ -9,7 +9,7 @@ class BorrowCount extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['student_id', 'count'];
+    protected $fillable = ['count'];
 
     public function student()
     {

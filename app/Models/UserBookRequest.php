@@ -20,4 +20,9 @@ class UserBookRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function borrowCount()
+    {
+        return $this->hasOne(BorrowCount::class, 'student_id', 'user_id');
+    }
 }

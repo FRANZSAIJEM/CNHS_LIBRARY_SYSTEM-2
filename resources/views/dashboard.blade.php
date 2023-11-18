@@ -55,7 +55,7 @@
                         @if ($totalFine !== null)
                             {{ number_format($totalFine, 2) }}
                         @else
-                            Default Fine not available
+                            0.00
                         @endif
                     </div>
                 </div>

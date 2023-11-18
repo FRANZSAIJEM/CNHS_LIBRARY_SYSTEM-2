@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\book;
 use App\Models\AcceptedRequest;
 use App\Models\BorrowCount;
+use App\Models\UserBookRequest;
+
 
 use Illuminate\Pagination\Paginator;
 
@@ -15,6 +17,12 @@ class BookListController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user(); // Assuming you are using Laravel's built-in authentication
+
+        // Fetch the user's book request count
+        $bookRequestCount = UserBookRequest::where('user_id', $user->id)->first();
+
+
         $query = book::query();
 
         if ($request->has('book_search')) {
@@ -27,7 +35,7 @@ class BookListController extends Controller
 
         $bookLists = $query->paginate(4);
 
-        return view('bookList', ['bookList' => $bookLists]);
+        return view('bookList', ['bookList' => $bookLists,  'bookRequestCount' => $bookRequestCount]);
     }
 
     public function destroy(Request $request, $id)
@@ -63,7 +71,7 @@ class BookListController extends Controller
     }
 
 
-    
+
 
     public function store(Request $request)
     {
@@ -71,9 +79,9 @@ class BookListController extends Controller
             'count' => 'required|integer',
         ]);
 
-        $defaultStudentId = 1; // Replace with the appropriate default student ID
 
-        $borrowCount = BorrowCount::where('student_id', $defaultStudentId)->first();
+
+        $borrowCount = BorrowCount::first(); // Assuming there's only one BorrowCount record
 
         if ($borrowCount) {
             // Update the existing record
@@ -83,7 +91,6 @@ class BookListController extends Controller
         } else {
             // Create a new record
             BorrowCount::create([
-                'student_id' => $defaultStudentId,
                 'count' => $request->input('count'),
             ]);
         }
@@ -91,6 +98,7 @@ class BookListController extends Controller
         // Pass the $borrowCount variable to the view
         return redirect()->route('bookList')->with('success', 'Updated successfully!');
     }
+
 
 
 }

@@ -9,22 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class NavbarController extends Controller
 {
-    //
 
     public function index(){
-        $acceptedRequest = AcceptedRequest::where('user_id', Auth::id())->first();
-        // Check if there is an accepted request for the user
+        $acceptedRequests = AcceptedRequest::where('user_id', Auth::id())->get();
+        // Check if there are any accepted requests for the user
         $date_pickup = $date_return = null;
 
-        if ($acceptedRequest) {
-            $date_pickup = $acceptedRequest->date_pickup;
-            $date_return = $acceptedRequest->date_return;
+        if ($acceptedRequests->count() > 0) {
+            // For simplicity, assuming the first accepted request's dates are used
+            $date_pickup = $acceptedRequests[0]->date_pickup;
+            $date_return = $acceptedRequests[0]->date_return;
         }
-
 
         return view('navbar')
             ->with('date_pickup', $date_pickup)
             ->with('date_return', $date_return)
-            ->with('acceptedRequest', $acceptedRequest); // Pass $acceptedRequest to the view
+            ->with('acceptedRequests', $acceptedRequests); // Pass $acceptedRequests to the view
     }
 }

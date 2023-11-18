@@ -37,8 +37,16 @@ class DashboardController extends Controller
 
         $defaultFine = DefaultFine::first();
 
+        // Use Auth::id() to get the authenticated user's ID
+    $acceptedRequests = AcceptedRequest::where('user_id', Auth::id())->get();
 
-        $totalFine = $acceptedRequest ? $acceptedRequest->total_fines : null;
+    $totalFine = 0;
+
+    foreach ($acceptedRequests as $request) {
+        $totalFine += $request->total_fines;
+    }
+
+
 
         return view('dashboard')
             ->with('totalStudents', $totalStudents)

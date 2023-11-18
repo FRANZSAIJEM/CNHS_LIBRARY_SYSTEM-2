@@ -41,24 +41,27 @@ $borrowCount = BorrowCount::first();
                     </form>
                 </div>
 
+                @if (!Auth::user()->is_admin)
+                <h1>{{ $bookRequestCount ? $bookRequestCount->request_count : '0' }}/{{ $borrowCount ? $borrowCount->count : '' }}</h1>
+
+                @endif
+
                 <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
                 @if (Auth::user()->is_admin)
-              <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
+                <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
 
-              {{-- <form action="{{ route('borrowCounts.store') }}" method="post">
-                @csrf
-                <label for="student_id">Select Student:</label>
+                <form action="{{ route('borrowCounts.store') }}" method="post">
+                    @csrf
 
+                    <label for="count">Set Borrowing Count:</label>
+                    <input type="number" name="count" id="count" value="{{ $borrowCount ? $borrowCount->count : '' }}">
 
-                <label for="count">Set Borrowing Count:</label>
-                <input type="number" name="count" id="count" value="{{ $borrowCount ? $borrowCount->count : '' }}">
-
-                <button type="submit">Set Borrowing Count</button>
-            </form> --}}
+                    <button type="submit">Set Borrowing Count</button>
+                </form>
 
 
-              </div>
-            @endif
+                </div>
+                @endif
           </div>
        <div style="">
 
