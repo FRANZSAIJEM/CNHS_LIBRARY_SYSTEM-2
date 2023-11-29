@@ -35,24 +35,24 @@ $defDailyFine = DefaultFine::first();
         <div class="text-right mb-5">
             <div>
                 <div class="" style="display: grid; place-content: center;">
+                    @if (Auth::user()->is_admin)
                     <form action="{{ route('requests') }}" method="GET" class="search-bar">
                         <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
-                            <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="book_search" placeholder="ID Number">
+                            <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="book_search" placeholder="🔍 ID Number">
                             {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
-
                         </div>
-
                     </form>
+                    @endif
                 </div>
 
 
 
             @if (Auth::user()->is_admin)
             <div style="position: relative">
-                <button id="showSearchButton" class="text-slate-600 hover:text-slate-900 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
+                {{-- <button id="showSearchButton" class="text-slate-600 hover:text-slate-900 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button> --}}
                 <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
 
-                <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50;">
+                <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50; transform: translateX(-5px);">
                     <div class="p-5 rounded-lg shadow-md bg-slate-50">
                         <h1 class="text-center"><b>Set Starting Fines</b></h1><br>
 
@@ -60,7 +60,7 @@ $defDailyFine = DefaultFine::first();
                             <form action="{{ route('setDefaultFine') }}" method="POST">
                                 @csrf
 
-                                ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defFine ? $defFine->amount : '' }}" type="text" name="amount" placeholder="Enter default fine amount" required><br>
+                                ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent text-right" placeholder="" value="{{ $defFine ? $defFine->amount : '' }}" type="number" name="amount" placeholder="Enter default fine amount" required><br>
                                 <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
                             </form>
                         </div> <br>
@@ -71,7 +71,7 @@ $defDailyFine = DefaultFine::first();
                             <form action="{{ route('setDailyFine') }}" method="POST">
                                 @csrf
 
-                                ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent" placeholder="" value="{{ $defDailyFine ? $defDailyFine->set_daily_fines : '' }}" type="text" name="set_daily_fines" placeholder="Enter default fine amount" required><br>
+                                ₱ <input style="border-bottom: 1px solid black" class="border-none bg-transparent text-right" placeholder="" value="{{ $defDailyFine ? $defDailyFine->set_daily_fines : '' }}" type="number" name="set_daily_fines" placeholder="Enter default fine amount" required><br>
                                 <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Save Amount</button>
                             </form>
                         </div>
@@ -168,6 +168,12 @@ $defDailyFine = DefaultFine::first();
                              <div class="p-5">
                                  <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
                                  {{ $requestedBook->title }} <br> <hr> <br>
+                                 <h1><b><i class="fa-solid fa-user"></i> Author</b></h1>
+                                 {{ $requestedBook->author }} <br> <hr> <br>
+                                 <h1><b><i class="fa-solid fa-bars-staggered"></i> Subject</b></h1>
+                                 {{ $requestedBook->subject }} <br> <hr> <br>
+                                 <h1><b><i class="fa-solid fa-location-pin"></i> ISBN</b></h1>
+                                 {{ $requestedBook->isbn }} <br> <hr> <br>
                              </div>
 
                         @endif
@@ -188,8 +194,9 @@ $defDailyFine = DefaultFine::first();
                         <div class="flex justify-evenly">
                          @if (!Auth::user()->is_admin)
                          <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
+                            <button class="open-modal text-green-600 hover:text-green-700 duration-100"  style="margin: 5px; padding: 10px; border-radius: 5px; visibility: hidden">Accept</button>
 
-                         <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
+                            <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
                                  @csrf
                                  @method('DELETE')
                                  <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Cancel Request</b></button>
@@ -370,7 +377,7 @@ $defDailyFine = DefaultFine::first();
     }
         .search-bar {
             display: block;
-            max-height: 0;
+
             overflow: hidden;
             transition: 1s;
         }

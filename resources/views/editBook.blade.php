@@ -41,7 +41,7 @@
         <div  class="overflow-hidden">
             <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
             <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required>{{$book->description}}</textarea>
-            {{-- <p id="charCount">Characters remaining: 255</p> --}}
+            <p id="charCount">Characters remaining: 255</p>
         </div> <br>
         <div style="">
             <label for="description"><b><i class="fa-solid fa-image"></i> Change cover photo</b></label><br>

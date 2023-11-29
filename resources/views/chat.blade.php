@@ -72,7 +72,7 @@
             <div style="">
                 <form action="{{ route('sendMessage') }}" method="post">
                     @csrf
-                    <input class="border-1 rounded-lg  p-5 mt-10 w-full" type="text" name="message_content" placeholder="Type your message..." required>
+                    <input id="myInput" class="border-1 rounded-lg  p-5 mt-10 w-full" type="text" autofocus name="message_content" placeholder="Type your message..." required>
                     <input  type="hidden" name="receiver_id" value="{{ $user->id }}"> <!-- Add a hidden input for receiver_id -->
                     <button class="float-right bg-slate-400 p-3 ps-5 pe-5 mt-3 text-white hover:bg-slate-500 duration-100 rounded-lg" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
                 </form>
@@ -119,6 +119,10 @@ const toggleButtons = document.querySelectorAll('.toggleDeleteButton');
                 deleteForms[index].style.display = 'none';
             }
         });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("myInput").focus();
     });
 
     </script>

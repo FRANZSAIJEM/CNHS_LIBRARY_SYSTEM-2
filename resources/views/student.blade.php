@@ -23,11 +23,11 @@
               <div class="" style="display: grid; place-content: center;">
                   <form action="{{ route('student') }}" method="GET" class="search-bar">
                       <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
-                          <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="ID Number, Name">
+                          <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="🔍 ID Number, Name">
                       </div>
                   </form>
               </div>
-              <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
+              <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px; visibility: hidden;"><i class="fa-solid fa-search"></i></button>
             </div>
         </div>
         <div class="">
@@ -115,7 +115,7 @@
     }
         .search-bar {
             display: block;
-            max-height: 0;
+
             overflow: hidden;
             transition: 1s;
         }

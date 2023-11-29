@@ -33,7 +33,7 @@ $borrowCount = BorrowCount::first();
                 <div class="" style="display: grid; place-content: center;">
                     <form action="{{ route('bookList') }}" method="GET" class="search-bar">
                         <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
-                            <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="book_search" placeholder="Title, Author, Subject">
+                            <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="book_search" placeholder="🔍 Title, Author, Subject">
                             {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
 
                         </div>
@@ -41,27 +41,32 @@ $borrowCount = BorrowCount::first();
                     </form>
                 </div>
 
-                @if (!Auth::user()->is_admin)
-                <h1>{{ $bookRequestCount ? $bookRequestCount->request_count : '0' }}/{{ $borrowCount ? $borrowCount->count : '' }}</h1>
 
-                @endif
+                {{-- <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button> --}}
+                <button>
+                    @if (!Auth::user()->is_admin)
+                    <h1><b>Borrow Limit: {{ $bookRequestCount ? $bookRequestCount->request_count : '0' }}/{{ $borrowCount ? $borrowCount->count : '' }}</b></h1>
+                    @endif
+                </button>
+                <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50; transform: translateX(-45px);">
+                    <div class="p-5 rounded-lg shadow-md bg-slate-50">
+                        <h1 class="text-center"><b>Set Borrowing Limit</b></h1><br>
+                        <div class="text-end">
+                            <form action="{{ route('borrowCounts.store') }}" method="post">
+                                @csrf
 
-                <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button>
+                                🔢 <input style="border-bottom: 1px solid black" class="border-none bg-transparent text-right" placeholder="" value="{{ $borrowCount ? $borrowCount->count : '' }}" type="number" name="count" id="count" placeholder="Enter default fine amount" required><br>
+                                <button style="margin-bottom: -10px;" class="mt-5 p-3 text-slate-600 hover:text-slate-900 duration-100" type="submit"><i class="fa-solid fa-pen"></i> Set Limit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 @if (Auth::user()->is_admin)
                 <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
-
-                <form action="{{ route('borrowCounts.store') }}" method="post">
-                    @csrf
-
-                    <label for="count">Set Borrowing Count:</label>
-                    <input type="number" name="count" id="count" value="{{ $borrowCount ? $borrowCount->count : '' }}">
-
-                    <button type="submit">Set Borrowing Count</button>
-                </form>
-
-
+                <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
                 </div>
                 @endif
+
           </div>
        <div style="">
 
@@ -154,7 +159,7 @@ $borrowCount = BorrowCount::first();
                             <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
                             <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required></textarea>
                         </div> <br>
-                        {{-- <p id="charCount">Characters remaining: 255</p> --}}
+                        <p id="charCount" style="visibility: hidden;">Characters remaining: 255</p>
 
                     <div style="">
                         <label for="description"><b><i class="fa-solid fa-image"></i> Choose cover photo</b></label><br>
@@ -252,7 +257,7 @@ $borrowCount = BorrowCount::first();
     /* Initially hide the search bar and set it offscreen */
     .search-bar {
             display: block;
-            max-height: 0;
+
             overflow: hidden;
             transition: 1s;
         }
@@ -332,6 +337,17 @@ $borrowCount = BorrowCount::first();
     }
 </style>
 <script>
+
+document.getElementById('showFormButton').addEventListener('click', function() {
+        var form = document.getElementById('defaultFineForm');
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    });
+
+
         const textarea = document.getElementById('description');
     const charCount = document.getElementById('charCount');
     const maxChars = 255;

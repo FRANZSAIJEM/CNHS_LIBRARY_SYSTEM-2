@@ -16,6 +16,7 @@
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="">
             <div>
+
                 @if (count($userNotifications) > 0)
                 @foreach ($userNotifications as $userNotification)
 

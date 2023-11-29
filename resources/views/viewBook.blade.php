@@ -50,7 +50,7 @@
             </div>
             <h1><b><i class="fa-solid fa-paragraph"></i> Description</b></h1>
             <div style="display: grid; place-content: center">
-                <textarea disabled style="resize: none" class="justDescription p-6 overflow-hidden border-none bg-white rounded-md shadow-md dark:bg-dark-eval-1" name="" id="" rows="4">{{$book->description}}</textarea>
+                <textarea disabled style="resize: none" class="justDescription p-6 overflow-hidden border-none bg-slate-100 rounded-md shadow-md dark:bg-dark-eval-1" name="" id="" rows="11">{{$book->description}}</textarea>
             </div>
 
         </div>
@@ -284,10 +284,10 @@
     <div style="display: grid; place-content: center;" class="mt-5">
         @if (!Auth::user()->is_admin)
             <div >
-                <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook || ($userBookRequest && $userBookRequest->request_count == $borrowCount->count) ? 'disabled' : '' }}"
+                <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook || ($userBookRequest && $userBookRequest->request_count == $borrowCount->count) || ($userBookRequest && $userBookRequest->request_count >= $borrowCount->count) ? 'disabled' : '' }}"
                     onclick="showConfirmationModal({{ $book->id }})"
                     type="submit"
-                    {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook || ($userBookRequest && $userBookRequest->request_count == $borrowCount->count) ? 'disabled' : '' }}
+                    {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook || ($userBookRequest && $userBookRequest->request_count == $borrowCount->count) || ($userBookRequest && $userBookRequest->request_count >= $borrowCount->count) ? 'disabled' : '' }}
                 >
 
                     <b>

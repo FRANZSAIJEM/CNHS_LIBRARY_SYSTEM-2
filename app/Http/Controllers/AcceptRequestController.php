@@ -25,7 +25,7 @@ class AcceptRequestController extends Controller
 {
     public function acceptRequest(Request $request, User $user, Book $book)
     {
-        // Assuming you have a "accepted_requests" table to store the accepted requests.
+
         $acceptedRequest = new AcceptedRequest();
         $acceptedRequest->user_id = $user->id;
         $acceptedRequest->book_id = $book->id;
@@ -33,40 +33,26 @@ class AcceptRequestController extends Controller
         $acceptedRequest->borrower_id = $user->id;
         $acceptedRequest->date_borrow = now();
 
-
         $latestDefaultFine = DefaultFine::orderBy('updated_at', 'desc')->first();
 
-
-        // Check if a default fine record exists
         if ($latestDefaultFine) {
             $acceptedRequest->default_fine_id = $latestDefaultFine->id;
         } else {
-            // Handle the case where there is no default fine record (provide a default value or error handling)
-            // You can set a default value or handle this case as needed.
+
         }
-
-
-
-         // Retrieve the values from the form and format them as datetime values
         $acceptedRequest->date_pickup = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_pickup'));
         $acceptedRequest->date_return = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_return'));
 
-            // Create a TimeDuration record
+
         $timeDuration = new TimeDuration();
         $timeDuration->date_pickup_seconds = $acceptedRequest->date_pickup->timestamp;
         $timeDuration->date_return_seconds = $acceptedRequest->date_return->timestamp;
 
-
-        // Update the timestamp to the current time
         $acceptedRequest->updated_at = now();
-
-        // Store the default fines in the session
         $request->session()->put('fines', $acceptedRequest->fines);
-
 
         $acceptedRequest->save();
 
-            // Create a TimeDuration record
         $timeDuration = new TimeDuration();
         $timeDuration->accepted_request_id = $acceptedRequest->id;
         $timeDuration->date_pickup_seconds = $acceptedRequest->date_pickup->timestamp;

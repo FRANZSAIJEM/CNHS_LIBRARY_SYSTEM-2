@@ -219,7 +219,7 @@
 
         @foreach($acceptedRequests as $request)
         <a href="{{ route('viewBook', ['id' => $request->book_id]) }}">
-            <div class="p-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
+            <div class="p-5 mb-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
                 <h1><b>Hello</b> {{ $loggedInUser->name }},</h1>
                 <p>
                     We are pleased to inform you that your book request for
