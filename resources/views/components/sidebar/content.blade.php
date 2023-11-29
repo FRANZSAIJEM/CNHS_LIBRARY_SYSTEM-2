@@ -153,7 +153,7 @@ href="{{ route('requests') }}"
 
 
         <x-sidebar.link
-            title="Transactions"
+            title="Borrowed Books"
             href="{{ route('transactions') }}"
             :isActive="request()->routeIs('transactions')"
         >

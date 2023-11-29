@@ -63,6 +63,8 @@
                                     {{ $acceptedRequest->user->name }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-id-card"></i> ID Number</b></h1>
                                     {{ $acceptedRequest->user->id_number }} <br> <hr> <br>
+                                    <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
+                                    {{ $acceptedRequest->user->grade_level }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
                                     {{ $acceptedRequest->book->title }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Borrowed On</b></h1>
@@ -84,13 +86,13 @@
                                     </div>
 
                                         {{ $formattedDate3 }} <br> <hr> <br>
-                                        <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
+                                        {{-- <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
 
                                         <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->total_fines  }}</div></div>
-                                        <hr>
+                                        <hr> --}}
                                 </div>
                             </div>
-                          <div class="text-center flex">
+                          <div class="text-center flex mt-5">
                             <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')

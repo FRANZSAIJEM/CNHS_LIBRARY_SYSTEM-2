@@ -46,7 +46,7 @@ class DailyFine extends Command
                 // Add daily fines only if the book is not returned
                 $request->daily_fines += $dailyFine;
             }
-            
+
             if ($defaultFine !== null) {
                 $request->total_fines = $request->daily_fines + $defaultFine;
                 $request->save();

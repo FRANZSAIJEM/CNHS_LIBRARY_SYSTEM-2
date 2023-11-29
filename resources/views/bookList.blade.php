@@ -34,12 +34,29 @@ $borrowCount = BorrowCount::first();
                     <form action="{{ route('bookList') }}" method="GET" class="search-bar">
                         <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
                             <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="book_search" placeholder="🔍 Title, Author, Subject">
-                            {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
-
                         </div>
-
                     </form>
+                    @if (!Auth::user()->is_admin)
+                    <form action="{{ route('bookList') }}" method="GET" class="search-bar">
+                        <div class="flex justify-center flex-wrap mb-3" style="font-size: 15px;">
+                            <button type="submit" name="letter_filter" value="" class="bg-slate-200 hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-lg me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}"><b>All</b></button>
+
+
+                            @foreach(range('A', 'Z') as $letter)
+                                <button type="submit" name="letter_filter" value="{{ $letter }}" class="bg-slate-200 hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-lg me-2 m-1 {{ (request()->input('letter_filter') == $letter) ? 'active' : '' }}">{{ $letter }}</button>
+                            @endforeach
+
+
+                            <input type="hidden" name="book_search" value="{{ request()->input('book_search') }}">
+                        </div>
+                    </form>
+                    @endif
+
+
                 </div>
+
+                {{-- option A-Z filter --}}
+
 
 
                 {{-- <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button> --}}
@@ -48,6 +65,7 @@ $borrowCount = BorrowCount::first();
                     <h1><b>Borrow Limit: {{ $bookRequestCount ? $bookRequestCount->request_count : '0' }}/{{ $borrowCount ? $borrowCount->count : '' }}</b></h1>
                     @endif
                 </button>
+
                 <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50; transform: translateX(-45px);">
                     <div class="p-5 rounded-lg shadow-md bg-slate-50">
                         <h1 class="text-center"><b>Set Borrowing Limit</b></h1><br>
@@ -61,6 +79,7 @@ $borrowCount = BorrowCount::first();
                         </div>
                     </div>
                 </div>
+
                 @if (Auth::user()->is_admin)
                 <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
                 <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
@@ -104,6 +123,8 @@ $borrowCount = BorrowCount::first();
 
                 </div>
             </div>
+
+
        <div style="display: grid; place-content: center;">
 
         <div class="pagination">
@@ -111,6 +132,8 @@ $borrowCount = BorrowCount::first();
         </div>
 
        </div>
+
+
        </div>
     </div>
 

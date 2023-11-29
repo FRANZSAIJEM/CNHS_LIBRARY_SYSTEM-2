@@ -250,6 +250,7 @@ $defDailyFine = DefaultFine::first();
                     <p style="tra">You have no requests.</p>
                 @endif
             </div>
+
         </div>
             {{-- @foreach ($users as $user)
                         @foreach ($user->requestedBooks as $requestedBook)
@@ -315,6 +316,7 @@ $defDailyFine = DefaultFine::first();
 
     {{-- Loading Screen --}}
     <div id="loading-bar" class="loading-bar"></div>
+
 <style>
     .success-message-container {
         position: fixed;

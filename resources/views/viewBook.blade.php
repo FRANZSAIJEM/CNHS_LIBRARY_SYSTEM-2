@@ -11,6 +11,8 @@
     </x-slot>
 
 <div style="display: grid; place-content: center;" class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+    <a href="{{ route('bookList') }}" class="rounded-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold"><i class="fa-solid fa-chevron-left"></i> Back</a>
+
     <div style="display: grid; place-items: center;">
         @if(session('success'))
            <div class="success-message-container">
@@ -21,7 +23,9 @@
            </div>
        @endif
    </div>
+
     <div class="viewAndComment overflow-hidden">
+
         <div class="p-6 overflow-hidden ">
 
 

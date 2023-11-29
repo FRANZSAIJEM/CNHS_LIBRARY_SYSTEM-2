@@ -46,18 +46,18 @@
     @if (!Auth::user()->is_admin)
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="text-center ">
-            <h1><b><i class="fa-solid fa-circle-dollar-to-slot"></i> Fines</b></h1>
+            <h1><b><i class="fa-solid fa-clock"></i> Late Returns</b></h1>
             {{-- <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"><div class="flex justify-center">₱ &nbsp; <div id="fines-container" style="display: none;">{{ number_format($totalFines, 2)}}</div></div></h3> --}}
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">
                 <div class="flex justify-center">
-                    ₱ &nbsp;
+                    {{-- ₱ &nbsp; --}}
                     <div id="fines-container" style="display: none;">
                         @if ($totalFine !== null)
-                            {{ number_format($totalFine, 2) }}
+                            {{ number_format($totalFine) }}
                         @else
                             0.00
                         @endif
-                    </div>
+                    </div>&nbsp; <span style="font-size: 17px;" class="mt-3">instances of <br> late returns.</span>
                 </div>
             </h3>
 
@@ -148,7 +148,7 @@ function updateCountdown(element, targetTimestamp) {
         // Show "0.00" in the fines container
         const finesContainer = document.getElementById('fines-container');
         finesContainer.style.display = 'block';
-        finesContainer.innerHTML = '0.00';
+        finesContainer.innerHTML = '0';
 
         setTimeout(() => updateCountdown(element, targetTimestamp), 1000);
     } else {

@@ -56,6 +56,7 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+
     public function hasAcceptedBook()
     {
         return $this->acceptedRequests()->exists();
