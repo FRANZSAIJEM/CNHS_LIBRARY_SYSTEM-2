@@ -19,7 +19,8 @@ class AcceptedRequest extends Model
         'fines',
         'book_returned',
         'daily_fines',
-        'total_fines'
+        'total_fines',
+        'late_return'
     ];
 
     public function user()
@@ -35,10 +36,14 @@ class AcceptedRequest extends Model
     {
         return $this->hasOne(TimeDuration::class);
     }
+
+
     public function defaultFine()
     {
         return $this->belongsTo(DefaultFine::class, 'default_fine_id');
     }
+
+
 
     // AcceptedRequest.php
     public function isBookReturned()

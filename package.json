@@ -19,6 +19,8 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.10",
+        "@fullcalendar/daygrid": "^6.1.10",
         "nprogress": "^0.2.0"
     }
 }

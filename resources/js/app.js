@@ -6,6 +6,26 @@ import PerfectScrollbar from 'perfect-scrollbar'
 
 window.PerfectScrollbar = PerfectScrollbar
 
+
+
+// import { Calendar } from '@fullcalendar/core';
+// import dayGridPlugin from '@fullcalendar/daygrid';
+
+
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     var calendarEl = document.getElementById('calendar');
+
+//     var calendar = new Calendar(calendarEl, {
+//         plugins: [dayGridPlugin],
+//         events: '/events', // You will need to define the route for fetching events
+//     });
+
+//     calendar.render();
+// });
+
+
+
 document.addEventListener('alpine:init', () => {
     Alpine.data('mainState', () => {
         let lastScrollTop = 0

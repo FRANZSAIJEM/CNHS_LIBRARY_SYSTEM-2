@@ -9,9 +9,10 @@
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="text-center ">
-            <h1><b><i class="fa-solid fa-book"></i> Total Books</b></h1>
             @if (!Auth::user()->is_admin)
-            <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$totalBooks}}</h3>
+            <h1><b><i class="fa-solid fa-book"></i> Total Available Books</b></h1>
+
+            <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$availableBooks}}</h3>
             <x-nav-link  :href="route('bookList')" :active="request()->routeIs('bookList')">
                 <b style="box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
                     width: 200px" class="bg-slate-500 text-white p-5 rounded-xl"><i class="fa-solid fa-handshake-angle"></i> {{ __('Borrow Book') }}</b>
@@ -19,6 +20,8 @@
             @endif
 
             @if (Auth::user()->is_admin)
+            <h1><b><i class="fa-solid fa-book"></i> Total Books</b></h1>
+
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$totalBooks}}</h3>
             <x-nav-link  :href="route('bookList')" :active="request()->routeIs('bookList')">
                 <b style="box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -52,12 +55,16 @@
                 <div class="flex justify-center">
                     {{-- ₱ &nbsp; --}}
                     <div id="fines-container" style="display: none;">
+
+
                         @if ($totalFine !== null)
                             {{ number_format($totalFine) }}
                         @else
                             0.00
                         @endif
-                    </div>&nbsp; <span style="font-size: 17px;" class="mt-3">instances of <br> late returns.</span>
+
+
+                    </div>&nbsp; <span style="font-size: 17px;" class="mt-3">Instances of <br> late returns.</span>
                 </div>
             </h3>
 

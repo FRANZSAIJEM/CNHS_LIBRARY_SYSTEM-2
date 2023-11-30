@@ -62,7 +62,7 @@ class AcceptRequestController extends Controller
         // Detach the book from the user's requestedBooks relationship since it's been accepted.
         $user->requestedBooks()->detach($book);
 
-        $notificationText = "{$user->name} Borrowed '{$book->title}' on " . now()->format('Y-m-d H:i A') . ".";
+        $notificationText = "{$user->name} Borrowed '{$book->title}' ";
 
         $notification = new Notification([
             'user_id' => $user->id,
@@ -91,14 +91,18 @@ class AcceptRequestController extends Controller
     public function transactions(Request $request)
     {
         $idNumberSearch = $request->input('id_number_search');
+
         // Retrieve all accepted requests from the database
-        $query = AcceptedRequest::with('user');
+        $query = AcceptedRequest::with('user', 'book');
 
         // If there is an ID number search query, filter by it
         if (!empty($idNumberSearch)) {
             $query->whereHas('user', function ($q) use ($idNumberSearch) {
                 $q->where('id_number', 'LIKE', "%$idNumberSearch%")
                   ->orWhere('name', 'LIKE', "%$idNumberSearch%");
+            })
+            ->orWhereHas('book', function ($bookQuery) use ($idNumberSearch) {
+                $bookQuery->where('title', 'LIKE', "%$idNumberSearch%");
             });
         }
 

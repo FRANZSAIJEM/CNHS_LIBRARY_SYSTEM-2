@@ -7,6 +7,9 @@
 
     <title>{{ config('app.name', 'K UI') }}</title>
 
+    <link rel="stylesheet" href="{{ asset('path/to/node_modules/@fullcalendar/core/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('path/to/node_modules/@fullcalendar/daygrid/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

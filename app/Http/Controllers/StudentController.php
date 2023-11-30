@@ -20,7 +20,7 @@ class StudentController extends Controller
     public function calculateTotalFines($userId)
     {
         // Calculate the total fines for a user based on their user ID
-        return AcceptedRequest::where('user_id', $userId)->sum('fines');
+        return AcceptedRequest::where('user_id', $userId)->sum('total_fines');
     }
 
 

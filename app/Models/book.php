@@ -14,6 +14,7 @@ class book extends Model
         'author',
         'subject',
         'availability',
+        'status',
         'isbn',
         'description',
         'image',

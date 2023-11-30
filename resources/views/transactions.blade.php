@@ -22,8 +22,10 @@
             <div>
                 <div class="" style="display: grid; place-content: center;">
                     <form action="{{ route('transactions') }}" method="GET" class="search-bar">
-                        <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
-                            <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="🔍 ID Number, Name">
+                        <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1 flex">
+                            <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="🔍 ID Number, Name, Book">
+                            <button style="" type="submit" name="letter_filter" value="" class=" hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}">Clear</button>
+
                             {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
 
                         </div>
@@ -85,14 +87,23 @@
                                         </div>
                                     </div>
 
-                                        {{ $formattedDate3 }} <br> <hr> <br>
-                                        {{-- <h1><b><i class="fa-solid fa-money-check-dollar"></i> Fines</b></h1>
 
-                                        <div class="flex">₱  &nbsp; <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->total_fines  }}</div></div>
-                                        <hr> --}}
+
+                                        {{ $formattedDate3 }} <br> <hr> <br>
+
+
+                                        <h1><b><i class="fa-solid fa-chart-simple"></i> Status</b></h1>
+                                        <div class="flex">
+                                            <div id="fines-container-{{ $index }}" style="display: none;">{{ $acceptedRequest->late_return }}</div>
+                                        </div>
+                                        <hr>
+
+
+
+
                                 </div>
                             </div>
-                          <div class="text-center flex mt-5">
+                          <div class="text-center mt-20">
                             <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
@@ -100,11 +111,11 @@
                                     style="width: 150px; border-radius: 5px; padding: 10px;"
                                     type="submit"
                                 >
-                                    <b><i class="fa-solid fa-check"></i> End Transaction</b>
+                                    <b><i class="fa-solid fa-check"></i> End Record</b>
                                 </button>
                             </form>
 
-                            <form action="{{ route('returnBook', $acceptedRequest->id) }}" method="POST">
+                            {{-- <form action="{{ route('returnBook', $acceptedRequest->id) }}" method="POST">
                                 @csrf
                                 @if (!$acceptedRequest->book_returned)
                                     <button class="text-green-600 hover:text-green-700 duration-100"
@@ -122,7 +133,7 @@
                                         <b><i class="fa-solid fa-rotate-left"></i> Book Already Returned</b>
                                     </button>
                                 @endif
-                            </form>
+                            </form> --}}
 
 
 
@@ -260,6 +271,9 @@ transform: translateY(-5px);
         place-content: center;
     }
     }
+
+
+
     .transactCenter{
         display: grid;
     }
@@ -276,6 +290,11 @@ transform: translateY(-5px);
 
     </style>
 <script>
+
+
+
+
+
                // JavaScript to toggle the search bar visibility with sliding effect
    const showSearchButton = document.getElementById('showSearchButton');
     const searchForm = document.querySelector('.search-bar');
@@ -348,7 +367,7 @@ function updateCountdown(element, targetTimestamp, index) {
         // Get the unique fines container for this transaction
         const finesContainer = document.getElementById(`fines-container-${index}`);
         finesContainer.style.display = 'block';
-        finesContainer.innerHTML = '0.00';
+        finesContainer.innerHTML = 'Ongoing borrowing';
 
         setTimeout(() => updateCountdown(element, targetTimestamp, index), 1000);
     } else {

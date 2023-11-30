@@ -29,9 +29,17 @@
 
             <div>
                 <label for="availability"><b><i class="fa-solid fa-chart-line"></i> Availability</b></label> <br>
-                <input required {{ $book->availability == 'Available' ? 'checked' : '' }} type="radio" id="availability" name="availability" value="Available"> Available &nbsp;
-                <input required {{ $book->availability == 'Not Available' ? 'checked' : '' }} type="radio" id="availability" name="availability" value="Not Available"> Not Available
+                <input required {{ $book->availability == 'Available' ? 'checked' : '' }} type="radio" id="availabilityAvailable" name="availability" value="Available"> Available &nbsp;
+                <input required {{ $book->availability == 'Not Available' ? 'checked' : '' }} type="radio" id="availabilityNotAvailable" name="availability" value="Not Available"> Not Available
             </div> <br>
+
+            <div>
+                <label for="status"><b><i class="fa-solid fa-chart-simple"></i> Book Status</b></label> <br>
+                <input required {{ $book->status == 'Good' ? 'checked' : '' }} type="radio" id="statusGood" name="status" value="Good" onchange="handleStatusChange()"> Good &nbsp;
+                <input required {{ $book->status == 'Damage' ? 'checked' : '' }} type="radio" id="statusDamage" name="status" value="Damage" onchange="handleStatusChange()"> Damage &nbsp;
+                <input required {{ $book->status == 'Lost' ? 'checked' : '' }} type="radio" id="statusLost" name="status" value="Lost" onchange="handleLostStatus()"> Lost &nbsp;
+            </div> <br>
+
 
             <div>
                 <label for="isbn"><b><i class="fa-solid fa-code-compare"></i> ISBN</b></label><br>
@@ -152,7 +160,19 @@ const imageInput = document.getElementById('image');
     }
   });
 
+  function handleLostStatus() {
+        // Select the "Not Available" radio button
+        document.getElementById("availabilityNotAvailable").checked = true;
 
+        // Disable the "Available" radio button
+        document.getElementById("availabilityAvailable").disabled = true;
+    }
 
+    function handleStatusChange() {
+        // Enable the "Available" radio button only if the "Lost" radio button is not checked
+        if (!document.getElementById("statusLost").checked) {
+            document.getElementById("availabilityAvailable").disabled = false;
+        }
+    }
 </script>
 </x-app-layout>

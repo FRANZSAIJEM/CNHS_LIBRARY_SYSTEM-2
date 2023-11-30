@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('author');
             $table->string('subject');
             $table->string('availability');
+            $table->string('status');
             $table->string('isbn');
             $table->string('description');
             $table->string('image')->nullable();

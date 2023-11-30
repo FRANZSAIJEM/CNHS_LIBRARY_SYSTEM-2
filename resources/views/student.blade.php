@@ -22,8 +22,10 @@
             <div>
               <div class="" style="display: grid; place-content: center;">
                   <form action="{{ route('student') }}" method="GET" class="search-bar">
-                      <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
+                      <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1 flex">
                           <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="🔍 ID Number, Name">
+                          <button style="" type="submit" name="letter_filter" value="" class=" hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}">Clear</button>
+
                       </div>
                   </form>
               </div>
@@ -35,7 +37,7 @@
                 <div class="flex flex-wrap">
                     @foreach ($students as $student)
                     <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
-                        <div style="width: 300px; height: 550px;">
+                        <div style="width: 300px; height: 600px;">
 
                             <a href="{{ route('startChat', ['userId' => $student->id]) }}" class="p-2 ps-3 pe-3 text-slate-500 bg-slate-300 hover:bg-slate-500 hover:text-slate-100 duration-100 btn btn-primary float-right start_Chat rounded-lg shadow-lg">
                                 <i class="fa-brands fa-rocketchat @if ($student->hasChatData()) rotate-3d @endif"></i>
@@ -57,6 +59,12 @@
                                 {{$student->gender}} <br> <hr> <br>
                                 <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
                                 {{$student->grade_level}} <br> <hr> <br>
+                                 <!-- Display fines -->
+                                 <h1><b><i class="fa-solid fa-clock"></i> Instances of late returns.</b></h1>
+                                 {{ number_format($student->totalFines, 0, '.', '') }} <br> <hr> <br>
+
+
+
                             </div>
                             <div class="text-center">
                                 <form class="toggle-form" data-student-id="{{ $student->id }}" style="display: inline;">

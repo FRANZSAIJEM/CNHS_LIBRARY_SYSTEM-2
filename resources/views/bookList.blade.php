@@ -32,9 +32,12 @@ $borrowCount = BorrowCount::first();
               <div>
                 <div class="" style="display: grid; place-content: center;">
                     <form action="{{ route('bookList') }}" method="GET" class="search-bar">
-                        <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
+                        <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1 flex">
                             <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="book_search" placeholder="🔍 Title, Author, Subject">
+                            <button style="" type="submit" name="letter_filter" value="" class=" hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}">Clear</button>
+
                         </div>
+
                     </form>
                     @if (!Auth::user()->is_admin)
                     <form action="{{ route('bookList') }}" method="GET" class="search-bar">
@@ -43,7 +46,7 @@ $borrowCount = BorrowCount::first();
 
 
                             @foreach(range('A', 'Z') as $letter)
-                                <button type="submit" name="letter_filter" value="{{ $letter }}" class="bg-slate-200 hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-lg me-2 m-1 {{ (request()->input('letter_filter') == $letter) ? 'active' : '' }}">{{ $letter }}</button>
+                                <button style="margin: 3px;" type="submit" name="letter_filter" value="{{ $letter }}" class="bg-slate-200 hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-lg {{ (request()->input('letter_filter') == $letter) ? 'active' : '' }}">{{ $letter }}</button>
                             @endforeach
 
 
@@ -172,6 +175,13 @@ $borrowCount = BorrowCount::first();
                             <input required type="radio" id="availability" name="availability" value="Available"> Available &nbsp;
                             <input required type="radio" id="availability" name="availability" value="Not Available"> Not Available
                         </div> <br>
+
+                        <div>
+                            <label for="status"><b><i class="fa-solid fa-chart-simple"></i> Book Status</b></label> <br>
+                            <input required type="radio" id="status" name="status" value="Good"> Good &nbsp;
+                            <input required type="radio" id="status" name="status" value="Damage"> Damage &nbsp;
+                        </div> <br>
+
 
                         <div>
                             <label for="isbn"><b><i class="fa-solid fa-code-compare"></i> ISBN</b></label><br>

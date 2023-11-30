@@ -28,6 +28,10 @@ class DefaultFineController extends Controller
         return redirect()->back()->with('success', 'Set successfully!');
     }
 
+
+
+
+
     public function storeDaily(Request $request){
         $validatedData = $request->validate([
             'set_daily_fines' => 'required|numeric|min:0', // You can add more validation rules if needed

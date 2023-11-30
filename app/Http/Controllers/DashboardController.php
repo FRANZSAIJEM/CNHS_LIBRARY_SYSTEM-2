@@ -21,6 +21,8 @@ class DashboardController extends Controller
     {
         $totalStudents = User::where('is_admin', false)->count();
         $totalBooks = Book::count();
+
+        $availableBooks = Book::where('availability', 'Available')->count();
         $totalRequests = DB::table('book_requests')->count();
         $totalFines = $this->calculateTotalFines(Auth::id());
 
@@ -51,6 +53,7 @@ class DashboardController extends Controller
         return view('dashboard')
             ->with('totalStudents', $totalStudents)
             ->with('totalBooks', $totalBooks)
+            ->with('availableBooks', $availableBooks)
             ->with('totalRequests', $totalRequests)
             ->with('totalFines', $totalFines)
             ->with('date_pickup', $date_pickup)
@@ -59,6 +62,10 @@ class DashboardController extends Controller
             ->with('defaultFine', $defaultFine)
             ->with('totalFine', $totalFine);
     }
+
+
+
+
 
     private function calculateTotalFines($userId)
     {

@@ -35,6 +35,7 @@ class BookController extends Controller
             'author' => 'required|max:255',
             'subject' => 'required|max:255',
             'availability' => 'required|in:Available,Not Available',
+            'status' => 'required|in:Good,Damage,Lost',
             'isbn' => 'required|max:255',
             'description' => 'required|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -70,6 +71,7 @@ class BookController extends Controller
             'author' => 'required|max:255',
             'subject' => 'required|max:255',
             'availability' => 'required|in:Available,Not Available',
+            'status' => 'required|in:Good,Damage,Lost',
             'isbn' => 'required|max:255',
             'description' => 'required|max:255',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // 'sometimes' allows the image to be optional
@@ -98,6 +100,9 @@ class BookController extends Controller
         // Step 5: Redirect to a relevant page
         return redirect()->route('bookList')->with('success', 'Updated successfully');
     }
+
+
+
 
     public function viewBook($id)
     {

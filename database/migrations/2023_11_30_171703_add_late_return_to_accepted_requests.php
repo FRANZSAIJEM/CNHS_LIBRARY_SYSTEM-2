@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('borrow_counts', function (Blueprint $table) {
-            $table->id();
-
-            $table->integer('count')->default(0);
-            $table->timestamps();
-
-
+        Schema::table('accepted_requests', function (Blueprint $table) {
+            $table->string('late_return')->nullable();
         });
     }
 
@@ -26,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('borrow_counts');
+        Schema::table('accepted_requests', function (Blueprint $table) {
+            $table->dropColumn('late_return');
+
+        });
     }
 };

@@ -37,8 +37,10 @@ $defDailyFine = DefaultFine::first();
                 <div class="" style="display: grid; place-content: center;">
                     @if (Auth::user()->is_admin)
                     <form action="{{ route('requests') }}" method="GET" class="search-bar">
-                        <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1">
+                        <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1 flex">
                             <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="book_search" placeholder="🔍 ID Number">
+                            <button style="" type="submit" name="letter_filter" value="" class=" hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}">Clear</button>
+
                             {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
                         </div>
                     </form>

@@ -52,6 +52,19 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 });
 
 
+
+Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
+Route::get('/event', [CalendarController::class, 'events'])->name('event');
+
+
+
+
+
+
+
+
+
+
 Route::post('/borrowCounts', [BookListController::class, 'store'])->name('borrowCounts.store');
 
 

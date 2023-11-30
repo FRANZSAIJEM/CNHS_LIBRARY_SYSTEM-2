@@ -32,7 +32,7 @@
             <div class="viewFlex rounded-md mb-5">
                <div class="marginTwo">
                     @if (isset($book))
-                        <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 352px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" ></div>
+                        <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 410px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" ></div>
                     @endif
 
                </div>
@@ -48,7 +48,9 @@
                     {{$book->isbn}} <br> <hr> <br>
                     <h1><b><i class="fa-solid fa-chart-line"></i> Availability</b> </h1>
                     <b style="color: {{ $book->availability === 'Not Available' ? 'red' : 'rgb(0, 255, 0)' }}">{{ $book->availability }}</b>
-                    <br> <hr>
+                    <br> <hr> <br>
+                    <h1><b><i class="fa-solid fa-chart-simple"></i> Status</b></h1>
+                    {{$book->status}} <br> <hr> <br>
                 </div>
 
             </div>

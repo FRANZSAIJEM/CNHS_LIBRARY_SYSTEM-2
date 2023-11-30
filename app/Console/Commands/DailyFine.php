@@ -45,6 +45,7 @@ class DailyFine extends Command
             if (!$request->book_returned) {
                 // Add daily fines only if the book is not returned
                 $request->daily_fines += $dailyFine;
+                $request->late_return = 'Late';
             }
 
             if ($defaultFine !== null) {
