@@ -21,58 +21,136 @@
 
         <div class="">
             <div class="">
-                <div class="flex flex-wrap">
+                <div class="flex justify-end">
                     {{-- Button to export PDF --}}
                     <form action="{{ route('generate-pdf') }}" method="post" target="_blank">
                         @csrf
-                        <button type="submit" class="btn btn-primary">Export PDF</button>
+                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
                     </form>
                 </div>
                 <br>
-                <h1><b>All Students who borrowed books</b></h1>
 
-                {{-- Display the list of students who borrowed books --}}
-                <ul>
-                    @foreach($usersWithAcceptedRequests as $user)
-                        <li>
-                            {{ $user->name }} - Borrowed Count: {{ $user->borrowed_count }}
-                            {{-- Add other user information or customize as needed --}}
-                        </li>
-                    @endforeach
-                </ul>
-                 <br>
-                 <b>Most Grade Level Borrowed Books:</b>
-                @foreach($gradeLevelCounts as $gradeLevel => $count)
-                    <li> Grade {{ $gradeLevel }} - Borrowed Count: {{ $count }}</li>
-                @endforeach
-                 <br>
-                <h1><b>Total Books:</b> {{ $allBooksCount }}</h1> <br>
-                <h1><b>Total Available Books:</b> {{ $availableBooksCount }}</h1>
-                <h1><b>Total Not Available Books:</b> {{ $notAvailableBooksCount }}</h1>
-                <br>
-                <h1><b>Total Good Books:</b> {{ $goodBooksCount }}</h1>
-                <h1><b>Total Damage Books:</b> {{ $damageBooksCount }}</h1>
-                <h1><b>Total Lost Books:</b> {{ $lostBooksCount }}</h1>
-                <br>
+                <div class="container mx-auto p-4">
+                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> All Students who borrowed books.</h1>
 
-                <h1><b>Most Borrowed Book</b></h1>
-                @if ($mostBorrowedBooks->isNotEmpty())
-                <ul>
-                    @foreach ($mostBorrowedBooks as $book)
-                        @if ($book->count > 0)
-                            <li class="mb-3">
-                                <p><b>Title:</b> {{ $book->title }}</p>
-                                <p><b>Author:</b> {{ $book->author }}</p>
-                                <p><b>Count:</b> {{ $book->count }}</p>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-                @else
-                <p>No books available.</p>
-                @endif
+                    <table class="min-w-full border border-gray-300 text-center">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b">ID Number</th>
+                                <th class="py-2 px-4 border-b">Student Name</th>
+                                <th class="py-2 px-4 border-b">Grade Level</th>
+
+                                <th class="py-2 px-4 border-b">Borrowed Count</th>
+                                {{-- Add other table headers if needed --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($usersWithAcceptedRequests as $user)
+                                <tr class="hover:bg-gray-100">
+                                    <td class="py-2 px-4 border-b">{{ $user->id }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $user->name }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $user->grade_level }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $user->borrowed_count }}</td>
+                                    {{-- Add other user information or customize as needed --}}
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
 
+                <div class="container mx-auto p-4">
+                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Most Grade Level Borrowed Books.</h1>
+
+                    <table class="min-w-full border border-gray-300 text-center">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b">Grade Level</th>
+                                <th class="py-2 px-4 border-b">Total Borrowed</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($gradeLevelCounts as $gradeLevel => $count)
+                                <tr class="hover:bg-gray-100">
+                                    <td class="py-2 px-4 border-b">{{ $gradeLevel }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $count }}</td>
+
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="container mx-auto p-4">
+                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Total books, and their condition, status, and availabilty.</h1>
+
+                    <table class="min-w-full border border-gray-300 text-center">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b">Total Books</th>
+                                <th class="py-2 px-4 border-b">Total Available Books</th>
+                                <th class="py-2 px-4 border-b">Total Not Available Books</th>
+                                <th class="py-2 px-4 border-b">Total Good Books</th>
+                                <th class="py-2 px-4 border-b">Total Damage Books</th>
+                                <th class="py-2 px-4 border-b">Total Lost Books</th>
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b">{{ $allBooksCount }}</td>
+                                <td class="py-2 px-4 border-b">{{ $availableBooksCount }}</td>
+                                <td class="py-2 px-4 border-b">{{ $notAvailableBooksCount }}</td>
+                                <td class="py-2 px-4 border-b">{{ $goodBooksCount }}</td>
+                                <td class="py-2 px-4 border-b">{{ $damageBooksCount }}</td>
+                                <td class="py-2 px-4 border-b">{{ $lostBooksCount }}</td>
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="container mx-auto p-4">
+                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Most Borrowed Book</h1>
+
+                    <table class="min-w-full border border-gray-300 text-center">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b">Book Title</th>
+                                <th class="py-2 px-4 border-b">Book Author</th>
+                                <th class="py-2 px-4 border-b">Book Borrowed Count</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ($mostBorrowedBooks->isNotEmpty())
+                                @foreach ($mostBorrowedBooks as $book)
+                                    @if ($book->count > 0)
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="py-2 px-4 border-b">{{ $book->title }}</td>
+                                            <td class="py-2 px-4 border-b">{{ $book->author }}</td>
+                                            <td class="py-2 px-4 border-b">{{ $book->count  }}</td>
+
+
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @else
+                            <p>No books available.</p>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

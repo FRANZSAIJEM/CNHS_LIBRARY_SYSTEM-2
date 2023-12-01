@@ -21,6 +21,7 @@
     "dependencies": {
         "@fullcalendar/core": "^6.1.10",
         "@fullcalendar/daygrid": "^6.1.10",
+        "@tailwindcss/typography": "^0.5.10",
         "nprogress": "^0.2.0"
     }
 }
