@@ -43,6 +43,11 @@ $defDailyFine = DefaultFine::first();
 
                             {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
                         </div>
+                        <div class="flex justify-end">
+                            <button class="text-white bg-blue-400 hover:bg-blue-500 duration-100" type="button" style="width: 143px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDateFilter()"><b><i class="fa-regular fa-calendar-days"></i> Filter By Date</b></button>
+                            {{-- <button type="submit" onclick="clearDateFilter()" class="hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1">Clear Date Filter</button> --}}
+
+                        </div>
                     </form>
                     @endif
                 </div>
@@ -52,7 +57,7 @@ $defDailyFine = DefaultFine::first();
             @if (Auth::user()->is_admin)
             <div style="position: relative">
                 {{-- <button id="showSearchButton" class="text-slate-600 hover:text-slate-900 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button> --}}
-                <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
+                {{-- <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
 
                 <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50; transform: translateX(-5px);">
                     <div class="p-5 rounded-lg shadow-md bg-slate-50">
@@ -78,7 +83,7 @@ $defDailyFine = DefaultFine::first();
                             </form>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
 
@@ -94,7 +99,7 @@ $defDailyFine = DefaultFine::first();
                 @foreach ($users as $user)
                 @if (Auth::user()->is_admin)
                 @foreach ($user->requestedBooks as $requestedBook)
-                <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
+                <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: 10px;">
                     @if (Auth::user()->is_admin)
                     <div style="width: 300px; height: 350px;">
                          <div class="p-5">
@@ -166,7 +171,7 @@ $defDailyFine = DefaultFine::first();
                          </div>
                         @endif
                         @if (!Auth::user()->is_admin)
-
+                        <div style="width: 300px; height: 350px;">
                              <div class="p-5">
                                  <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
                                  {{ $requestedBook->title }} <br> <hr> <br>
@@ -177,7 +182,7 @@ $defDailyFine = DefaultFine::first();
                                  <h1><b><i class="fa-solid fa-location-pin"></i> ISBN</b></h1>
                                  {{ $requestedBook->isbn }} <br> <hr> <br>
                              </div>
-
+                            </div>
                         @endif
                          @if (Auth::user()->is_admin)
                          <div class="flex" style="margin-top: 4px;">
@@ -196,7 +201,7 @@ $defDailyFine = DefaultFine::first();
                         <div class="flex justify-evenly">
                          @if (!Auth::user()->is_admin)
                          <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
-                            <button class="open-modal text-green-600 hover:text-green-700 duration-100"  style="margin: 5px; padding: 10px; border-radius: 5px; visibility: hidden">Accept</button>
+                            {{-- <button class="open-modal text-green-600 hover:text-green-700 duration-100"  style="margin: 5px; padding: 10px; border-radius: 5px; visibility: hidden">Accept</button> --}}
 
                             <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
                                  @csrf
@@ -210,6 +215,7 @@ $defDailyFine = DefaultFine::first();
                     @endforeach
                 @endif
                     @foreach ($user->requestedBooks as $requestedBook)
+
                     <div  id="confirmAcceptModal-{{ $requestedBook->id }}" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
                         <div class="modalWidth" style="transform: translateY(35px); background-color: white; border-radius: 5px; margin: 100px auto; padding: 20px; text-align: left;">
                             <div class="flex justify-between">
@@ -217,6 +223,7 @@ $defDailyFine = DefaultFine::first();
                                 <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})"><i class="fa-solid fa-xmark"></i></button>
                             </div>
                             <hr> <br>
+
                             <p>
                                 <form action="{{ route('acceptRequest', ['user' => $user, 'book' => '__REQUESTEDBOOK_ID__']) }}" method="POST">
                                     @csrf
@@ -230,10 +237,7 @@ $defDailyFine = DefaultFine::first();
                                         <input class="border-none"  type="datetime-local" id="date_return" name="date_return" required>
                                     </div>
                                     <br>
-                                    {{-- <div>
-                                        <label for="fines"><b><i class="fa-solid fa-money-check-dollar"></i> Fines (optional)</b></label> <br>
-                                        <input class="border-none"  type="number" step="0.01" id="fines" name="fines" placeholder="Enter fine amount">
-                                    </div> --}} <br>
+                                   <br>
                                         <hr>
                                         <br>
                                     <div class="flex justify-end">
@@ -244,7 +248,11 @@ $defDailyFine = DefaultFine::first();
                             </p>
 
                         </div>
+
                     </div>
+
+
+
                     @endforeach
                 @endforeach
                     @else
@@ -252,67 +260,45 @@ $defDailyFine = DefaultFine::first();
                     <p style="tra">You have no requests.</p>
                 @endif
             </div>
+    {{-- Filter by date --}}
+    <div id="confirmFilterDateModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+        <div class="modalWidthDate" style="transform: translateY(35px); background-color: white; border-radius: 5px; margin: 100px auto; padding: 20px; text-align: left;">
+            <div class="flex justify-between">
+                <h2><b><i class="fa-solid fa-calendar-days"></i> Set Date</b></h2>
+                <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationDateFilterModal()"><i class="fa-solid fa-xmark"></i></button>
+
+            </div>
+            <hr> <br>
+
+            <p>
+                <form action="{{ route('requests') }}" method="GET" class="search-bar">
+                    @csrf
+                    <div>
+                        <label for="start_date"><b><i class="fa-solid fa-boxes-packing"></i> Start Date:</b></label> <br>
+                        <input style="background-color: transparent;" class="text-left border-none" type="date" name="start_date" value="{{ request('start_date') }}">
+                    </div>
+                    <br>
+                    <div>
+                        <label for="end_date"><b><i class="fa-solid fa-boxes-packing"></i> End Date:</b></label> <br>
+                        <input style="background-color: transparent;"  class="text-left border-none" type="date" name="end_date" value="{{ request('end_date') }}">
+                    </div>
+                    <br>
+                   <br>
+                        <hr>
+                        <br>
+                    <div class="flex justify-end">
+                        <button type="button" class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;" onclick="hideConfirmationDateFilterModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                        <button type="submit" class="hover:text-green-700 text-green-600 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1"><i class="fa fa-check"></i> Filter</button>
+                    </div>
+                </form>
+
+
+            </p>
 
         </div>
-            {{-- @foreach ($users as $user)
-                        @foreach ($user->requestedBooks as $requestedBook)
-                            <div style="background-color: rgb(27, 66, 81); margin: 30px; border-radius: 5px; box-shadow: 10px 10px 20px 5px rgba(0, 0, 0, 0.298);">
-                                <div style="background-position: center center; border-radius: 5px; width: 250px; height: 350px; background-size: cover;">
-                                    <div style="color: white; padding: 20px; text-shadow: 0px 0px 5px black;">
-                                        <div>
-                                            <h1><b>Borrower</b></h1>
-                                            {{ $user->name }} <br> <br>
-                                            <h1><b>ID Number</b></h1>
-                                            {{ $user->id_number }} <br> <br>
-                                            <h1><b>Book Title</b></h1>
-                                            {{ $requestedBook->title }} <br> <br>
-                                            <h1><b>Grade Level</b></h1>
-                                            {{ $user->grade_level }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="display: flex; place-content: center; margin-bottom: 20px;">
-                                    <a id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; background-color: rgb(56, 108, 128); color: white; padding: 10px; border-radius: 5px;">View</a>
+    </div>
+        </div>
 
-                                    <button type="button" class="open-modal" onclick="showAcceptanceModal({{ $requestedBook->id }})" style="margin: 5px; background-color: rgb(56, 128, 63); color: white; padding: 10px; border-radius: 5px;">Accept</button>
-
-                                    <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="margin: 5px; background-color: rgb(128, 56, 56); color: white; padding: 10px; border-radius: 5px;">Remove</button>
-                                    </form>
-
-                                </div>
-                            </div>
-                            <div id="confirmAcceptModal-{{ $requestedBook->id }}" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
-                                <div style="background-color: white; border-radius: 5px; width: 300px; margin: 100px auto; padding: 20px; text-align: center;">
-                                    <div style="display: inline-flex">
-                                        <!-- Form to submit the delete request -->
-                                        <form action="{{ route('acceptRequest', ['user' => $user, 'book' => '__REQUESTEDBOOK_ID__']) }}" method="POST">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label for="date_pickup">Date Pickup:</label>
-                                                <input type="datetime-local" id="date_pickup" name="date_pickup" required>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="date_return">Date Return:</label>
-                                                <input type="datetime-local" id="date_return" name="date_return" required>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="fines">Fines (optional):</label>
-                                                <input type="number" step="0.01" id="fines" name="fines" placeholder="Enter fine amount">
-                                            </div>
-
-                                            <button style="background-color: rgb(146, 146, 146); padding: 10px 20px; margin-right: 10px; border-radius: 5px; color: white;" onclick="hideAcceptanceModal({{ $requestedBook->id }})">Cancel</button>
-                                            <button type="submit" style="margin: 5px; background-color: rgb(60, 163, 60);  color: white; padding: 10px; border-radius: 5px; width: 100px;">Accept</button>
-                                        </form>
-                                   </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    @endforeach --}}
 
     </div>
 
@@ -340,6 +326,11 @@ $defDailyFine = DefaultFine::first();
         background-color: #00af2cab;
         transition: width 3s linear;
     }
+
+    .modalWidthDate{
+        width: 300px;
+    }
+
 
     @media (max-width: 1000px) and (max-height: 2000px) {
         .requestCenter{
@@ -409,6 +400,32 @@ $defDailyFine = DefaultFine::first();
 </style>
 
 <script>
+
+function clearDateFilter() {
+        document.querySelector('input[name="start_date"]').value = '';
+        document.querySelector('input[name="end_date"]').value = '';
+    }
+
+
+
+
+function showConfirmationModalDateFilter() {
+            var modalDate = document.getElementById('confirmFilterDateModal');
+            modalDate.style.display = 'block';
+        }
+
+
+        function hideConfirmationDateFilterModal() {
+
+            var modalDate2 = document.getElementById('confirmFilterDateModal');
+            modalDate2.style.display = 'none';
+
+        }
+
+
+
+
+
 // JavaScript to show and hide the loading bar
 window.addEventListener('beforeunload', function () {
   document.getElementById('loading-bar').style.width = '100%';

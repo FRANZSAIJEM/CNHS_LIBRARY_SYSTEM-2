@@ -55,7 +55,11 @@ $borrowCount = BorrowCount::first();
                     </form>
                     @endif
 
-
+                    <button>
+                        @if (!Auth::user()->is_admin)
+                        <h1><b>Borrow Limit: {{ $bookRequestCount ? $bookRequestCount->request_count : '0' }}/{{ $borrowCount ? $borrowCount->count : '' }}</b></h1>
+                        @endif
+                    </button>
                 </div>
 
                 {{-- option A-Z filter --}}
@@ -63,11 +67,7 @@ $borrowCount = BorrowCount::first();
 
 
                 {{-- <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button> --}}
-                <button>
-                    @if (!Auth::user()->is_admin)
-                    <h1><b>Borrow Limit: {{ $bookRequestCount ? $bookRequestCount->request_count : '0' }}/{{ $borrowCount ? $borrowCount->count : '' }}</b></h1>
-                    @endif
-                </button>
+
 
                 <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50; transform: translateX(-45px);">
                     <div class="p-5 rounded-lg shadow-md bg-slate-50">
@@ -402,6 +402,7 @@ document.getElementById('showFormButton').addEventListener('click', function() {
             form.action = form.action.replace('__BOOK_ID__', bookId);
         }
 
+
         function showConfirmationModal(bookId) {
             var modal = document.getElementById('confirmDeleteModal');
             modal.style.display = 'block';
@@ -420,6 +421,14 @@ document.getElementById('showFormButton').addEventListener('click', function() {
             modal2.style.display = 'none';
 
         }
+
+
+
+
+
+
+
+
         const imageInput = document.getElementById('image');
         const previewImage = document.getElementById('previewImage');
 

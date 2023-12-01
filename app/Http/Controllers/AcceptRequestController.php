@@ -82,16 +82,31 @@ class AcceptRequestController extends Controller
             $userNotification->save();
         }
 
+
+        // Update the is_borrowed field for the user to true
+        $user->is_borrowed = true;
+        $user->save();
+
+        $user->borrowed_count++;
+        $user->save();
+
+        $book->count++;
+        $book->save();
+
         // Redirect back to the previous page or wherever you want.
         return redirect()->back()->with('success', 'Accepted and saved.')
         ->with('notification', $notificationText);
     }
 
 
+
+
+
     public function transactions(Request $request)
     {
         $idNumberSearch = $request->input('id_number_search');
-
+        $startDate = $request->input('start_date') ? \Carbon\Carbon::parse($request->input('start_date'))->startOfDay() : null;
+        $endDate = $request->input('end_date') ? \Carbon\Carbon::parse($request->input('end_date'))->endOfDay() : null;
         // Retrieve all accepted requests from the database
         $query = AcceptedRequest::with('user', 'book');
 
@@ -106,6 +121,13 @@ class AcceptRequestController extends Controller
             });
         }
 
+        if (!empty($startDate) && !empty($endDate)) {
+            $query->where(function ($query) use ($startDate, $endDate) {
+                $query->where('date_borrow', '>=', $startDate)
+                      ->where('date_borrow', '<=', $endDate);
+            });
+        }
+
         $acceptedRequests = $query->get();
 
         foreach ($acceptedRequests as $acceptedRequest) {
@@ -113,22 +135,6 @@ class AcceptRequestController extends Controller
             $acceptedRequest->total_fines = $acceptedRequest->total_fines ?? 0;
         }
 
-            // Retrieve the default fine amount for each accepted request
-        // foreach ($acceptedRequests as $acceptedRequest) {
-        //     $defaultFine = DefaultFine::find($acceptedRequest->default_fine_id);
-
-        //     // If a default fine record exists, set the 'defaultFineAmount' attribute
-        //     if ($defaultFine) {
-        //         $acceptedRequest->total_fines = $defaultFine->amount;
-        //     } else {
-        //         // Handle the case where there is no default fine record (provide a default value or error handling)
-        //         // You can set a default value or handle this case as needed.
-        //         $acceptedRequest->total_fines = 0;
-        //     }
-        // }
-
-
-        // Convert date_borrow and date_return fields to DateTime objects
         $acceptedRequests->each(function ($acceptedRequest) {
             $acceptedRequest->date_borrow = \Carbon\Carbon::parse($acceptedRequest->date_borrow);
             $acceptedRequest->date_pickup = \Carbon\Carbon::parse($acceptedRequest->date_pickup);
@@ -140,6 +146,9 @@ class AcceptRequestController extends Controller
 
         return view('transactions', compact('acceptedRequests', 'idNumberSearch'));
     }
+
+
+
 
     public function history()
     {

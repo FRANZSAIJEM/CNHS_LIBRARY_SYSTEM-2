@@ -13,7 +13,7 @@ use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\DefaultFineController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BorrowCountController;
-
+use App\Http\Controllers\PdfController;
 
 
 
@@ -53,15 +53,17 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 
 
 
+
+
+
+Route::get('/reports', [PdfController::class, 'index'])->name('reports');
+Route::post('/generate-pdf', [PdfController::class, 'generatePdf'])->name('generate-pdf');
+
+
+
+
 Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
 Route::get('/event', [CalendarController::class, 'events'])->name('event');
-
-
-
-
-
-
-
 
 
 

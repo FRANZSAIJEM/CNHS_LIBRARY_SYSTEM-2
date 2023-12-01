@@ -83,6 +83,7 @@ class StudentController extends Controller
         return redirect()->route('student')->with('success', $message);
     }
 
+
     public function requestIndex(Request $request)
     {
         // Retrieve all users with related requested books
@@ -95,6 +96,19 @@ class StudentController extends Controller
             $usersQuery->where('id_number', 'LIKE', "%$searchTerm%");
         }
 
+
+
+        // Check if start_date and end_date are provided in the request
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = $request->input('start_date') . ' 00:00:00';
+            $endDate = $request->input('end_date') . ' 23:59:59';
+
+            // Add a where condition to filter users by the created_at field within the date range
+            $usersQuery->whereHas('requestedBooks', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('book_requests.created_at', [$startDate, $endDate]);
+            });
+        }
+
         // Get the filtered users
         $users = $usersQuery->get();
 
@@ -103,6 +117,9 @@ class StudentController extends Controller
 
         return view('requests', compact('users', 'totalRequests'));
     }
+
+
+
 
 
 

@@ -18,20 +18,25 @@
                </div>
            @endif
        </div>
-        <div class="text-right mb-5">
+        <div class="text-right">
             <div>
                 <div class="" style="display: grid; place-content: center;">
                     <form action="{{ route('transactions') }}" method="GET" class="search-bar">
                         <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1 flex">
                             <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="🔍 ID Number, Name, Book">
                             <button style="" type="submit" name="letter_filter" value="" class=" hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}">Clear</button>
-
-                            {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
+                        </div>
+                        <div class="flex justify-end">
+                            <button class="text-white bg-blue-400 hover:bg-blue-500 duration-100" type="button" style="width: 143px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDateFilter()"><b><i class="fa-regular fa-calendar-days"></i> Filter By Date</b></button>
+                            {{-- <button type="submit" onclick="clearDateFilter()" class="hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1">Clear Date Filter</button> --}}
 
                         </div>
-
                     </form>
+
                 </div>
+
+
+
                 <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px; visibility: hidden;"><i class="fa-solid fa-search"></i></button>
 
             </div>
@@ -104,16 +109,19 @@
                                 </div>
                             </div>
                           <div class="text-center mt-20">
-                            <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">
+                            <button class="text-green-600 hover:text-green-700 duration-100" type="button" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showConfirmationModal({{ $acceptedRequest->id }})"><b><i class="fa-solid fa-check"></i> End Record</b></button>
+
+                            {{-- <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
+
                                 <button class="text-green-600 hover:text-green-700 duration-100"
                                     style="width: 150px; border-radius: 5px; padding: 10px;"
                                     type="submit"
                                 >
                                     <b><i class="fa-solid fa-check"></i> End Record</b>
                                 </button>
-                            </form>
+                            </form> --}}
 
                             {{-- <form action="{{ route('returnBook', $acceptedRequest->id) }}" method="POST">
                                 @csrf
@@ -192,8 +200,89 @@
                 </div>
             @endforeach
             </div> --}}
+
+
+              {{-- Delete Modal --}}
+            <div id="confirmDeleteModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+                <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
+
+                    <div class="flex justify-between">
+                        <h2><b><i class="fa-solid fa-clipboard"></i> End Record</b></h2>
+                        <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationModal()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <hr> <br>
+                    <p>Are you sure you want to End this record?</p>
+                    <br>
+                    <hr> <br>
+                    <div class="">
+                        <div class="flex justify-end">
+                            <button class="rounded-lg p-4  text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+
+                            <form action="{{ route('acceptedRequests.destroy', ['id' => '__BOOK_ID__']) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="rounded-lg p-4  text-green-600 hover:text-green-700 duration-100"
+                                    style="width: 150px;"
+                                    type="submit"
+                                >
+                                    <b><i class="fa-solid fa-check"></i> End Record</b>
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+              {{-- Filter by date --}}
+              <div id="confirmFilterDateModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+                <div class="modalWidthDate" style="transform: translateY(35px); background-color: white; border-radius: 5px; margin: 100px auto; padding: 20px; text-align: left;">
+                    <div class="flex justify-between">
+                        <h2><b><i class="fa-solid fa-calendar-days"></i> Set Date</b></h2>
+                        <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationDateFilterModal()"><i class="fa-solid fa-xmark"></i></button>
+
+                    </div>
+                    <hr> <br>
+
+                    <p>
+                        <form action="{{ route('transactions') }}" method="GET" class="search-bar">
+                            @csrf
+                            <div>
+                                <label for="start_date"><b><i class="fa-solid fa-boxes-packing"></i> Start Date:</b></label> <br>
+                                <input style="background-color: transparent;" class="text-left border-none" type="date" name="start_date" value="{{ request('start_date') }}">
+                            </div>
+                            <br>
+                            <div>
+                                <label for="end_date"><b><i class="fa-solid fa-boxes-packing"></i> End Date:</b></label> <br>
+                                <input style="background-color: transparent;"  class="text-left border-none" type="date" name="end_date" value="{{ request('end_date') }}">
+                            </div>
+                            <br>
+                           <br>
+                                <hr>
+                                <br>
+                            <div class="flex justify-end">
+                                <button type="button" class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;" onclick="hideConfirmationDateFilterModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                                <button type="submit" class="hover:text-green-700 text-green-600 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1"><i class="fa fa-check"></i> Filter</button>
+                            </div>
+                        </form>
+                    </p>
+
+                </div>
+            </div>
+
+
+
+
         </div>
     </div>
+
+
+
+
+
 
    {{-- Loading Screen --}}
    <div id="loading-bar" class="loading-bar"></div>
@@ -258,11 +347,21 @@ transform: translateY(-5px);
         transition: width 3s linear;
     }
 
+    .modalWidthDate{
+        width: 300px;
+    }
+
             @media (max-width: 1000px) and (max-height: 2000px) {
             .transactCenter{
-        display: grid;
+            display: grid;
 
-    }
+        }
+        .modalWidth{
+            width: 550px;
+        }
+
+
+
     }
 
     @media (max-width: 600px) and (max-height: 2000px) {
@@ -270,6 +369,11 @@ transform: translateY(-5px);
         display: grid;
         place-content: center;
     }
+    .modalWidth{
+            width: 300px;
+        }
+
+
     }
 
 
@@ -287,11 +391,55 @@ transform: translateY(-5px);
   z-index: 9999;
   transition: width 0.3s ease; /* Adjust the animation speed as needed */
 }
-
+.modalWidth{
+        width: 600px;
+    }
     </style>
 <script>
+    function clearDateFilter() {
+        document.querySelector('input[name="start_date"]').value = '';
+        document.querySelector('input[name="end_date"]').value = '';
+    }
 
 
+
+
+        function showConfirmationModal(bookId) {
+            var modal = document.getElementById('confirmDeleteModal');
+            modal.style.display = 'block';
+
+            // Set the action of the form to include the specific book's ID
+            var form = modal.querySelector('form');
+            form.action = form.action.replace('__BOOK_ID__', bookId);
+        }
+
+        function hideConfirmationModal() {
+
+            var modal2 = document.getElementById('confirmDeleteModal');
+            modal2.style.display = 'none';
+
+        }
+
+
+
+
+
+
+
+
+
+        function showConfirmationModalDateFilter() {
+            var modalDate = document.getElementById('confirmFilterDateModal');
+            modalDate.style.display = 'block';
+        }
+
+
+        function hideConfirmationDateFilterModal() {
+
+            var modalDate2 = document.getElementById('confirmFilterDateModal');
+            modalDate2.style.display = 'none';
+
+        }
 
 
 

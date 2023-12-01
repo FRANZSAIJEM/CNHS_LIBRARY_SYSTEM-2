@@ -26,6 +26,8 @@ class User extends Authenticatable
         'password',
         'gender',
         'image',
+        'is_borrowed',
+        'borrowed_count',
     ];
 
     /**
