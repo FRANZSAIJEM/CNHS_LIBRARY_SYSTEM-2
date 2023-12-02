@@ -26,7 +26,8 @@
             :isActive="request()->routeIs('bookList')"
             >
             <x-slot name="icon">
-                <x-heroicon-o-bookmark class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+                <i style="font-size: 20px; margin-left: 4px;" class="fa-solid w-5 fa-book"></i>
+                {{-- <x-heroicon-o-bookmark class="flex-shrink-0 w-6 h-6" aria-hidden="true" /> --}}
             </x-slot>
 
         </x-sidebar.link>
@@ -184,6 +185,7 @@ href="{{ route('requests') }}"
     >
 
     <x-slot name="icon">
+
         <x-heroicon-o-document-download class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
     </x-slot>
     </x-sidebar.link>

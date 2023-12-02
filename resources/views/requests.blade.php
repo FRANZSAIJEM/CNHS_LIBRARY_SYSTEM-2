@@ -237,14 +237,24 @@ $defDailyFine = DefaultFine::first();
                                         <input class="border-none"  type="datetime-local" id="date_return" name="date_return" required>
                                     </div>
                                     <br>
+                                    <div>
+                                        <h1><b>You can choose a return date a week from today.</b></h1> <br>
+                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(1)">1 week</button>
+                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(2)">2 weeks</button>
+                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(3)">3 weeks</button>
+                                    </div>
+                                    <br>
                                    <br>
-                                        <hr>
+                                    <hr>
                                         <br>
                                     <div class="flex justify-end">
-                                        <button class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                                        <button type="button" class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
                                         <button type="submit" class="rounded-lg p-4  text-green-600 hover:text-green-700 duration-100" style="width: 125px;"><i class="fa-solid fa-check"></i>  Accept</button>
                                     </div>
+
+
                                 </form>
+
                             </p>
 
                         </div>
@@ -512,5 +522,40 @@ function showAcceptanceModal(requestedBook) {
             }, 3000); // 3 seconds for the loading bar to animate, then 100 milliseconds for the success message to disappear
         }
     });
+
+    function setPickupReturnDate(weeksToAdd) {
+    // Get current date and time in the local time zone
+    var currentDate = new Date();
+
+    // Set time to midnight (00:00:00)
+    currentDate.setHours(0, 0, 0, 0);
+
+    // Format the current date to be compatible with the input type datetime-local
+    var formattedDate = formatDateForInput(currentDate);
+
+    // Set the date_pickup to today's date
+    document.getElementById('date_pickup').value = formattedDate;
+
+    // Calculate the return date (pickup date + selected weeks)
+    var returnDate = new Date(currentDate.getTime() + weeksToAdd * 7 * 24 * 60 * 60 * 1000);
+    var formattedReturnDate = formatDateForInput(returnDate);
+
+    // Set the date_return
+    document.getElementById('date_return').value = formattedReturnDate;
+}
+
+// Helper function to format date for input type datetime-local
+function formatDateForInput(date) {
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1).toString().padStart(2, '0');
+    var day = date.getDate().toString().padStart(2, '0');
+    var hours = date.getHours().toString().padStart(2, '0');
+    var minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+
+
 </script>
 </x-app-layout>

@@ -56,7 +56,7 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 
 
 
-Route::get('/reports', [PdfController::class, 'index'])->name('reports');
+Route::get('/reports', [PdfController::class, 'index'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('reports');
 Route::post('/generate-pdf', [PdfController::class, 'generatePdf'])->name('generate-pdf');
 
 

@@ -10,6 +10,7 @@ use App\Models\AcceptedRequest;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -31,7 +32,6 @@ class StudentController extends Controller
         $query = User::where('is_admin', false);
         $fines = $request->session()->get('fines');
 
-
         if ($request->has('id_number_search')) {
             $idNumberSearch = $request->input('id_number_search');
             $query->where(function ($subquery) use ($idNumberSearch) {
@@ -47,7 +47,31 @@ class StudentController extends Controller
             $date_return = $acceptedRequest->date_return;
         }
 
-        $students = $query->get();
+        // Join the 'chats' table to get users with existing chats
+        $students = $query->leftJoin('chats', function ($join) {
+            $join->on('users.id', '=', 'chats.sender_id')
+                ->orWhere('users.id', '=', 'chats.receiver_id');
+        })
+        ->select(
+            'users.id',
+            'users.id_number',
+            'users.name',
+            'users.email',
+            'users.contact',
+            'users.gender',
+            'users.grade_level',
+
+            // Add other columns from the 'users' table here
+
+            DB::raw('COUNT(chats.id) as chat_count')
+        )
+        ->groupBy('users.id', 'users.id_number', 'users.name'
+        , 'users.email'
+        , 'users.contact'
+        , 'users.gender'
+        , 'users.grade_level') // Add other columns from the 'users' table here
+        ->orderByDesc('chat_count') // Order by the number of chat records in descending order
+        ->get();
 
         // Calculate total fines for each student
         foreach ($students as $student) {
@@ -56,10 +80,11 @@ class StudentController extends Controller
         }
 
         return view('student', ['students' => $students, 'fines' => $fines])
-        ->with('date_pickup', $date_pickup)
-        ->with('date_return', $date_return)
-        ->with('acceptedRequest', $acceptedRequest);
+            ->with('date_pickup', $date_pickup)
+            ->with('date_return', $date_return)
+            ->with('acceptedRequest', $acceptedRequest);
     }
+
 
 
 

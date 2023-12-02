@@ -270,6 +270,16 @@ yearSelect.style.width = '100px';
 yearSelect.style.borderRadius = '10px';
 yearSelect.style.margin = '10px';
 
+
+// Create a select dropdown for the month
+const monthSelect = document.createElement('select');
+yearSelect.style.padding = '10px';
+yearSelect.style.width = '100px';
+yearSelect.style.borderRadius = '10px';
+yearSelect.style.margin = '10px';
+
+
+
 // Populate the select dropdown with years, adjust the range as needed
 for (let i = 1957; i <= 2077; i++) {
   const option = document.createElement('option');
@@ -278,16 +288,20 @@ for (let i = 1957; i <= 2077; i++) {
   yearSelect.appendChild(option);
 }
 
+
+
+for (let i = 0; i < 12; i++) {
+  const option = document.createElement('option');
+  option.value = i + 1;
+  option.text = monthNames[i];
+  monthSelect.appendChild(option);
+}
+
+// Set the default selected month
+monthSelect.value = month;
+
 // Set the default selected year
 yearSelect.value = year;
-
-
-
-// Create a div for the month text
-const monthTextDiv = document.createElement('div');
-monthTextDiv.textContent = monthNames[month - 1];
-monthTextDiv.style.marginLeft = '20px';
-
 
 
 
@@ -298,15 +312,18 @@ yearSelect.addEventListener('change', () => {
   createCalendar(selectedYear, month);
 });
 
-
-header.appendChild(monthTextDiv);
-
-  header.appendChild(prevMonthButton);
-  header.appendChild(yearSelect);
-  header.appendChild(nextMonthButton);
-
+// Add an event listener to the month select dropdown
+monthSelect.addEventListener('change', () => {
+  const selectedMonth = parseInt(monthSelect.value, 10);
+  createCalendar(year, selectedMonth);
+});
 
 
+
+header.appendChild(prevMonthButton);
+header.appendChild(yearSelect);
+header.appendChild(monthSelect); // Add the month select dropdown
+header.appendChild(nextMonthButton);
 
 
 
@@ -372,16 +389,33 @@ header.appendChild(monthTextDiv);
 
 
 
-  // Toggle button
-  const toggleButton = document.createElement('button');
+ // Toggle button
+const toggleButton = document.createElement('button');
 
-  toggleButton.textContent = '👁️View';
+toggleButton.textContent = 'View Detail';
+toggleButton.style.borderRadius = '10px';
+toggleButton.style.marginLeft = '10px';
 
 
-  toggleButton.addEventListener('click', () => {
-    toggleNotifications(td);
-  });
 
+toggleButton.addEventListener('click', () => {
+  toggleNotifications(td);
+});
+
+// Add hover effect
+toggleButton.style.transition = 'background-color 0.3s';
+toggleButton.style.backgroundColor = 'initial';
+
+toggleButton.addEventListener('mouseover', () => {
+  toggleButton.style.backgroundColor = '#eee'; // Adjust the background color on hover
+});
+
+toggleButton.addEventListener('mouseout', () => {
+  toggleButton.style.backgroundColor = 'initial';
+});
+
+// Append the button to the document
+document.body.appendChild(toggleButton);
 
 
   // Hide the notification list by default
@@ -426,8 +460,6 @@ header.appendChild(monthTextDiv);
 
 
 
-
-
 function toggleNotifications(td) {
   const notificationList = td.querySelector('ul');
   const dot = td.querySelector('.dot');
@@ -435,8 +467,24 @@ function toggleNotifications(td) {
   if (notificationList.style.display === 'none' || !notificationList.style.display) {
     notificationList.style.display = 'block';
     dot.style.display = 'none';
+    notificationList.style.transform = 'scale(0)';
+    notificationList.style.margin = '5px'; // Adjust the margin as needed
+
+    setTimeout(() => {
+      notificationList.style.transition = 'transform 0.5s, margin 0.5s';
+      notificationList.style.transform = 'scale(1)';
+      notificationList.style.margin = '15px'; // Adjust the final margin as needed
+    }, 0);
   } else {
-    notificationList.style.display = 'none';
+    notificationList.style.transform = 'scale(0)';
+    notificationList.style.margin = '5px'; // Adjust the margin as needed
+
+    setTimeout(() => {
+      notificationList.style.transition = 'transform 0.5s, margin 0.5s';
+      notificationList.style.display = 'none';
+      notificationList.style.transition = '';
+    }, 500);
+
     dot.style.display = 'block';
   }
 }
