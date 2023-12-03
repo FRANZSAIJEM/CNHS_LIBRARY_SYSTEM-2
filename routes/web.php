@@ -59,6 +59,19 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 Route::get('/reports', [PdfController::class, 'index'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('reports');
 Route::post('/generate-pdf', [PdfController::class, 'generatePdf'])->name('generate-pdf');
 
+Route::post('/generate-pdf-allStudents', [PdfController::class, 'generatePdfForStudents'])->name('generate-pdf-allStudents');
+
+Route::post('/generate-pdf-gradeLevelMostBorrowed', [PdfController::class, 'generatePdfForLevelMostBorrowed'])->name('generate-pdf-gradeLevelMostBorrowed');
+Route::post('/generate-pdf-bookCondition', [PdfController::class, 'generatePdfForBookCondition'])->name('generate-pdf-bookCondition');
+Route::post('/generate-pdf-mostBorrowedBooks', [PdfController::class, 'generatePdfFormostBorrowedBooks'])->name('generate-pdf-mostBorrowedBooks');
+
+Route::post('/generate-pdf-borrowedByDate', [PdfController::class, 'generatePdfForborrowedByDate'])->name('generate-pdf-borrowedByDate');
+
+
+
+// Add a new route for the checkbox-selected PDF export
+Route::post('/generate-selected-pdf', [PdfController::class, 'generateSelectedPdf'])->name('generate-selected-pdf');
+
 
 
 

@@ -21,6 +21,34 @@
 
         <div class="">
             <div class="">
+
+
+                <form action="{{ route('generate-selected-pdf') }}" method="post" target="_blank">
+                    @csrf
+
+                    {{-- Add checkboxes for different report options --}}
+                    <label for="allStudents">All Students</label>
+                    <input type="checkbox" name="reports[]" value="allStudents">
+
+                    <label for="gradeLevelMostBorrowed">Grade Level Most Borrowed</label>
+                    <input type="checkbox" name="reports[]" value="gradeLevelMostBorrowed">
+
+                    <label for="bookCondition">Book Condition</label>
+                    <input type="checkbox" name="reports[]" value="bookCondition">
+
+                    <label for="mostBorrowedBooks">Most Borrowed Books</label>
+                    <input type="checkbox" name="reports[]" value="mostBorrowedBooks">
+
+                    <label for="borrowedByDate">Borrowed By Date</label>
+                    <input type="checkbox" name="reports[]" value="borrowedByDate">
+
+                    {{-- Add a submit button to trigger the PDF generation --}}
+                    <button type="submit">Generate PDF</button>
+                </form>
+
+
+
+
                 <div class="flex justify-end">
                     {{-- Button to export PDF --}}
                     <form action="{{ route('generate-pdf') }}" method="post" target="_blank">
@@ -28,6 +56,55 @@
                         <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
                     </form>
                 </div>
+
+                <div class="flex justify-end">
+                    {{-- Button to export PDF --}}
+                    <form action="{{ route('generate-pdf-allStudents') }}" method="post" target="_blank">
+                        @csrf
+                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                    </form>
+                </div>
+
+                <div class="flex justify-end">
+                    {{-- Button to export PDF --}}
+                    <form action="{{ route('generate-pdf-gradeLevelMostBorrowed') }}" method="post" target="_blank">
+                        @csrf
+                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                    </form>
+                </div>
+
+                <div class="flex justify-end">
+                    {{-- Button to export PDF --}}
+                    <form action="{{ route('generate-pdf-bookCondition') }}" method="post" target="_blank">
+                        @csrf
+                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                    </form>
+                </div>
+
+                <div class="flex justify-end">
+                    {{-- Button to export PDF --}}
+                    <form action="{{ route('generate-pdf-mostBorrowedBooks') }}" method="post" target="_blank">
+                        @csrf
+                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                    </form>
+                </div>
+
+                <div class="flex justify-end">
+                    {{-- Button to export PDF --}}
+                    <form action="{{ route('generate-pdf-borrowedByDate') }}" method="post" target="_blank">
+                        @csrf
+                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                    </form>
+                </div>
+
+
+
+
+
+
+
+
+
                 <br>
 
                 <div class="container mx-auto p-4">

@@ -12,7 +12,8 @@
         >
 
         <x-slot name="icon">
-            <x-heroicon-o-home  class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+
+            <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-house"></i>
         </x-slot>
 
         </x-sidebar.link>
@@ -26,7 +27,7 @@
             :isActive="request()->routeIs('bookList')"
             >
             <x-slot name="icon">
-                <i style="font-size: 20px; margin-left: 4px;" class="fa-solid w-5 fa-book"></i>
+                <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-book"></i>
                 {{-- <x-heroicon-o-bookmark class="flex-shrink-0 w-6 h-6" aria-hidden="true" /> --}}
             </x-slot>
 
@@ -43,8 +44,8 @@
         :isActive="request()->routeIs('history')"
     >
         <x-slot name="icon">
-            <x-heroicon-o-trash class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
 
+            <i  class="fa-solid fa-clock-rotate-left w-6 h-6 flex justify-center mb-2 text-lg"></i>
             <!-- Conditionally display the badge for history -->
             @php
             $loggedInUserId = Auth::id();
@@ -75,7 +76,8 @@
         :isActive="request()->routeIs('startChatStud')"
         >
         <x-slot name="icon">
-            <x-heroicon-o-chat class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+            <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-comment"></i>
+
         </x-slot>
 
     </x-sidebar.link>
@@ -121,8 +123,8 @@ href="{{ route('requests') }}"
 :isActive="request()->routeIs('requests')"
 >
 <x-slot name="icon">
-    <x-heroicon-o-bell class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
 
+    <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-code-pull-request"></i>
     <!-- Conditionally display the badge for requests -->
     @php
     $totalRequests = DB::table('book_requests')->count();
@@ -160,7 +162,8 @@ href="{{ route('requests') }}"
         >
 
         <x-slot name="icon">
-            <x-heroicon-o-archive class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+
+            <i  class="fas w-6 h-6 flex justify-center mb-2 text-lg fa-exchange-alt"></i>
         </x-slot>
         </x-sidebar.link>
 
@@ -174,7 +177,7 @@ href="{{ route('requests') }}"
         >
 
         <x-slot name="icon">
-            <x-heroicon-o-users class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+            <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-users"></i>
         </x-slot>
         </x-sidebar.link>
 
@@ -185,8 +188,8 @@ href="{{ route('requests') }}"
     >
 
     <x-slot name="icon">
+        <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-file-lines"></i>
 
-        <x-heroicon-o-document-download class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
     </x-slot>
     </x-sidebar.link>
 

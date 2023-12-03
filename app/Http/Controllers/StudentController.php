@@ -63,7 +63,8 @@ class StudentController extends Controller
 
             // Add other columns from the 'users' table here
 
-            DB::raw('COUNT(chats.id) as chat_count')
+            DB::raw('COUNT(chats.id) as chat_count'),
+            DB::raw('MAX(chats.created_at) as latest_chat_date')
         )
         ->groupBy('users.id', 'users.id_number', 'users.name'
         , 'users.email'
@@ -71,6 +72,7 @@ class StudentController extends Controller
         , 'users.gender'
         , 'users.grade_level') // Add other columns from the 'users' table here
         ->orderByDesc('chat_count') // Order by the number of chat records in descending order
+        ->orderByDesc('latest_chat_date') // Order by the latest chat date in descending order
         ->get();
 
         // Calculate total fines for each student
@@ -84,6 +86,8 @@ class StudentController extends Controller
             ->with('date_return', $date_return)
             ->with('acceptedRequest', $acceptedRequest);
     }
+
+
 
 
 

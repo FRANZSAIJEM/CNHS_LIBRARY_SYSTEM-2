@@ -68,6 +68,126 @@ class PdfController extends Controller
     }
 
 
+    public function generatePdfForStudents(){
+         // Retrieve users with non-zero borrowed_count
+         $usersWithBorrowedCount = User::where('borrowed_count', '>', 0)
+         ->get(['id', 'id_number', 'grade_level', 'name', 'borrowed_count']);
+
+        // Define the data array
+        $data = [
+            'usersWithBorrowedCount' => $usersWithBorrowedCount,
+
+        ];
+
+        // Load the PDF view with the data
+        $pdf = PDF::loadView('pdf.pdfForStudents', $data);
+
+        // Use stream instead of download
+        return $pdf->stream('sample.pdf', ['Attachment' => false]);
+    }
+
+
+
+    public function generatePdfForLevelMostBorrowed(){
+          // Retrieve users with non-zero borrowed_count
+          $usersWithBorrowedCount = User::where('borrowed_count', '>', 0)
+          ->get(['id', 'id_number', 'grade_level', 'name', 'borrowed_count']);
+
+          // Retrieve the count of users for each grade level
+          $gradeLevelCounts = $usersWithBorrowedCount->groupBy('grade_level')->map->count();
+
+            // Define the data array
+            $data = [
+                'usersWithBorrowedCount' => $usersWithBorrowedCount,
+                'gradeLevelCounts' => $gradeLevelCounts,
+            ];
+
+                    // Load the PDF view with the data
+            $pdf = PDF::loadView('pdf.pdfForMostGradeLevelBorrowedCount', $data);
+
+            // Use stream instead of download
+            return $pdf->stream('sample.pdf', ['Attachment' => false]);
+
+
+    }
+
+    public function generatePdfForBookCondition(){
+        // Retrieve the count of available and not available books
+        $availableBooksCount = Book::where('availability', 'Available')->count();
+        $notAvailableBooksCount = Book::where('availability', 'Not Available')->count();
+        $allBooksCount = Book::count();
+
+        $goodBooksCount = Book::where('status', 'Good')->count();
+        $damageBooksCount = Book::where('status', 'Damage')->count();
+        $lostBooksCount = Book::where('status', 'Lost')->count();
+
+
+          // Define the data array
+          $data = [
+            'availableBooksCount' => $availableBooksCount,
+            'notAvailableBooksCount' => $notAvailableBooksCount,
+            'allBooksCount' => $allBooksCount,
+            'goodBooksCount' => $goodBooksCount,
+            'damageBooksCount' => $damageBooksCount,
+            'lostBooksCount' => $lostBooksCount,
+
+
+        ];
+
+                // Load the PDF view with the data
+        $pdf = PDF::loadView('pdf.pdfForBookCondition', $data);
+
+        // Use stream instead of download
+        return $pdf->stream('sample.pdf', ['Attachment' => false]);
+
+    }
+
+
+
+    public function generatePdfFormostBorrowedBooks(){
+        // Retrieve the most borrowed books based on the 'count' field
+        $mostBorrowedBooks = Book::orderBy('count', 'desc')->get();
+
+
+         // Define the data array
+         $data = [
+            'mostBorrowedBooks' => $mostBorrowedBooks,
+
+        ];
+
+        // Load the PDF view with the data
+        $pdf = PDF::loadView('pdf.pdfForMostBorrowedBook', $data);
+
+        // Use stream instead of download
+        return $pdf->stream('sample.pdf', ['Attachment' => false]);
+    }
+
+
+    public function generatePdfForborrowedByDate(){
+       // Retrieve all notifications
+       $notifications = Notification::all();
+
+       // Group notifications by year and month
+       $groupedNotifications = $notifications->groupBy(function ($date) {
+           return $date->created_at->format('Y-m-d');
+       });
+
+
+
+        // Define the data array
+        $data = [
+            'groupedNotifications' => $groupedNotifications,
+        ];
+
+        // Load the PDF view with the data
+        $pdf = PDF::loadView('pdf.pdfForBorrowedByDate', $data);
+
+        // Use stream instead of download
+        return $pdf->stream('sample.pdf', ['Attachment' => false]);
+
+    }
+
+
 
     public function generatePdf()
     {
@@ -113,8 +233,6 @@ class PdfController extends Controller
             'lostBooksCount' => $lostBooksCount,
             'mostBorrowedBooks' => $mostBorrowedBooks,
             'groupedNotifications' => $groupedNotifications,
-
-
         ];
 
         // Load the PDF view with the data
@@ -123,4 +241,71 @@ class PdfController extends Controller
         // Use stream instead of download
         return $pdf->stream('sample.pdf', ['Attachment' => false]);
     }
+
+
+        // New function to generate PDF based on selected checkboxes
+    public function generateSelectedPdf(Request $request)
+    {
+        // Get selected reports from the form
+        $selectedReports = $request->input('reports');
+
+        // Define an array to store data for selected reports
+        $data = [];
+
+
+
+
+        // Check if 'allStudents' is selected
+        if (in_array('allStudents', $selectedReports)) {
+            $data['usersWithBorrowedCount'] = User::where('borrowed_count', '>', 0)
+                ->get(['id', 'id_number', 'grade_level', 'name', 'borrowed_count']);
+        }
+
+        // Check if 'gradeLevelMostBorrowed' is selected
+        if (in_array('gradeLevelMostBorrowed', $selectedReports)) {
+            $usersWithBorrowedCount = User::where('borrowed_count', '>', 0)
+            ->get(['id', 'id_number', 'grade_level', 'name', 'borrowed_count']);
+            $data['gradeLevelCounts'] = $usersWithBorrowedCount->groupBy('grade_level')->map->count();
+
+        }
+
+
+        // Check if 'mostBorrowedBooks' is selected
+        if (in_array('mostBorrowedBooks', $selectedReports)) {
+            $data['mostBorrowedBooks'] = Book::orderBy('count', 'desc')->get();
+        }
+
+
+      // Check if 'bookCondition' is selected
+if (in_array('bookCondition', $selectedReports)) {
+    $data['bookCondition'] = [
+        'availableBooksCount' => Book::where('availability', 'Available')->count(),
+        'notAvailableBooksCount' => Book::where('availability', 'Not Available')->count(),
+        'allBooksCount' => Book::count(),
+        'goodBooksCount' => Book::where('status', 'Good')->count(),
+        'damageBooksCount' => Book::where('status', 'Damage')->count(),
+        'lostBooksCount' => Book::where('status', 'Lost')->count(),
+    ];
+}
+
+
+        // Check if 'borrowedByDate' is selected
+        if (in_array('borrowedByDate', $selectedReports)) {
+            $notifications = Notification::all();
+
+            // Group notifications by year and month
+            $data['groupedNotifications'] = $notifications->groupBy(function ($date) {
+                return $date->created_at->format('Y-m-d');
+            });
+        }
+
+        // Load the PDF view with the data
+        $pdf = PDF::loadView('pdf.pdfForSelectedReports', $data);
+
+        // Use stream instead of download
+        return $pdf->stream('selected_sample.pdf', ['Attachment' => false]);
+    }
+
+
+
 }

@@ -54,17 +54,22 @@
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">
                 <div class="flex justify-center">
                     {{-- ₱ &nbsp; --}}
+                    @if ($totalFine !== null)
+                        {{ number_format($totalFine) }}
+                    @else
+                        0.00
+                    @endif
+
+{{--
                     <div id="fines-container" style="display: none;">
 
 
-                        @if ($totalFine !== null)
-                            {{ number_format($totalFine) }}
-                        @else
-                            0.00
-                        @endif
 
 
-                    </div>&nbsp; <span style="font-size: 17px;" class="mt-3">Instances of <br> late returns.</span>
+
+                    </div> --}}
+
+                    <span style="font-size: 17px;" class="mt-3 ms-2">Instances of <br> late returns.</span>
                 </div>
             </h3>
 

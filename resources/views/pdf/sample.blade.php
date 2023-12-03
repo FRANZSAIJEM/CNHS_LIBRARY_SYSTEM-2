@@ -38,10 +38,8 @@
         <div class="">
 
             <div class="container mx-auto p-4">
-
-
-
                 <div style="text-align: center;">
+                    <img width="100px" height="100px" src="logo.png" alt=""> <br> <br>
                     CNHS LIBRARY SYSTEM <br>
                     Sta. Cruz, Calape, Bohol
                 </div> <br> <br> <br>
@@ -207,14 +205,9 @@
                                 <td>Day {{ $day }}, {{ \Carbon\Carbon::createFromDate($year, $month, $day)->format('l') }}</td>
                                 <td>{{ count($notifications) }}</td>
                             </tr>
-
                         @endforeach
                     </tbody>
                 </table>
-
-
-
-
             </div>
 
         </div>

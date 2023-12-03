@@ -60,6 +60,8 @@
                                 <h1><b><i class="fa-solid fa-layer-group"></i> Grade Level</b></h1>
                                 {{$student->grade_level}} <br> <hr> <br>
                                  <!-- Display fines -->
+
+                                 
                                  <h1><b><i class="fa-solid fa-clock"></i> Instances of late returns.</b></h1>
                                  {{ number_format($student->totalFines, 0, '.', '') }} <br> <hr> <br>
 
