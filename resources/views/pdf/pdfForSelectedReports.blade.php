@@ -46,7 +46,7 @@
 @if(isset($usersWithBorrowedCount))
 <div class="container mx-auto p-4">
 
-    <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> All Students who borrowed books.</h1>
+    <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> All Students Who Borrowed Books.</h1>
 
     <table class="pdf-table">
         <thead>
@@ -108,7 +108,7 @@
 
 @if(isset($bookCondition))
 <div class="container mx-auto p-4">
-    <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> Total books, and their condition, status, and availability.</h1>
+    <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> Total Books, And Their Condition, Status, And Availability.</h1>
 
     <table class="pdf-table">
         <thead>
@@ -185,7 +185,7 @@
 
 @if(isset($groupedNotifications))
 <div class="container mx-auto p-4">
-    <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> All students who borrowed books by year and month</h1>
+    <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> All Students Who Borrowed Books By Year And Month</h1>
 
     <table class="pdf-table">
         <thead>

@@ -40,19 +40,18 @@ $defDailyFine = DefaultFine::first();
                         <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1 flex">
                             <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="book_search" placeholder="🔍 ID Number">
                             <button style="" type="submit" name="letter_filter" value="" class=" hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}">Clear</button>
-
                             {{-- <button type="submit" class="search-button text-slate-600 bg-slate-200 hover:text-slate-700 duration-100" style="width: 100px;">Search</button> --}}
-                        </div>
-                        <div class="flex justify-end">
-                            <button class="text-white bg-blue-400 hover:bg-blue-500 duration-100" type="button" style="width: 143px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDateFilter()"><b><i class="fa-regular fa-calendar-days"></i> Filter By Date</b></button>
-                            {{-- <button type="submit" onclick="clearDateFilter()" class="hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1">Clear Date Filter</button> --}}
-
                         </div>
                     </form>
                     @endif
                 </div>
+                <form action="{{ route('requests') }}" method="GET" class="search-bar">
+                    <div class="flex justify-end">
+                        <button class="text-white bg-orange-400 hover:bg-orange-500 duration-100" type="button" style="width: 143px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDateFilter()"><b><i class="fa-regular fa-calendar-days"></i> Filter By Date</b></button>
+                        {{-- <button type="submit" onclick="clearDateFilter()" class="hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1">Clear Date Filter</button> --}}
 
-
+                    </div>
+                </form>
 
             @if (Auth::user()->is_admin)
             <div style="position: relative">

@@ -8,6 +8,16 @@
     </x-slot>
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
+        <div style="display: grid; place-items: center;">
+            @if(session('success'))
+               <div class="success-message-container">
+                   <div class="success-message bg-white rounded-lg shadow-md text-green-700 p-4">
+                    <span class="rounded-full p-1 ps-2 pe-2 bg-green-200 text-slate-500" ><i class="fa-solid fa-check"></i></span> {{ session('success') }}
+                        <div class="loadingBar"></div>
+                   </div>
+               </div>
+           @endif
+       </div>
         <div class="text-center ">
             @if (!Auth::user()->is_admin)
             <h1><b><i class="fa-solid fa-book"></i> Total Available Books</b></h1>
@@ -115,6 +125,31 @@
        {{-- Loading Screen --}}
        <div id="loading-bar" class="loading-bar"></div>
       <style>
+  .success-message-container {
+        position: fixed;
+    }
+
+    .success-message {
+        text-align: right;
+        margin-bottom: 150px;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .loadingBar{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background-color: #00af2cab;
+        transition: width 3s linear;
+    }
+
+
+
+
+
 .loading-bar {
   width: 0;
   height: 5px; /* You can adjust the height as needed */
@@ -175,6 +210,37 @@ function updateCountdown(element, targetTimestamp) {
 // Initialize the countdown timers when the page loads
 window.addEventListener('DOMContentLoaded', initializeCountdown);
 
+
+window.addEventListener('DOMContentLoaded', (event) => {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.style.opacity = '1';
+                successMessage.style.transform = 'translateY(0)';
+            }, 100);
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const successMessageContainer = document.querySelector('.success-message-container');
+        const successMessage = document.querySelector('.success-message');
+        const loadingBar = document.querySelector('.loadingBar');
+
+        if (successMessage) {
+            setTimeout(() => {
+                loadingBar.style.width = '100%';
+            }, 5000);
+
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+                successMessage.style.opacity = '0';
+                successMessage.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    successMessageContainer.remove();
+                }, 5000);
+            }, 5000); // 3 seconds for the loading bar to animate, then 100 milliseconds for the success message to disappear
+        }
+    });
 
     </script>
 </x-app-layout>

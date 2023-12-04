@@ -43,7 +43,7 @@
                     CNHS LIBRARY SYSTEM <br>
                     Sta. Cruz, Calape, Bohol
                 </div> <br> <br> <br>
-                <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> All Students who borrowed books.</h1>
+                <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> All Students Who Borrowed Books.</h1>
 
                 <table class="pdf-table">
                     <thead>
@@ -58,7 +58,7 @@
                     <tbody>
                         @foreach($usersWithBorrowedCount as $user)
                             <tr>
-                                <td>{{ $user->id }}</td>
+                                <td>{{ $user->id_number }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->grade_level }}</td>
                                 <td>{{ $user->borrowed_count }}</td>
@@ -96,7 +96,7 @@
 
 
             <div class="container mx-auto p-4">
-                <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> Total books, and their condition, status, and availabilty.</h1>
+                <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> Total Books, And Their Condition, Status, And Availabilty.</h1>
 
                 <table class="pdf-table">
                     <thead>
@@ -165,7 +165,7 @@
 
 
             <div class="container mx-auto p-4">
-                <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> All students who borrowed books by year and month</h1>
+                <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> All Students Who Borrowed Books By Year And Month</h1>
 
                 <table class="pdf-table">
                     <thead>

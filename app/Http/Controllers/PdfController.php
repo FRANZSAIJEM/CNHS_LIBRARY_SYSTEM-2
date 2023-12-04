@@ -305,7 +305,4 @@ if (in_array('bookCondition', $selectedReports)) {
         // Use stream instead of download
         return $pdf->stream('selected_sample.pdf', ['Attachment' => false]);
     }
-
-
-
 }

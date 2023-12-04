@@ -69,7 +69,7 @@ $borrowCount = BorrowCount::first();
                 {{-- <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button> --}}
 
 
-                <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50; transform: translateX(-45px);">
+                <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50; transform: translateX(-45px) translateY(45px);">
                     <div class="p-5 rounded-lg shadow-md bg-slate-50">
                         <h1 class="text-center"><b>Set Borrowing Limit</b></h1><br>
                         <div class="text-end">
@@ -90,6 +90,8 @@ $borrowCount = BorrowCount::first();
                 @endif
 
           </div>
+
+
        <div style="">
 
             <div class="bookCenter">
@@ -215,7 +217,7 @@ $borrowCount = BorrowCount::first();
 
 
     {{-- Delete Modal --}}
-    <div id="confirmDeleteModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+    <div id="confirmDeleteModal" style="margin-top: 50px; overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
         <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
 
             <div class="flex justify-between">

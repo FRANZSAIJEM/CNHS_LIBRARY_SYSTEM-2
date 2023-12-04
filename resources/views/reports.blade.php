@@ -21,94 +21,61 @@
 
         <div class="">
             <div class="">
-
-
-                <form action="{{ route('generate-selected-pdf') }}" method="post" target="_blank">
-                    @csrf
-
-                    {{-- Add checkboxes for different report options --}}
-                    <label for="allStudents">All Students</label>
-                    <input type="checkbox" name="reports[]" value="allStudents">
-
-                    <label for="gradeLevelMostBorrowed">Grade Level Most Borrowed</label>
-                    <input type="checkbox" name="reports[]" value="gradeLevelMostBorrowed">
-
-                    <label for="bookCondition">Book Condition</label>
-                    <input type="checkbox" name="reports[]" value="bookCondition">
-
-                    <label for="mostBorrowedBooks">Most Borrowed Books</label>
-                    <input type="checkbox" name="reports[]" value="mostBorrowedBooks">
-
-                    <label for="borrowedByDate">Borrowed By Date</label>
-                    <input type="checkbox" name="reports[]" value="borrowedByDate">
-
-                    {{-- Add a submit button to trigger the PDF generation --}}
-                    <button type="submit">Generate PDF</button>
-                </form>
-
-
-
-
                 <div class="flex justify-end">
                     {{-- Button to export PDF --}}
-                    <form action="{{ route('generate-pdf') }}" method="post" target="_blank">
-                        @csrf
-                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                    </form>
+                    <button class="text-orange-600 hover:text-orange-700 duration-100" type="button" style="width: 123px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal()"><b><i class="fa-regular fa-file-pdf"></i> Export PDF</b></button>
                 </div>
-
-                <div class="flex justify-end">
-                    {{-- Button to export PDF --}}
-                    <form action="{{ route('generate-pdf-allStudents') }}" method="post" target="_blank">
-                        @csrf
-                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                    </form>
-                </div>
-
-                <div class="flex justify-end">
-                    {{-- Button to export PDF --}}
-                    <form action="{{ route('generate-pdf-gradeLevelMostBorrowed') }}" method="post" target="_blank">
-                        @csrf
-                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                    </form>
-                </div>
-
-                <div class="flex justify-end">
-                    {{-- Button to export PDF --}}
-                    <form action="{{ route('generate-pdf-bookCondition') }}" method="post" target="_blank">
-                        @csrf
-                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                    </form>
-                </div>
-
-                <div class="flex justify-end">
-                    {{-- Button to export PDF --}}
-                    <form action="{{ route('generate-pdf-mostBorrowedBooks') }}" method="post" target="_blank">
-                        @csrf
-                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                    </form>
-                </div>
-
-                <div class="flex justify-end">
-                    {{-- Button to export PDF --}}
-                    <form action="{{ route('generate-pdf-borrowedByDate') }}" method="post" target="_blank">
-                        @csrf
-                        <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                    </form>
-                </div>
+                 <br>
 
 
+                {{-- <div>
 
+                    <div class="flex justify-end">
 
+                        <form action="{{ route('generate-pdf-allStudents') }}" method="post" target="_blank">
+                            @csrf
+                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                        </form>
+                    </div>
 
+                    <div class="flex justify-end">
 
+                        <form action="{{ route('generate-pdf-gradeLevelMostBorrowed') }}" method="post" target="_blank">
+                            @csrf
+                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                        </form>
+                    </div>
 
+                    <div class="flex justify-end">
 
+                        <form action="{{ route('generate-pdf-bookCondition') }}" method="post" target="_blank">
+                            @csrf
+                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                        </form>
+                    </div>
+
+                    <div class="flex justify-end">
+
+                        <form action="{{ route('generate-pdf-mostBorrowedBooks') }}" method="post" target="_blank">
+                            @csrf
+                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                        </form>
+                    </div>
+
+                    <div class="flex justify-end">
+
+                        <form action="{{ route('generate-pdf-borrowedByDate') }}" method="post" target="_blank">
+                            @csrf
+                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
+                        </form>
+                    </div>
+
+                </div> --}}
 
                 <br>
 
                 <div class="container mx-auto p-4">
-                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> All Students who borrowed books.</h1>
+                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> All Students Who Borrowed Books.</h1>
 
                     <table class="min-w-full border border-gray-300 text-center">
                         <thead>
@@ -162,7 +129,7 @@
 
 
                 <div class="container mx-auto p-4">
-                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Total books, and their condition, status, and availabilty.</h1>
+                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Total books, And Their Condition, Status, And Availabilty.</h1>
 
                     <table class="min-w-full border border-gray-300 text-center">
                         <thead>
@@ -231,7 +198,7 @@
 
 
                 <div class="container mx-auto p-4">
-                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> All students who borrowed books by year and month</h1>
+                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> All Students Who Borrowed Books By Year And Month</h1>
 
 
                     <table class="min-w-full border border-gray-300 text-center">
@@ -288,4 +255,122 @@
         </div>
     </div>
 
+
+ <div id="confirmDeleteModal" style="margin-top: 50px; overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+    <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
+
+        <div class="flex justify-between">
+            <h2><b><i class="fa-regular fa-file-pdf"></i> Select Option</b></h2>
+            <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <hr> <br>
+        <div class="">
+            <div style="display: grid; place-content: center;">
+                <form action="{{ route('generate-pdf') }}" method="post" target="_blank">
+
+                    @csrf
+                    <div class="flex justify-center">
+                        <button style="width: 180px;" type="submit" class="bg-orange-500 p-3 rounded-lg text-white hover:bg-orange-600 duration-100"><i class="fa-regular fa-file-pdf"></i> <b>Export all reports</b></button>
+                    </div>
+                </form> <br>
+               <h1 class="flex justify-center">or</h1>
+                <br>
+
+                <form action="{{ route('generate-selected-pdf') }}" method="post" target="_blank">
+                    @csrf
+
+                            <h1 class="flex justify-center"><b>Select report you want to export PDF</b></h1> <br>
+                            {{-- Add checkboxes for different report options --}}
+                            <div class="flex mb-2">
+                                <label style="width: 325px;" class="cursor-pointer bg-slate-200 p-2 rounded-lg hover:bg-slate-300 duration-100" for="allStudents">
+                                <input id="allStudents" type="checkbox" name="reports[]" onchange="updateSubmitButton()" value="allStudents"> &nbsp;
+                                All Students Who Borrowed Books</label>
+                            </div>
+
+                            <div class="flex mb-2">
+
+                                <label style="width: 325px;" class="cursor-pointer bg-slate-200 p-2 rounded-lg hover:bg-slate-300 duration-100" for="gradeLevelMostBorrowed">
+                                    <input id="gradeLevelMostBorrowed" type="checkbox" name="reports[]" onchange="updateSubmitButton()" value="gradeLevelMostBorrowed"> &nbsp;
+                                    Grade Level Most Borrowed</label>
+                            </div>
+
+                            <div class="flex mb-2">
+
+                                <label style="width: 325px;" class="cursor-pointer bg-slate-200 p-2 rounded-lg hover:bg-slate-300 duration-100" for="bookCondition">
+                                    <input id="bookCondition" type="checkbox" name="reports[]" onchange="updateSubmitButton()" value="bookCondition"> &nbsp;
+                                    Book Condition</label>
+                            </div>
+
+                            <div class="flex mb-2">
+
+                                <label style="width: 325px;" class="cursor-pointer bg-slate-200 p-2 rounded-lg hover:bg-slate-300 duration-100" for="mostBorrowedBooks">
+                                    <input id="mostBorrowedBooks" type="checkbox" name="reports[]" onchange="updateSubmitButton()" value="mostBorrowedBooks"> &nbsp;
+                                    Most Borrowed Books</label>
+                            </div>
+
+                            <div class="flex mb-2">
+
+                                <label style="width: 325px;" class="cursor-pointer bg-slate-200 p-2 rounded-lg hover:bg-slate-300 duration-100" for="borrowedByDate">
+                                    <input id="borrowedByDate" type="checkbox" name="reports[]" onchange="updateSubmitButton()" value="borrowedByDate"> &nbsp;
+                                    Borrowed By Date</label>
+                            </div>
+
+                          <div class="flex justify-center mt-5">
+                              {{-- Add a submit button to trigger the PDF generation --}}
+                            <button style="width: 180px;" disabled id="generatePdfButton" class="bg-orange-500 hover:bg-orange-600 duration-100 p-3 rounded-lg text-white" type="submit"><i class="fa-regular fa-file-pdf"></i> <b>Export PDF</b></button>
+                          </div>
+                </form>
+            </div>
+
+        </div>
+        <br>
+        <hr> <br>
+        <div class="">
+               <div class="flex justify-end">
+
+               </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+    <script>
+        function updateSubmitButton() {
+            // Get all checkboxes
+            var checkboxes = document.getElementsByName('reports[]');
+
+            // Get the submit button
+            var submitButton = document.getElementById('generatePdfButton');
+
+            // Check if any checkbox is selected
+            var anyCheckboxSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+            // Enable or disable the submit button based on checkbox selection
+            submitButton.disabled = !anyCheckboxSelected;
+        }
+        function showConfirmationModal(bookId) {
+            var modal = document.getElementById('confirmDeleteModal');
+            modal.style.display = 'block';
+        }
+
+
+        function hideConfirmationModal() {
+
+            var modal2 = document.getElementById('confirmDeleteModal');
+
+
+            modal2.style.display = 'none';
+
+        }
+
+    </script>
+    <style>
+          .modalWidth{
+        width: 350px;
+    }
+    </style>
 </x-app-layout>
+
