@@ -11,11 +11,15 @@ use App\Models\DefaultFine;
 use App\Models\Reply;
 use App\Models\TimeDuration;
 
+
+
 use App\Models\Book; // Import your Book model
 use App\Models\AcceptedRequest; // Import your Book model
 use App\Models\Notification;
 use App\Models\UserNotification;
 use App\Models\UserBookRequest;
+use App\Models\returnedBook; // Import the ReturnedBook model
+use App\Models\ReturnedBookNotification; // Import the ReturnedBook model
 
 use Illuminate\Support\Facades\Auth;
 
@@ -68,6 +72,7 @@ class AcceptRequestController extends Controller
             'user_id' => $user->id,
             'notification_text' => $notificationText,
         ]);
+
         $notification->save();
 
         $userIdsToNotify = User::pluck('id')->toArray();
@@ -150,10 +155,18 @@ class AcceptRequestController extends Controller
 
 
 
-    public function history()
+    public function history(User $users, book $book)
     {
         // Get the currently authenticated user
         $user = Auth::user();
+
+
+        $returnHistorys = ReturnedBookNotification::where('user_id', $user->id)
+            ->with('returnedBook')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+
 
         // Retrieve the user's notifications from the database and sort them in ascending order by the created_at timestamp
         $userNotifications = UserNotification::where('user_id', $user->id)
@@ -161,8 +174,11 @@ class AcceptRequestController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('history', compact('userNotifications'));
+        return view('history', compact('userNotifications', 'returnHistorys'));
     }
+
+
+
 
 
 
@@ -171,18 +187,33 @@ class AcceptRequestController extends Controller
         // Find the UserNotification record by ID
         $userNotification = UserNotification::find($id);
 
-        // Check if the record exists
-        if ($userNotification) {
-            // Delete the UserNotification record
-            $userNotification->delete();
 
-            // Redirect back to the history page or wherever you prefer
-            return redirect()->back()->with('success', 'Cleared successfully');
-        } else {
-            // Handle the case where the record does not exist (e.g., show an error message)
-            return redirect()->back()->with('error', 'Notification not found');
+        // Check if the UserNotification record exists and delete it
+        if ($userNotification) {
+            $userNotification->delete();
         }
+
+        // Redirect back to the history page or wherever you prefer
+        return redirect()->back()->with('success', 'Cleared successfully');
     }
+
+    public function clearReturnedNotification($id)
+    {
+
+        // Find the ReturnedBook record by ID
+        $returnedBook = ReturnedBookNotification::find($id);
+
+        // Check if the ReturnedBook record exists and delete it
+        if ($returnedBook) {
+            $returnedBook->delete();
+        }
+
+        // Redirect back to the history page or wherever you prefer
+        return redirect()->back()->with('success', 'Cleared successfully');
+    }
+
+
+
 
 
     public function returnBook($id)
@@ -215,6 +246,34 @@ class AcceptRequestController extends Controller
             return redirect()->back()->with('error', 'Transaction not found');
         }
 
+        // Detach the book from the user's requestedBooks relationship since it's been accepted.
+        $book = $transaction->book; // Assuming there's a 'book' relationship in your AcceptedRequest model
+        $user = $transaction->user; // Assuming there's a 'user' relationship in your AcceptedRequest model
+
+        $user->requestedBooks()->detach($book);
+
+        $notificationText = "{$user->name} Returned '{$book->title}' ";
+
+        $notification = new returnedBook([
+            'borrower_id' => $user->id,
+            'notification_text' => $notificationText,
+            'created_at' => now(),
+        ]);
+
+        $notification->save();
+
+        $userIdsToNotify = User::pluck('id')->toArray();
+
+        $usersToNotify = User::whereIn('id', $userIdsToNotify)->get();
+
+        foreach ($usersToNotify as $userToNotify) {
+            $userNotification = new ReturnedBookNotification([
+                'user_id' => $userToNotify->id,
+                'returnedBook_id' => $notification->id,
+            ]);
+            $userNotification->save();
+        }
+
         // Find the related TimeDuration record
         $timeDuration = TimeDuration::where('accepted_request_id', $id)->first();
 
@@ -237,6 +296,13 @@ class AcceptRequestController extends Controller
 
         return redirect()->back()->with('success', 'Returned successfully');
     }
+
+
+
+
+
+
+
 
 
 

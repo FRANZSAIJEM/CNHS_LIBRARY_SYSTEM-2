@@ -46,6 +46,11 @@
                 <input placeholder="ISBN" class="modalInput rounded-lg" type="text" id="isbn" name="isbn" required value="{{ $book->isbn }}">
             </div> <br>
 
+            <div>
+                <label for="publish"><b><i class="fa-solid fa-code-compare"></i> Publish</b></label><br>
+                <input placeholder="Publish" class="modalInput rounded-lg" type="text" id="publish" name="publish" required value="{{ $book->publish }}">
+            </div> <br>
+
         <div  class="overflow-hidden">
             <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
             <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required>{{$book->description}}</textarea>

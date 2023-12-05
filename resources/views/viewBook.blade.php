@@ -35,6 +35,9 @@
                         <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 410px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" ></div>
                     @endif
 
+                    <div class="p-1 text-white" style="transform: translateY(-45px); background-color: rgba(0, 0, 0, 0.5)">
+                        <b>Published:</b> {{$book->publish}}
+                    </div>
                </div>
 
                 <div class="marginTwo" style="width: 250px;">
@@ -305,29 +308,50 @@
                             @endif
 
                             @elseif (!$userHasAcceptedRequestForReturnedBook && $user->hasAcceptedRequestForBook($book->id))
-                                <button class="your-button-class"
+
+                            <button class="your-button-class"
                                     onclick="showConfirmationModal({{ $book->id }})"
                                     type="submit"
-
-
                                     @if (!$user->hasAcceptedRequestForBook($book->id) || $user->hasAcceptedBook() || !$bookReturnStatus)
                                         disabled style="color: black;"
                                     @endif
-                                    >
-
-
-
-                                    @if (!auth()->user()->hasAcceptedRequestForBook($book->id))
+                            >
+                                @if (!auth()->user()->hasAcceptedRequestForBook($book->id))
                                     <i class="fa-solid fa-person-walking-arrow-loop-left"></i> Reserved
-                                    @else
-                                        @if (!empty($book->requestedByUsers) && count($book->requestedByUsers) > 0)
+                                @else
+                                    @if (!empty($book->requestedByUsers) && count($book->requestedByUsers) > 0)
                                         <i class="fa-solid fa-person-walking-arrow-loop-left"></i> Reserved by {{ $book->requestedByUsers[0]->name }}
+                                    @else
+                                        @php
+                                            $acceptedRequest = $book->acceptedRequests->first(); // Get the first accepted request
+                                        @endphp
+                                        <i class="fa-solid fa-person-walking-arrow-loop-left"></i>
+                                        @if ($acceptedRequest)
+                                            Borrowed by: {{ $acceptedRequest->user->name }} <br> <br>
+                                            @php
+
+                                            $carbonDate3 = \Carbon\Carbon::parse($acceptedRequest->date_return);
+                                            $carbonDate4 = \Carbon\Carbon::parse($acceptedRequest->date_pickup);
+
+
+                                            $formattedDate3 = $carbonDate3->format('l, F jS, Y');
+                                            $formattedDate4 = $carbonDate4->format('l, F jS');
+
+                                        @endphp
+                                            <div class="bg-green-200 p-3 rounded-lg text-slate-500 shadow-lg" style="font-size: 15px;">
+                                                This book will return between {{$formattedDate4}} and {{ $formattedDate3 }}
+                                            </div>
 
                                         @else
-                                        <i class="fa-solid fa-person-walking-arrow-loop-left"></i> Reserve
+                                            <i class="fa-solid fa-person-walking-arrow-loop-left"></i> Reserve
                                         @endif
                                     @endif
-                                </button>
+                                @endif
+                            </button>
+
+
+
+
                         @else
                             <i class="fa-solid fa-code-pull-request"></i> Request
                         @endif

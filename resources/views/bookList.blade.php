@@ -39,7 +39,7 @@ $borrowCount = BorrowCount::first();
                         </div>
 
                     </form>
-                    @if (!Auth::user()->is_admin)
+
                     <form action="{{ route('bookList') }}" method="GET" class="search-bar">
                         <div class="flex justify-center flex-wrap mb-3" style="font-size: 15px;">
                             <button type="submit" name="letter_filter" value="" class="bg-slate-200 hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-lg me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}"><b>All</b></button>
@@ -53,7 +53,7 @@ $borrowCount = BorrowCount::first();
                             <input type="hidden" name="book_search" value="{{ request()->input('book_search') }}">
                         </div>
                     </form>
-                    @endif
+
 
                     <button>
                         @if (!Auth::user()->is_admin)
@@ -61,13 +61,6 @@ $borrowCount = BorrowCount::first();
                         @endif
                     </button>
                 </div>
-
-                {{-- option A-Z filter --}}
-
-
-
-                {{-- <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px;"><i class="fa-solid fa-search"></i></button> --}}
-
 
                 <div id="defaultFineForm" style="display: none; position: absolute; right: 0; top: 50; transform: translateX(-45px) translateY(45px);">
                     <div class="p-5 rounded-lg shadow-md bg-slate-50">
@@ -83,6 +76,10 @@ $borrowCount = BorrowCount::first();
                     </div>
                 </div>
 
+                <div class="flex justify-start">
+                    <button style="margin-bottom: -40px;" class="bg-slate-500 hover:bg-slate-600 duration-100 pe-3 ps-3 p-2 me-2 ms-2 rounded-lg text-white" onclick="toggleStyle('cardBookStyle')"><i class="fa-regular fa-hard-drive"></i></button>
+                    <button style="margin-bottom: -40px;" class="bg-slate-500 hover:bg-slate-600 duration-100 pe-3 ps-3 p-2 me-2 ms-2 rounded-lg text-white" onclick="toggleStyle('defaultBookStyle')"><i class="fa-solid fa-list"></i></button>
+                </div>
                 @if (Auth::user()->is_admin)
                 <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
                 <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
@@ -94,10 +91,56 @@ $borrowCount = BorrowCount::first();
 
        <div style="">
 
-            <div class="bookCenter">
+            <!-- Default Book Style Section -->
+            <div class="defaultBookStyle" style="display: none;">
+                <div class="">
+                    <div class="">
+                        <!-- Loop through your books and apply the default style -->
+                        <div style="display: flex; flex-wrap: wrap;" class="flex justify-start">
+                            @foreach ($bookListsDefault as $bookLists)
+                                <div style="flex: 1; margin: 10px;">
+                                    <a class="hover-effect" href="{{ route('viewBook', ['id' => $bookLists->id]) }}" style="text-decoration: none;">
+                                        <div class="hover-effect bg-orange-200 p-3 mb-5 shadow-lg" style="border-radius: 5px; width: 260px; height: 300px;">
+                                                <b class=""><i class="fa-solid fa-font"></i> Title: {{$bookLists->title}}</b> <br> <hr style="border: 1pt solid rgb(151, 151, 151);"> <br>
+                                                <b class=""><i class="fa-solid fa-user"></i> Author: {{$bookLists->author}}</b> <br> <hr style="border: 1pt solid rgb(151, 151, 151);"> <br>
+                                                <b class=""><i class="fa-solid fa-bars"></i> Subject: {{$bookLists->subject}}</b> <br> <hr style="border: 1pt solid rgb(151, 151, 151);"> <br>
+
+                                        </div>
+                                        @if (Auth::user()->is_admin)
+                                        <div class="flex" style="text-align: center; margin-top: 4px; transform: translateY(-75px);">
+                                            <form action="{{ route('editBook.edit', ['id' => $bookLists->id]) }}" method="GET" style="display: inline;">
+                                                @csrf
+                                                <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="width: 123px !important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit</b></button>
+                                            </form>
+
+                                            <!-- Button to trigger the modal -->
+                                            <button class="text-red-600 hover:text-red-700 duration-100" type="button" style="width: 123px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal({{ $bookLists->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
+                                        </div>
+                                        @endif
+                                    </a>
+                                </div>
+
+                            @endforeach
+                        </div>
+
+                    </div>
+                </div>
+                <div style="display: grid; place-content: center;">
+
+                    <div class="pagination">
+                        {{ $bookListsDefault->links() }}
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+            <div class="bookCenter cardBookStyle" >
                 <div class="bookDisplay flex flex-wrap">
-                    @foreach ($bookList as $bookLists)
-                    <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px; ">
+                    @foreach ($bookListsCard as $bookLists)
+                    <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px; transform: translateX(-50px);">
                         <a href="{{ route('viewBook', ['id' => $bookLists->id]) }}" style="text-decoration: none;">
                             <div class="bookImage" style="background-position: center center; border-radius: 5px; background-size: cover; background-image: url('{{ asset('storage/' . $bookLists->image) }}');">
                                 <div style="color: white; text-align: center; padding: 10px; text-shadow: 0px 0px 5px black">
@@ -127,16 +170,21 @@ $borrowCount = BorrowCount::first();
                 @endforeach
 
                 </div>
+
+                <div style="display: grid; place-content: center;">
+
+                    <div class="pagination">
+                        {{ $bookListsCard->links() }}
+                    </div>
+
+                </div>
             </div>
 
 
-       <div style="display: grid; place-content: center;">
 
-        <div class="pagination">
-            {{ $bookList->links() }}
-        </div>
 
-       </div>
+
+
 
 
        </div>
@@ -188,6 +236,11 @@ $borrowCount = BorrowCount::first();
                         <div>
                             <label for="isbn"><b><i class="fa-solid fa-code-compare"></i> ISBN</b></label><br>
                             <input placeholder="ISBN" class="modalInput rounded-lg" type="text" id="isbn" name="isbn" required>
+                        </div> <br>
+
+                        <div>
+                            <label for="publish"><b><i class="fa-solid fa-code-compare"></i> Publish</b></label><br>
+                            <input placeholder="Publish" class="modalInput rounded-lg" type="text" id="publish" name="publish" required>
                         </div> <br>
 
                         <div class="overflow-hidden">
@@ -251,6 +304,13 @@ $borrowCount = BorrowCount::first();
        <div id="loading-bar" class="loading-bar"></div>
 </div>
 <style>
+     .hover-effect {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .hover-effect:hover {
+        transform: scale(1.1);
+    }
 
     .success-message-container {
         position: fixed;
@@ -372,6 +432,32 @@ $borrowCount = BorrowCount::first();
     }
 </style>
 <script>
+
+  // Check for the user's preferred style in local storage
+  const userPreferredStyle = localStorage.getItem('userPreferredStyle');
+
+// Set the initial style based on the user's preference or default to 'defaultBookStyle'
+const initialStyle = userPreferredStyle || 'defaultBookStyle';
+
+// Call the toggleStyle function with the initial style
+toggleStyle(initialStyle);
+
+function toggleStyle(style) {
+    const defaultBookStyle = document.querySelector('.defaultBookStyle');
+    const cardBookStyle = document.querySelector('.cardBookStyle');
+
+    if (style === 'defaultBookStyle') {
+        defaultBookStyle.style.display = 'block';
+        cardBookStyle.style.display = 'none';
+    } else {
+        defaultBookStyle.style.display = 'none';
+        cardBookStyle.style.display = 'block';
+    }
+
+    // Store the user's preferred style in local storage
+    localStorage.setItem('userPreferredStyle', style);
+}
+
 
 document.getElementById('showFormButton').addEventListener('click', function() {
         var form = document.getElementById('defaultFineForm');

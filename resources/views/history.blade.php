@@ -23,6 +23,40 @@
 
             <div>
                 <div id="cardView" class="view-container"> <br> <br>
+
+                @foreach ($returnHistorys as $returnHistory)
+                @php
+                    $carbonDate1 = \Carbon\Carbon::parse($returnHistory->created_at);
+                    $formattedDate1 = $carbonDate1->format('l, F jS, Y');
+                @endphp
+                <div class="flex justify-between p-5 mb-5 rounded-md shadow-md bg-white dark:bg-dark-eval-1">
+                    <div class="historyList">
+                        <div>
+                        <!-- Display the notification text -->
+                        {{ $returnHistory->returnedBook->notification_text }}
+
+                        on {{ $formattedDate1 }}
+                        </div> <br>
+                        <div class="me-5">
+                            <h6 class="me-3 text-right" style="font-size: 13px;"></h6>
+                            {{ \Carbon\Carbon::parse( $returnHistory->created_at )->shortRelativeDiff() }}
+
+                        </div>
+                    </div>
+                    <div>
+                        <form action="{{ route('clearReturnedNotification', ['id' => $returnHistory->id]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button class="text-slate-600 p-3 rounded mt-3 hover:text-slate-900 duration-100 w-20" type="submit"><i class="fa-solid fa-xmark"></i></button>
+                        </form>
+                    </div>
+                </div>
+                @endforeach
+
+
+
+
+
                 @if (count($userNotifications) > 0)
                 @foreach ($userNotifications as $userNotification)
                 @php
@@ -37,6 +71,7 @@
 
                                 on {{ $formattedDate1 }}
                             </div> <br>
+
                             <div class="me-5">
                                 <h6 class="me-3 text-right" style="font-size: 13px;"></h6>
                                 {{ \Carbon\Carbon::parse( $userNotification->created_at )->shortRelativeDiff() }}
@@ -53,13 +88,19 @@
                                 <button class="text-slate-600 p-3 rounded mt-3 hover:text-slate-900 duration-100 w-20" type="submit"><i class="fa-solid fa-xmark"></i></button>
                             </form>
                         </div>
+
                     </div>
             @endforeach
             @else
                 <!-- Message for no notifications in history -->
                 <p>You have no history.</p>
             @endif
+
+
             </div>
+
+
+
         </div>
 
         </div>
@@ -202,33 +243,6 @@ function toggleView(view) {
     }
 }
 
-
-
-// document.addEventListener('DOMContentLoaded', function() {
-//         var calendarEl = document.getElementById('calendar');
-
-//         var calendar = new FullCalendar.Calendar(calendarEl, {
-//             plugins: ['dayGrid'],
-//             events: [
-//                 { title: 'Test Event', start: '2023-11-30' }, // Replace with your actual date
-//             ],
-//             eventRender: function(info) {
-//                 console.log(info.event); // Log event data for debugging
-//                 var dot = document.createElement('div');
-//                 dot.className = 'event-dot';
-//                 info.el.appendChild(dot);
-//             },
-//             // Other calendar options and configurations
-//         });
-
-//         calendar.render();
-//     });
-
-
-
-
-
-
 // JavaScript to show and hide the loading bar
 window.addEventListener('beforeunload', function () {
   document.getElementById('loading-bar').style.width = '100%';
@@ -243,6 +257,8 @@ window.addEventListener('load', function () {
 
 // Extracted data from the Blade template
 const userNotifications = @json($userNotifications);
+
+
 function createCalendar(year, month) {
   const calendar = document.getElementById('calendar');
   const currentDate = new Date(year, month - 1, 1);
@@ -383,22 +399,23 @@ header.appendChild(nextMonthButton);
           );
         });
 
+
         if (notificationsForDay.length > 0) {
-    // Display all notifications in the cell
-    const notificationList = document.createElement('ul');
-    notificationList.style.listStyle = 'none';
-    notificationsForDay.forEach(notification => {
-    const listItem = document.createElement('li');
-    listItem.textContent = notification.notification.notification_text;
-    listItem.style.marginBottom = '20px'; // Add margin between notifications
-    listItem.style.fontSize = '12px'; // Adjust font size
-    listItem.style.backgroundColor = 'gray'; // Adjust font size
-    listItem.style.borderRadius = '10px'; // Adjust font size
-    listItem.style.color = 'white'; // Adjust font size
-    listItem.style.padding = '10px'; // Adjust font size
+        // Display all notifications in the cell
+        const notificationList = document.createElement('ul');
+        notificationList.style.listStyle = 'none';
+        notificationsForDay.forEach(notification => {
+        const listItem = document.createElement('li');
+        listItem.textContent = notification.notification.notification_text;
+        listItem.style.marginBottom = '20px'; // Add margin between notifications
+        listItem.style.fontSize = '12px'; // Adjust font size
+        listItem.style.backgroundColor = 'gray'; // Adjust font size
+        listItem.style.borderRadius = '10px'; // Adjust font size
+        listItem.style.color = 'white'; // Adjust font size
+        listItem.style.padding = '10px'; // Adjust font size
 
 
-    notificationList.appendChild(listItem);
+        notificationList.appendChild(listItem);
   });
 
 
@@ -406,7 +423,7 @@ header.appendChild(nextMonthButton);
  // Toggle button
 const toggleButton = document.createElement('button');
 
-toggleButton.textContent = 'View Detail';
+toggleButton.textContent = 'View Borrower';
 toggleButton.style.borderRadius = '10px';
 toggleButton.style.marginLeft = '10px';
 
@@ -467,6 +484,10 @@ document.body.appendChild(toggleButton);
   calendar.appendChild(header);
   calendar.appendChild(table);
 }
+
+
+
+
 
 
 
@@ -629,6 +650,9 @@ function toggleNotifications(td) {
     dot.style.display = 'block';
   }
 }
+
+
+
 
 
 

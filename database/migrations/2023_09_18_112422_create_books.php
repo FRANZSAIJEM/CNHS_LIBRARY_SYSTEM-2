@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('isbn');
             $table->string('description');
+            $table->string('publish');
             $table->string('image')->nullable();
             $table->timestamps();
 

@@ -39,9 +39,15 @@ class BookListController extends Controller
             }
         }
 
-        $bookLists = $query->paginate(4);
 
-        return view('bookList', ['bookList' => $bookLists, 'bookRequestCount' => $bookRequestCount]);
+        $bookListsDefault = $query->paginate(35);
+        $bookListsCard = $query->paginate(4);
+
+
+        return view('bookList', [
+            'bookListsDefault' => $bookListsDefault,
+            'bookListsCard' => $bookListsCard,
+            'bookRequestCount' => $bookRequestCount]);
     }
 
 

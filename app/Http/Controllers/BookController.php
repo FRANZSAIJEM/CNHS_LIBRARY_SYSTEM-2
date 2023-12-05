@@ -37,6 +37,7 @@ class BookController extends Controller
             'availability' => 'required|in:Available,Not Available',
             'status' => 'required|in:Good,Damage,Lost',
             'isbn' => 'required|max:255',
+            'publish' => 'required|max:255',
             'description' => 'required|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
 
@@ -73,6 +74,7 @@ class BookController extends Controller
             'availability' => 'required|in:Available,Not Available',
             'status' => 'required|in:Good,Damage,Lost',
             'isbn' => 'required|max:255',
+            'publish' => 'required|max:255',
             'description' => 'required|max:255',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // 'sometimes' allows the image to be optional
             // Add validation rules for other fields as needed

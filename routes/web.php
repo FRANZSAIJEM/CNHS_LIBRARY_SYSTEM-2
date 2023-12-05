@@ -146,6 +146,8 @@ Route::post('/returnBook/{id}', [AcceptRequestController::class , 'returnBook'])
 
 
 Route::delete('/clearNotification/{id}', [AcceptRequestController::class, 'clearNotification'])->name('clearNotification');
+Route::delete('/clearReturnedNotification/{id}', [AcceptRequestController::class, 'clearReturnedNotification'])->name('clearReturnedNotification');
+
 
 Route::get('/notifications', [AcceptRequestController::class, 'notifications'])->name('notifications');
 

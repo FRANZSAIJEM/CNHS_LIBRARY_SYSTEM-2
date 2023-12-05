@@ -17,6 +17,7 @@ class book extends Model
         'status',
         'isbn',
         'description',
+        'publish',
         'image',
     ];
 

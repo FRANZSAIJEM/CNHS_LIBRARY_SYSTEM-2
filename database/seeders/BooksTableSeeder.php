@@ -23,7 +23,7 @@ class BooksTableSeeder extends Seeder
                 'subject' => $faker->word,
                 'availability' => $faker->randomElement(['Available', 'Not Available']),
                 'status' => $faker->randomElement(['Good', 'Damage']),
-
+                'publish' => $faker->sentence,
                 'isbn' => $faker->isbn13,
                 'description' => $faker->paragraph,
                 'image' => 'storage/Other.png', // You can set a default image path here.
