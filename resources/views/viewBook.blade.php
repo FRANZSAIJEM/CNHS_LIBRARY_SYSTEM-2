@@ -4,14 +4,14 @@
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
-                <i class="fa-solid fa-eye"></i> {{ __('View Book') }}
+                <a href="javascript:void(0);" onclick="goBack()" class="rounded-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold"><i class="fa-solid fa-chevron-left"></i> Back</a>/ <i class="fa-solid fa-eye"></i> {{ __('View Book') }}
             </h2>
 
         </div>
     </x-slot>
 
 <div style="display: grid; place-content: center;" class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-    <a href="{{ route('bookList') }}" class="rounded-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold"><i class="fa-solid fa-chevron-left"></i> Back</a>
+
 
     <div style="display: grid; place-items: center;">
         @if(session('success'))
@@ -32,12 +32,23 @@
             <div class="viewFlex rounded-md mb-5">
                <div class="marginTwo">
                     @if (isset($book))
-                        <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 410px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" ></div>
+                        <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 410px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" >
+
+                        </div>
+
                     @endif
 
                     <div class="p-1 text-white" style="transform: translateY(-45px); background-color: rgba(0, 0, 0, 0.5)">
                         <b>Published:</b> {{$book->publish}}
                     </div>
+                    @if (Auth::user()->is_admin)
+                            <form action="{{ route('editBook.edit', ['id' => $book->id]) }}" method="GET" style="display: inline;">
+                                @csrf
+                                <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="!important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit Book</b></button>
+                            </form>
+                            <button class="text-red-600 hover:text-red-700 duration-100" type="button" style=" border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDelete({{ $book->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
+
+                        @endif
                </div>
 
                 <div class="marginTwo" style="width: 250px;">
@@ -289,7 +300,6 @@
 
 
 
-
     <div style="display: grid; place-content: center;" class="mt-5">
         @if (!Auth::user()->is_admin)
             <div >
@@ -421,6 +431,36 @@
         </div>
     </div>
 
+  {{-- Delete Modal --}}
+  <div id="confirmDeleteModalDelete" style="margin-top: 50px; overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+    <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
+
+        <div class="flex justify-between">
+            <h2><b><i class="fa-solid fa-address-book"></i> Delete Book</b></h2>
+            <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationModalDelete()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <hr> <br>
+        <p>Are you sure you want to delete this book?</p>
+        <br>
+        <hr> <br>
+        <div class="">
+               <div class="flex justify-end">
+                <button class="rounded-lg p-4  text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModalDelete()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+
+                <form action="{{ route('bookList.destroy', ['id' => '__BOOK_ID__']) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button class="rounded-lg p-4  text-red-600 hover:text-red-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-trash"></i>  Confirm</button>
+                </form>
+               </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
     {{-- Loading Screen --}}
     <div id="loading-bar" class="loading-bar"></div>
 
@@ -469,6 +509,9 @@
         transition: width 3s linear;
     }
 
+    .modalWidth{
+        width: 600px;
+    }
     .justDescription{
         width: 600px;
     }
@@ -511,6 +554,9 @@
         .comments{
         width: 480px;
     }
+    .modalWidth{
+            width: 550px;
+        }
         .forcomments{
         width: 500px;
     }
@@ -538,6 +584,9 @@
         .replies{
         width: 245px;
     }
+    .modalWidth{
+            width: 300px;
+        }
         .comments{
         width: 255px;
     }
@@ -576,6 +625,30 @@
 </style>
 
 <script>
+
+function showConfirmationModalDelete(bookId) {
+            var modal = document.getElementById('confirmDeleteModalDelete');
+            modal.style.display = 'block';
+
+            // Set the action of the form to include the specific book's ID
+            var form = modal.querySelector('form');
+            form.action = form.action.replace('__BOOK_ID__', bookId);
+        }
+
+
+        function hideConfirmationModalDelete() {
+
+            var modal2 = document.getElementById('confirmDeleteModalDelete');
+            modal2.style.display = 'none';
+
+        }
+
+
+
+
+     function goBack() {
+        window.history.back();
+    }
     function showConfirmationModal(bookId) {
             var modal = document.getElementById('confirmDeleteModal');
             modal.style.display = 'block';

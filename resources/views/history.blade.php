@@ -33,7 +33,7 @@
                     <div class="historyList">
                         <div>
                         <!-- Display the notification text -->
-                        {{ $returnHistory->returnedBook->notification_text }}
+                        {{ $returnHistory->notification->notification_text }}
 
                         on {{ $formattedDate1 }}
                         </div> <br>
@@ -257,6 +257,8 @@ window.addEventListener('load', function () {
 
 // Extracted data from the Blade template
 const userNotifications = @json($userNotifications);
+const returnHistorys = @json($returnHistorys);
+
 
 
 function createCalendar(year, month) {
@@ -400,11 +402,26 @@ header.appendChild(nextMonthButton);
         });
 
 
-        if (notificationsForDay.length > 0) {
-        // Display all notifications in the cell
-        const notificationList = document.createElement('ul');
-        notificationList.style.listStyle = 'none';
-        notificationsForDay.forEach(notification => {
+
+        // Check if there are notifications for this day
+        const notificationsForDayReturn = returnHistorys.filter(notification => {
+          const notificationDate = new Date(notification.created_at);
+          return (
+            notificationDate.getDate() === day &&
+            notificationDate.getMonth() === currentDate.getMonth() &&
+            notificationDate.getFullYear() === currentDate.getFullYear()
+          );
+        });
+
+
+
+// Check if notificationsForDay has notifications
+if (notificationsForDay.length > 0) {
+    // Display all notifications in the cell
+    const notificationList = document.createElement('ul');
+    notificationList.style.listStyle = 'none';
+
+    notificationsForDay.forEach(notification => {
         const listItem = document.createElement('li');
         listItem.textContent = notification.notification.notification_text;
         listItem.style.marginBottom = '20px'; // Add margin between notifications
@@ -414,59 +431,117 @@ header.appendChild(nextMonthButton);
         listItem.style.color = 'white'; // Adjust font size
         listItem.style.padding = '10px'; // Adjust font size
 
+        notificationList.appendChild(listItem);
+    });
+
+    // Toggle button for Borrower
+    const toggleButton = document.createElement('button');
+    toggleButton.textContent = 'View Borrower';
+    toggleButton.style.borderRadius = '10px';
+    toggleButton.style.marginLeft = '10px';
+
+    toggleButton.addEventListener('click', () => {
+        toggleNotifications(td);
+    });
+
+    // Hover effect for Borrower button
+    toggleButton.style.transition = 'background-color 0.3s';
+    toggleButton.style.backgroundColor = 'initial';
+
+    toggleButton.addEventListener('mouseover', () => {
+        toggleButton.style.backgroundColor = '#ccc'; // Adjust the background color on hover
+    });
+
+    toggleButton.addEventListener('mouseout', () => {
+        toggleButton.style.backgroundColor = 'initial';
+    });
+
+    // Append the Borrower button to the document
+    document.body.appendChild(toggleButton);
+
+    // Hide the notification list by default
+    notificationList.style.display = 'none';
+
+    // Add the Borrower button and notification list to the cell
+    td.appendChild(toggleButton);
+    td.appendChild(notificationList);
+
+    // Add a dot to indicate data
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    td.appendChild(dot);
+}
+
+
+
+// Check if notificationsForDay has notifications
+if (notificationsForDayReturn.length > 0) {
+    // Display all notifications in the cell
+    const notificationList = document.createElement('ul');
+    notificationList.style.listStyle = 'none';
+
+    notificationsForDayReturn.forEach(notification => {
+        const listItem = document.createElement('li');
+        listItem.textContent = notification.notification.notification_text;
+        listItem.style.marginBottom = '20px'; // Add margin between notifications
+        listItem.style.fontSize = '12px'; // Adjust font size
+        listItem.style.backgroundColor = 'gray'; // Adjust font size
+        listItem.style.borderRadius = '10px'; // Adjust font size
+        listItem.style.color = 'white'; // Adjust font size
+        listItem.style.padding = '10px'; // Adjust font size
 
         notificationList.appendChild(listItem);
-  });
+    });
 
+    // Toggle button for Borrower
+    const toggleButton = document.createElement('button');
+    toggleButton.textContent = 'View Returner';
+    toggleButton.style.borderRadius = '10px';
+    toggleButton.style.marginLeft = '10px';
 
+    toggleButton.addEventListener('click', () => {
+        toggleNotificationsReturn(td);
+    });
 
- // Toggle button
-const toggleButton = document.createElement('button');
+    // Hover effect for Borrower button
+    toggleButton.style.transition = 'background-color 0.3s';
+    toggleButton.style.backgroundColor = 'initial';
 
-toggleButton.textContent = 'View Borrower';
-toggleButton.style.borderRadius = '10px';
-toggleButton.style.marginLeft = '10px';
+    toggleButton.addEventListener('mouseover', () => {
+        toggleButton.style.backgroundColor = '#ccc'; // Adjust the background color on hover
+    });
 
-toggleButton.addEventListener('click', () => {
-  toggleNotifications(td);
-});
+    toggleButton.addEventListener('mouseout', () => {
+        toggleButton.style.backgroundColor = 'initial';
+    });
 
-// Add hover effect
-toggleButton.style.transition = 'background-color 0.3s';
-toggleButton.style.backgroundColor = 'initial';
+    // Append the Borrower button to the document
+    document.body.appendChild(toggleButton);
 
-toggleButton.addEventListener('mouseover', () => {
-  toggleButton.style.backgroundColor = '#ccc'; // Adjust the background color on hover
-});
+    // Hide the notification list by default
+    notificationList.style.display = 'none';
 
-toggleButton.addEventListener('mouseout', () => {
-  toggleButton.style.backgroundColor = 'initial';
-});
+    // Add the Borrower button and notification list to the cell
+    td.appendChild(toggleButton);
+    td.appendChild(notificationList);
 
-// Append the button to the document
-document.body.appendChild(toggleButton);
-
-
-  // Hide the notification list by default
-  notificationList.style.display = 'none';
-
-  // Add the toggle button and notification list to the cell
-  td.appendChild(toggleButton);
-  td.appendChild(notificationList);
-
-  // Add a dot to indicate data
-  const dot = document.createElement('div');
-  dot.className = 'dot';
-  td.appendChild(dot);
+    // Add a dot to indicate data
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    td.appendChild(dot);
 }
-        if (
-          day === new Date().getDate() &&
-          currentDate.getMonth() === new Date().getMonth() &&
-          currentDate.getFullYear() === new Date().getFullYear()
-        ) {
-          // Highlight today's date
-          td.classList.add('today');
-        }
+
+
+
+
+
+
+
+
+if (day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear())
+    {
+        td.classList.add('today');
+    }
         day++;
       }
       tr.appendChild(td);
@@ -492,9 +567,6 @@ document.body.appendChild(toggleButton);
 
 
 
-
-
-
 // Create a card element
 const notificationCard = document.createElement('div');
 notificationCard.className = 'notification-card';
@@ -508,13 +580,15 @@ notificationCard.style.borderRadius = '5px';
 notificationCard.style.marginTop = '150px';
 notificationCard.style.boxShadow = 'rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px';
 
+
 // Append the card to the document
 document.body.appendChild(notificationCard);
+
 
 // Add this code for the animation
 function toggleNotifications(td) {
   const dot = td.querySelector('.dot');
-  const notificationsForDay = getNotificationsForDay(td); // Replace with your logic to get notifications for the clicked day
+  const notificationsForDay = getNotificationsForDay(td);
 
   if (notificationsForDay.length > 0) {
     // Populate the card with notifications
@@ -617,6 +691,10 @@ function toggleNotifications(td) {
       notificationCard.appendChild(listItem);
     });
 
+
+
+
+
     // Show the card with animation
     notificationCard.style.display = 'block';
     notificationCard.style.transform = 'scale(0)'; // Set initial scale
@@ -654,6 +732,171 @@ function toggleNotifications(td) {
 
 
 
+// Create a card element for return
+const notificationCardReturn = document.createElement('div');
+notificationCardReturn.className = 'notification-card';
+notificationCardReturn.style.display = 'none'; // Hide the card by default
+notificationCardReturn.style.position = 'absolute';
+notificationCardReturn.style.zIndex = '1';
+notificationCardReturn.style.backgroundColor = 'white';
+notificationCardReturn.style.padding = '10px';
+notificationCardReturn.style.border = '1px solid #ccc';
+notificationCardReturn.style.borderRadius = '5px';
+notificationCardReturn.style.marginTop = '150px';
+notificationCardReturn.style.boxShadow = 'rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px';
+// Append the card to the document
+document.body.appendChild(notificationCardReturn);
+
+
+
+
+
+// Add this code for the animation
+function toggleNotificationsReturn(td) {
+  const dot = td.querySelector('.dot');
+  const notificationsForDayReturn = getNotificationsForDayReturn(td);
+
+
+  if (notificationsForDayReturn.length > 0) {
+    // Populate the card with notifications
+    notificationCardReturn.innerHTML = '';
+
+    // Get the date of the clicked cell
+    const day = parseInt(td.textContent);
+    const currentDate = new Date();
+    currentDate.setDate(day);
+
+     // Set the header with the date of the clicked cell
+     const dayOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const headerText = `${currentDate.getDate()} ${dayOfWeek[currentDate.getDay()]}`;
+
+    // Header element
+    const header = document.createElement('div');
+    header.style.fontWeight = 'bold';
+    header.style.marginBottom = '10px';
+    header.style.textAlign = 'center';
+    header.style.fontSize = '30px';
+    header.textContent = headerText;
+    notificationCardReturn.appendChild(header);
+
+
+    // Close button container
+    const closeButtonContainer = document.createElement('div');
+    closeButtonContainer.style.display = 'flex';
+    closeButtonContainer.style.justifyContent = 'flex-end'; // Align items to the right
+
+
+
+
+    // Close button
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.style.marginBottom = '10px';
+    closeButton.style.padding = '5px 10px';
+
+    closeButton.style.border = 'none';
+    closeButton.style.borderRadius = '10px';
+    closeButton.style.cursor = 'pointer';
+
+    // Hover effect styles
+    closeButton.addEventListener('mouseover', () => {
+        closeButton.style.backgroundColor = '#ccc';
+        closeButton.style.transition = '0.2s';
+
+    });
+
+    closeButton.addEventListener('mouseout', () => {
+    closeButton.style.backgroundColor = 'transparent';
+    closeButton.style.transition = '0.2s';
+
+    });
+
+
+
+
+    // Add an event listener to the close button
+    closeButton.addEventListener('click', () => {
+    // Hide the card with animation when the close button is clicked
+    notificationCardReturn.style.transform = 'scale(0)';
+    notificationCardReturn.classList.remove('notification-card-enter');
+
+    // Set a timeout to hide the card after the animation is complete
+    setTimeout(() => {
+        notificationCardReturn.style.display = 'none';
+    }, 300); // 300 milliseconds is the duration of the animation
+
+    // Clear the content
+    notificationCardReturn.innerHTML = '';
+    });
+
+    closeButton.addEventListener('click', () => {
+      // Hide the card with animation when the close button is clicked
+      notificationCardReturn.style.transform = 'scale(0)';
+      notificationCardReturn.classList.remove('notification-card-enter');
+      // Set a timeout to hide the card after the animation is complete
+      setTimeout(() => {
+        notificationCardReturn.style.display = 'none';
+      }, 300); // 300 milliseconds is the duration of the animation
+      // Clear the content
+      notificationCardReturn.innerHTML = '';
+    });
+        // Append the close button to its container
+    closeButtonContainer.appendChild(closeButton)
+    // Append the close button container to the card
+    notificationCardReturn.appendChild(closeButtonContainer);
+
+
+    notificationsForDayReturn.forEach(notification => {
+      const listItem = document.createElement('div');
+      listItem.textContent = notification.notification.notification_text;
+      listItem.style.marginBottom = '10px'; // Add margin between notifications
+      listItem.style.fontSize = '15px'; // Adjust font size
+      listItem.style.backgroundColor = 'gray'; // Adjust background color
+      listItem.style.borderRadius = '10px'; // Adjust border radius
+      listItem.style.color = 'white'; // Adjust text color
+      listItem.style.padding = '10px'; // Adjust padding
+
+      notificationCardReturn.appendChild(listItem);
+    });
+
+
+
+
+    // Show the card with animation
+    notificationCardReturn.style.display = 'block';
+    notificationCardReturn.style.transform = 'scale(0)'; // Set initial scale
+
+    // Center the card on the screen
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    const cardWidth = notificationCardReturn.offsetWidth;
+    const cardHeight = notificationCardReturn.offsetHeight;
+
+    notificationCardReturn.style.top = `${(screenHeight - cardHeight) / 2}px`;
+    notificationCardReturn.style.left = `${(screenWidth - cardWidth) / 2}px`;
+
+    notificationCardReturn.classList.add('notification-card-enter');
+
+    // Set a timeout to remove the class after the animation is complete
+    setTimeout(() => {
+      notificationCardReturn.classList.remove('notification-card-enter');
+    }, 300); // 300 milliseconds is the duration of the animation
+
+    // Apply final scale with transition
+    notificationCardReturn.style.transform = 'scale(1)';
+
+    dot.style.display = 'none';
+  } else {
+    // Hide the card with animation
+    notificationCardReturn.style.transform = 'scale(0)';
+    notificationCardReturn.style.display = 'none';
+    notificationCardReturn.classList.remove('notification-card-enter');
+    dot.style.display = 'block';
+  }
+}
+
+
 
 
 
@@ -681,6 +924,25 @@ function getNotificationsForDay(td) {
   });
 
   return notificationsForDay;
+}
+
+
+function getNotificationsForDayReturn(td) {
+  // Extract date information from the clicked cell
+  const day = parseInt(td.textContent, 10); // Assuming the day is present in the cell content
+  const currentDate = new Date(); // Get the current date for the month and year
+
+  // Filter userNotifications for the clicked day
+  const notificationsForDayReturn = returnHistorys.filter(notification => {
+    const notificationDate = new Date(notification.created_at);
+    return (
+      notificationDate.getDate() === day &&
+      notificationDate.getMonth() === currentDate.getMonth() &&
+      notificationDate.getFullYear() === currentDate.getFullYear()
+    );
+  });
+
+  return notificationsForDayReturn;
 }
 
 

@@ -2,12 +2,14 @@
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
-                <i class="fa-solid fa-edit"></i> {{ __('Edit Book') }}
+                <a href="javascript:void(0);" onclick="goBack()" class="rounded-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold"><i class="fa-solid fa-chevron-left"></i> Back</a>/ <i class="fa-solid fa-edit"></i> {{ __('Edit Book') }}
             </h2>
         </div>
     </x-slot>
 
 <div style="display: grid; place-content: center;">
+
+
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <form action="{{ route('updateBook.update', ['id' => $book->id]) }}" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column;">
             @csrf
@@ -132,6 +134,9 @@
 </style>
 
 <script>
+        function goBack() {
+        window.history.back();
+    }
     const textarea = document.getElementById('description');
     const charCount = document.getElementById('charCount');
     const maxChars = 255;

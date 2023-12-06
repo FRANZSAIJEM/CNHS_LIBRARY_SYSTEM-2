@@ -20,7 +20,7 @@ class ReturnedBookNotification extends Model
         return $this->belongsTo(Book::class, 'book_id');
     }
 
-    public function returnedBook()
+    public function notification()
     {
         return $this->belongsTo(returnedBook::class, 'returnedBook_id');
     }

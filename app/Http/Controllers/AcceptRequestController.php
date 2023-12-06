@@ -162,7 +162,7 @@ class AcceptRequestController extends Controller
 
 
         $returnHistorys = ReturnedBookNotification::where('user_id', $user->id)
-            ->with('returnedBook')
+            ->with('notification')
             ->orderBy('created_at', 'desc')
             ->get();
 

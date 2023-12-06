@@ -130,34 +130,63 @@
 
                 <div class="container mx-auto p-4">
                     <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Total books, And Their Condition, Status, And Availabilty.</h1>
+                    
+                    <table class="min-w-full border border-gray-300 text-center">
+                        <tbody>
+                            <tr>
+                                <th class="py-2 px-4 border-b">Attribute</th>
+                                <th class="py-2 px-4 border-b">Count</th>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b">Total Books</td>
+                                <td class="py-2 px-4 border-b">{{ $allBooksCount }}</td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b">Total Available Books</td>
+                                <td class="py-2 px-4 border-b">{{ $availableBooksCount }}</td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b">Total Not Available Books</td>
+                                <td class="py-2 px-4 border-b">{{ $notAvailableBooksCount }}</td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b">Total Good Books</td>
+                                <td class="py-2 px-4 border-b">{{ $goodBooksCount }}</td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b">Total Damage Books</td>
+                                <td class="py-2 px-4 border-b">{{ $damageBooksCount }}</td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-4 border-b">Total Lost Books</td>
+                                <td class="py-2 px-4 border-b">{{ $lostBooksCount }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+
+                <div class="container mx-auto p-4">
+                    <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Total Count of Each Book Subject</h1>
 
                     <table class="min-w-full border border-gray-300 text-center">
                         <thead>
                             <tr>
+                                <th class="py-2 px-4 border-b">Subject</th>
                                 <th class="py-2 px-4 border-b">Total Books</th>
-                                <th class="py-2 px-4 border-b">Total Available Books</th>
-                                <th class="py-2 px-4 border-b">Total Not Available Books</th>
-                                <th class="py-2 px-4 border-b">Total Good Books</th>
-                                <th class="py-2 px-4 border-b">Total Damage Books</th>
-                                <th class="py-2 px-4 border-b">Total Lost Books</th>
-
-
-
+                                <th class="py-2 px-4 border-b">Available</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                            <tr class="hover:bg-gray-100">
-                                <td class="py-2 px-4 border-b">{{ $allBooksCount }}</td>
-                                <td class="py-2 px-4 border-b">{{ $availableBooksCount }}</td>
-                                <td class="py-2 px-4 border-b">{{ $notAvailableBooksCount }}</td>
-                                <td class="py-2 px-4 border-b">{{ $goodBooksCount }}</td>
-                                <td class="py-2 px-4 border-b">{{ $damageBooksCount }}</td>
-                                <td class="py-2 px-4 border-b">{{ $lostBooksCount }}</td>
-
-
-                            </tr>
-
+                            @foreach ($subjectCounts as $subject => $count)
+                                <tr class="hover:bg-gray-100">
+                                    <td class="py-2 px-4 border-b">{{ $subject }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $count }}</td>
+                                    <td class="py-2 px-4 border-b">{{ $availableSubjectCounts[$subject] ?? 0 }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -299,6 +328,13 @@
                                 <label style="width: 325px;" class="cursor-pointer bg-slate-200 p-2 rounded-lg hover:bg-slate-300 duration-100" for="bookCondition">
                                     <input id="bookCondition" type="checkbox" name="reports[]" onchange="updateSubmitButton()" value="bookCondition"> &nbsp;
                                     Book Condition</label>
+                            </div>
+
+                            <div class="flex mb-2">
+
+                                <label style="width: 325px;" class="cursor-pointer bg-slate-200 p-2 rounded-lg hover:bg-slate-300 duration-100" for="bookSubjectCounts">
+                                    <input id="bookSubjectCounts" type="checkbox" name="reports[]" onchange="updateSubmitButton()" value="bookSubjectCounts"> &nbsp;
+                                    Total Count of Each Book Subject</label>
                             </div>
 
                             <div class="flex mb-2">

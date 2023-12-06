@@ -111,29 +111,77 @@
     <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> Total Books, And Their Condition, Status, And Availability.</h1>
 
     <table class="pdf-table">
-        <thead>
-            <tr>
-                <th class="py-2 px-4 border-b">Total Books</th>
-                <th class="py-2 px-4 border-b">Total Available Books</th>
-                <th class="py-2 px-4 border-b">Total Not Available Books</th>
-                <th class="py-2 px-4 border-b">Total Good Books</th>
-                <th class="py-2 px-4 border-b">Total Damage Books</th>
-                <th class="py-2 px-4 border-b">Total Lost Books</th>
-            </tr>
-        </thead>
         <tbody>
+            <tr>
+                <th class="py-2 px-4 border-b">Attribute</th>
+                <th class="py-2 px-4 border-b">Count</th>
+            </tr>
             <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b">Total Books</td>
                 <td class="py-2 px-4 border-b">{{ $bookCondition['allBooksCount'] }}</td>
+            </tr>
+            <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b">Total Available Books</td>
                 <td class="py-2 px-4 border-b">{{ $bookCondition['availableBooksCount'] }}</td>
+
+            </tr>
+            <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b">Total Not Available Books</td>
                 <td class="py-2 px-4 border-b">{{ $bookCondition['notAvailableBooksCount'] }}</td>
+
+            </tr>
+            <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b">Total Good Books</td>
                 <td class="py-2 px-4 border-b">{{ $bookCondition['goodBooksCount'] }}</td>
+
+            </tr>
+            <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b">Total Damage Books</td>
                 <td class="py-2 px-4 border-b">{{ $bookCondition['damageBooksCount'] }}</td>
+
+            </tr>
+            <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b">Total Lost Books</td>
                 <td class="py-2 px-4 border-b">{{ $bookCondition['lostBooksCount'] }}</td>
             </tr>
         </tbody>
     </table>
 </div>
 @endif
+
+
+
+
+@if(isset($bookSubjectCounts))
+    <div class="container mx-auto p-4">
+        <h1 class="description-title"><b style="font-size: 1.5rem;">Description: </b> Count of Each Book Subject</h1>
+
+        <table class="pdf-table">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Subject</th>
+                    <th class="py-2 px-4 border-b">Total Books</th>
+                    <th class="py-2 px-4 border-b">Available Books</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($bookSubjectCounts as $subject => $count)
+                    <tr class="hover:bg-gray-100">
+                        <td class="py-2 px-4 border-b">{{ $subject }}</td>
+                        <td class="py-2 px-4 border-b">{{ $count }}</td>
+                        <td class="py-2 px-4 border-b">{{ $availableSubjectCounts[$subject] ?? 0 }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endif
+
+
+
+
+
+
 
 
 

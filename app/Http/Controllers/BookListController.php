@@ -15,6 +15,7 @@ use Illuminate\Pagination\Paginator;
 
 class BookListController extends Controller
 {
+
     public function index(Request $request)
     {
         $user = auth()->user(); // Assuming you are using Laravel's built-in authentication
@@ -28,9 +29,22 @@ class BookListController extends Controller
             $bookSearch = $request->input('book_search');
             $query->where(function ($subquery) use ($bookSearch) {
                 $subquery->where('title', 'LIKE', '%' . $bookSearch . '%')
-                    ->orWhere('author', 'LIKE', '%' . $bookSearch . '%');
+                    ->orWhere('author', 'LIKE', '%' . $bookSearch . '%')
+                    ->orWhere('subject', 'LIKE', '%' . $bookSearch . '%');
+
             });
         }
+
+
+         // Handle subject filter
+        if ($request->has('subject_filter')) {
+            $subjectFilter = $request->input('subject_filter');
+            if ($subjectFilter) {
+                $query->where('subject', $subjectFilter);
+            }
+        }
+
+
 
         if ($request->has('letter_filter')) {
             $letterFilter = $request->input('letter_filter');
@@ -41,7 +55,7 @@ class BookListController extends Controller
 
 
         $bookListsDefault = $query->paginate(35);
-        $bookListsCard = $query->paginate(4);
+        $bookListsCard = $query->paginate(8);
 
 
         return view('bookList', [
@@ -49,6 +63,9 @@ class BookListController extends Controller
             'bookListsCard' => $bookListsCard,
             'bookRequestCount' => $bookRequestCount]);
     }
+
+
+
 
 
     public function destroy(Request $request, $id)

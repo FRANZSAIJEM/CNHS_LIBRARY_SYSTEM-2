@@ -109,7 +109,7 @@
 
                                 </div>
                             </div>
-                          <div class="text-center mt-20">
+                          <div class="text-center" style="margin-top: 125px;">
                             <button class="text-green-600 hover:text-green-700 duration-100" type="button" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showConfirmationModal({{ $acceptedRequest->id }})"><b><i class="fa-solid fa-check"></i> End Record</b></button>
 
                             {{-- <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">

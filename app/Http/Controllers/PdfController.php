@@ -32,6 +32,18 @@ class PdfController extends Controller
         // Retrieve the most borrowed books based on the 'count' field
         $mostBorrowedBooks = Book::orderBy('count', 'desc')->get();
 
+
+
+            // Retrieve all books
+        $books = book::all();
+
+        // Count occurrences of each subject
+        $subjectCounts = $books->groupBy('subject')->map->count();
+
+          // Get the count of available books for each subject
+        $availableSubjectCounts = $books->where('availability', 'Available')->groupBy('subject')->map->count();
+
+
          // Retrieve the count of available and not available books
         $availableBooksCount = book::where('availability', 'Available')->count();
         $notAvailableBooksCount = book::where('availability', 'Not Available')->count();
@@ -63,7 +75,8 @@ class PdfController extends Controller
             'lostBooksCount' => $lostBooksCount,
             'mostBorrowedBooks' => $mostBorrowedBooks,
             'groupedNotifications' => $groupedNotifications,
-
+            'subjectCounts' => $subjectCounts,
+            'availableSubjectCounts' => $availableSubjectCounts,
         ]);
     }
 
@@ -211,6 +224,16 @@ class PdfController extends Controller
         $lostBooksCount = Book::where('status', 'Lost')->count();
 
 
+        // Retrieve all books
+        $books = book::all();
+
+        // Count occurrences of each subject
+        $subjectCounts = $books->groupBy('subject')->map->count();
+
+        // Get the count of available books for each subject
+        $availableSubjectCounts = $books->where('availability', 'Available')->groupBy('subject')->map->count();
+
+
          // Retrieve all notifications
         $notifications = Notification::all();
 
@@ -233,6 +256,9 @@ class PdfController extends Controller
             'lostBooksCount' => $lostBooksCount,
             'mostBorrowedBooks' => $mostBorrowedBooks,
             'groupedNotifications' => $groupedNotifications,
+            'subjectCounts' => $subjectCounts,
+            'availableSubjectCounts' => $availableSubjectCounts,
+
         ];
 
         // Load the PDF view with the data
@@ -276,17 +302,48 @@ class PdfController extends Controller
         }
 
 
+
+          // Retrieve all books
+        $books = Book::all();
+
+        // Count occurrences of each subject
+        $subjectCounts = $books->groupBy('subject')->map->count();
+
+        // Get the count of available books for each subject
+        $availableSubjectCounts = $books->where('availability', 'Available')->groupBy('subject')->map->count();
+
+        // Check if 'bookSubjectCounts' is selected
+        if (in_array('bookSubjectCounts', $selectedReports)) {
+            $data['bookSubjectCounts'] = $subjectCounts;
+            $data['availableSubjectCounts'] = $availableSubjectCounts;
+        }
+
+
+
+
       // Check if 'bookCondition' is selected
-if (in_array('bookCondition', $selectedReports)) {
-    $data['bookCondition'] = [
-        'availableBooksCount' => Book::where('availability', 'Available')->count(),
-        'notAvailableBooksCount' => Book::where('availability', 'Not Available')->count(),
-        'allBooksCount' => Book::count(),
-        'goodBooksCount' => Book::where('status', 'Good')->count(),
-        'damageBooksCount' => Book::where('status', 'Damage')->count(),
-        'lostBooksCount' => Book::where('status', 'Lost')->count(),
-    ];
-}
+        if (in_array('bookCondition', $selectedReports)) {
+            $data['bookCondition'] = [
+                'availableBooksCount' => Book::where('availability', 'Available')->count(),
+                'notAvailableBooksCount' => Book::where('availability', 'Not Available')->count(),
+                'allBooksCount' => Book::count(),
+                'goodBooksCount' => Book::where('status', 'Good')->count(),
+                'damageBooksCount' => Book::where('status', 'Damage')->count(),
+                'lostBooksCount' => Book::where('status', 'Lost')->count(),
+            ];
+        }
+
+
+
+       // Retrieve all books
+       $books = book::all();
+
+       // Count occurrences of each subject
+       $subjectCounts = $books->groupBy('subject')->map->count();
+
+       // Get the count of available books for each subject
+       $availableSubjectCounts = $books->where('availability', 'Available')->groupBy('subject')->map->count();
+
 
 
         // Check if 'borrowedByDate' is selected
