@@ -256,7 +256,7 @@ $borrowCount = BorrowCount::first();
                         </div> <br>
 
                         <div>
-                            <label for="publish"><b><i class="fa-solid fa-code-compare"></i> Publish</b></label><br>
+                            <label for="publish"><b><i class="fa-solid fa-calendar-days"></i> Publish</b></label><br>
                             <input placeholder="Publish" class="modalInput rounded-lg" type="text" id="publish" name="publish" required>
                         </div> <br>
 

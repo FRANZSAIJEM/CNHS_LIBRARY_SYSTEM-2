@@ -22,13 +22,16 @@ use App\Models\returnedBook; // Import the ReturnedBook model
 use App\Models\ReturnedBookNotification; // Import the ReturnedBook model
 
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Config;
 
 
 class AcceptRequestController extends Controller
 {
     public function acceptRequest(Request $request, User $user, Book $book)
     {
+
+        // Set the timezone to your application's timezone
+        Config::set('app.timezone', 'Asia/Manila');
 
         $acceptedRequest = new AcceptedRequest();
         $acceptedRequest->user_id = $user->id;

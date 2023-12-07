@@ -84,7 +84,8 @@
         <thead>
             <tr>
                 <th class="py-2 px-4 border-b">Grade Level</th>
-                <th class="py-2 px-4 border-b">Total Borrowed</th>
+                <th class="py-2 px-4 border-b">Total Borrowed From Grade Level</th>
+                <th class="py-2 px-4 border-b">Total Borrowed Books</th>
 
             </tr>
         </thead>
@@ -93,6 +94,7 @@
                 <tr class="hover:bg-gray-100">
                     <td class="py-2 px-4 border-b">{{ $gradeLevel }}</td>
                     <td class="py-2 px-4 border-b">{{ $count }}</td>
+                    <td class="py-2 px-4 border-b">{{ $usersWithBorrowedCount->where('grade_level', $gradeLevel)->sum('borrowed_count') }}</td>
 
 
                 </tr>
@@ -265,12 +267,12 @@
 
                     <td>
                         @if ($month != $prevMonth)
-                            {{ \Carbon\Carbon::createFromDate(null, $month, null)->format('F') }}
+                            {{ \Carbon\Carbon::createFromDate(null, $month, null)->setTimezone('Asia/Manila')->format('F') }}
                             @php $prevMonth = $month; @endphp
                         @endif
                     </td>
 
-                    <td>Day {{ $day }}, {{ \Carbon\Carbon::createFromDate($year, $month, $day)->format('l') }}</td>
+                    <td>Day {{ $day }}, {{ \Carbon\Carbon::createFromDate($year, $month, $day)->setTimezone('Asia/Manila')->format('l') }}</td>
                     <td>{{ count($notifications) }}</td>
                 </tr>
             @endforeach

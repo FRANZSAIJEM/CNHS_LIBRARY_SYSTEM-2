@@ -54,6 +54,8 @@ class PdfController extends Controller
         $damageBooksCount = book::where('status', 'Damage')->count();
         $lostBooksCount = book::where('status', 'Lost')->count();
 
+
+        
         // Retrieve all notifications
         $notifications = Notification::all();
 
@@ -61,6 +63,8 @@ class PdfController extends Controller
         $groupedNotifications = $notifications->groupBy(function ($date) {
             return $date->created_at->format('Y-m-d');
         });
+
+
 
 
          // Pass the data to the view

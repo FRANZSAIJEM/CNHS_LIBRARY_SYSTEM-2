@@ -51,6 +51,9 @@
                     @foreach ($acceptedRequests as $index => $acceptedRequest)
                     @php
                         $carbonDate1 = \Carbon\Carbon::parse($acceptedRequest->date_borrow);
+
+                        // Adjust timezone if needed
+                        $carbonDate1->setTimezone('Asia/Manila'); // Replace 'YourTimeZone' with the desired timezone
                         $carbonDate2 = \Carbon\Carbon::parse($acceptedRequest->date_pickup);
                         $carbonDate3 = \Carbon\Carbon::parse($acceptedRequest->date_return);
 
