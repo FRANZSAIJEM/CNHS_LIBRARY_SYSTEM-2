@@ -74,7 +74,10 @@
 @endif
 
 
-
+@php
+     $usersWithBorrowedCount = App\Models\User::where('borrowed_count', '>', 0)
+    ->get(['id', 'id_number', 'grade_level', 'name', 'borrowed_count']);
+@endphp
 
 @if(isset($gradeLevelCounts))
 <div class="container mx-auto p-4">
@@ -95,8 +98,6 @@
                     <td class="py-2 px-4 border-b">{{ $gradeLevel }}</td>
                     <td class="py-2 px-4 border-b">{{ $count }}</td>
                     <td class="py-2 px-4 border-b">{{ $usersWithBorrowedCount->where('grade_level', $gradeLevel)->sum('borrowed_count') }}</td>
-
-
                 </tr>
             @endforeach
         </tbody>

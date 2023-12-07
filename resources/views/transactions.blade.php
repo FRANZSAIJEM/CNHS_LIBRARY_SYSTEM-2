@@ -2,7 +2,7 @@
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
-                <i class="fa-solid fa-box-archive"></i> {{ __('Transactions') }}
+                <i  class="fas fa-exchange-alt"></i> {{ __('Borrowed Books') }}
             </h2>
         </div>
     </x-slot>
@@ -258,6 +258,8 @@
                                 <label for="start_date"><b><i class="fa-solid fa-boxes-packing"></i> Start Date:</b></label> <br>
                                 <input style="background-color: transparent;" class="text-left border-none" type="date" name="start_date" value="{{ request('start_date') }}">
                             </div>
+                            <br>
+                            <h1><b>Between</b></h1>
                             <br>
                             <div>
                                 <label for="end_date"><b><i class="fa-solid fa-boxes-packing"></i> End Date:</b></label> <br>

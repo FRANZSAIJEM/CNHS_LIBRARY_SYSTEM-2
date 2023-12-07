@@ -121,7 +121,6 @@
                                     <td class="py-2 px-4 border-b">{{ $gradeLevel }}</td>
                                     <td class="py-2 px-4 border-b">{{ $count }}</td>
                                     <td class="py-2 px-4 border-b">{{ $usersWithBorrowedCount->where('grade_level', $gradeLevel)->sum('borrowed_count') }}</td>
-
                                 </tr>
 
                             @endforeach

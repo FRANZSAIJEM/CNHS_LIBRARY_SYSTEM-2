@@ -15,14 +15,16 @@
 
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="">
-            {{-- @if (Auth::user()->is_admin)
-            <button class="bg-orange-400 text-white hover:bg-orange-500 duration-100 p-3 rounded-lg shadow-lg" id="cardViewBtn" onclick="toggleView('card')"><i class="fa fa-credit-card"></i> Card View</button>
-            <button class="bg-orange-400 text-white hover:bg-orange-500 duration-100 p-3 rounded-lg shadow-lg" id="calendarViewBtn" onclick="toggleView('calendar')"><i class="fa fa-calendar"></i> Calendar View</button>
+            @if (Auth::user()->is_admin)
+            <div class="mb-5">
+                <button class="bg-orange-400 text-white hover:bg-orange-500 duration-100 p-3 rounded-lg shadow-lg" id="cardViewBtn" onclick="toggleView('card')"><i class="fa fa-credit-card"></i> Card View</button>
+                <button class="bg-orange-400 text-white hover:bg-orange-500 duration-100 p-3 rounded-lg shadow-lg" id="calendarViewBtn" onclick="toggleView('calendar')"><i class="fa fa-calendar"></i> Calendar View</button>
 
-            @endif --}}
+            </div>
+            @endif
 
             <div>
-                <div id="" class="view-container">
+                <div id="cardView" class="view-container">
 
                 @foreach ($returnHistorys as $returnHistory)
                 @php
@@ -32,7 +34,7 @@
                     $carbonDate1->setTimezone('Asia/Manila'); // Replace 'YourTimeZone' with the desired timezone
                     $formattedDate1 = $carbonDate1->format('l, F jS, Y');
                 @endphp
-                @if (!Auth::user()->is_admin)
+
                 <div class="flex justify-between p-5 mb-5 rounded-md shadow-md bg-white dark:bg-dark-eval-1">
                     <div class="historyList">
                         <div>
@@ -48,14 +50,16 @@
                         </div>
                     </div>
                     <div>
-                        <form action="{{ route('clearReturnedNotification', ['id' => $returnHistory->id]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="text-slate-600 p-3 rounded mt-3 hover:text-slate-900 duration-100 w-20" type="submit"><i class="fa-solid fa-xmark"></i></button>
-                        </form>
+                        @if (!Auth::user()->is_admin)
+                            <form action="{{ route('clearReturnedNotification', ['id' => $returnHistory->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="text-slate-600 p-3 rounded mt-3 hover:text-slate-900 duration-100 w-20" type="submit"><i class="fa-solid fa-xmark"></i></button>
+                            </form>
+                        @endif
                     </div>
                 </div>
-                @endif
+
                 @endforeach
 
 
@@ -71,7 +75,7 @@
                     $carbonDate1->setTimezone('Asia/Manila'); // Replace 'YourTimeZone' with the desired timezone
                     $formattedDate1 = $carbonDate1->format('l, F jS, Y');
                 @endphp
-                @if (!Auth::user()->is_admin)
+
                 <div class="flex justify-between p-5 mb-5 rounded-md shadow-md bg-white dark:bg-dark-eval-1">
                     <div class="historyList">
                         <div>
@@ -91,15 +95,17 @@
                     </div>
 
                     <div>
+                        @if (!Auth::user()->is_admin)
                         <form action="{{ route('clearNotification', ['id' => $userNotification->id]) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button class="text-slate-600 p-3 rounded mt-3 hover:text-slate-900 duration-100 w-20" type="submit"><i class="fa-solid fa-xmark"></i></button>
                         </form>
+                        @endif
                     </div>
 
                 </div>
-                @endif
+
             @endforeach
             @else
                 <!-- Message for no notifications in history -->
@@ -117,7 +123,7 @@
 
         @if (Auth::user()->is_admin)
 
-        <div id="" class="view-container" style="margin-top: -70px;">
+        <div id="calendarView" class="view-container" style="margin-top: -70px; display: none;">
             <table id="calendar"></table>
         </div>
 

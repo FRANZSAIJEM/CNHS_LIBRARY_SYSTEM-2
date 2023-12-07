@@ -41,14 +41,16 @@
                     <div class="p-1 text-white" style="transform: translateY(-45px); background-color: rgba(0, 0, 0, 0.5)">
                         <b>Published:</b> {{$book->publish}}
                     </div>
+               <div class="text-center" style="margin-top: -15px;">
                     @if (Auth::user()->is_admin)
-                            <form action="{{ route('editBook.edit', ['id' => $book->id]) }}" method="GET" style="display: inline;">
-                                @csrf
-                                <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="!important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit Book</b></button>
-                            </form>
-                            <button class="text-red-600 hover:text-red-700 duration-100" type="button" style=" border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDelete({{ $book->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
+                        <form action="{{ route('editBook.edit', ['id' => $book->id]) }}" method="GET" style="display: inline;">
+                            @csrf
+                            <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="!important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit</b></button>
+                        </form>
+                        <button class="text-red-600 hover:text-red-700 duration-100" type="button" style=" border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDelete({{ $book->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
 
-                        @endif
+                    @endif
+               </div>
                </div>
 
                 <div class="marginTwo" style="width: 250px;">

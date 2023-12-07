@@ -26,9 +26,6 @@ class PdfController extends Controller
 
         // Retrieve the count of users for each grade level
         $gradeLevelCounts = $usersWithBorrowedCount->groupBy('grade_level')->map->count();
-
-
-
         // Retrieve the most borrowed books based on the 'count' field
         $mostBorrowedBooks = Book::orderBy('count', 'desc')->get();
 
@@ -55,7 +52,7 @@ class PdfController extends Controller
         $lostBooksCount = book::where('status', 'Lost')->count();
 
 
-        
+
         // Retrieve all notifications
         $notifications = Notification::all();
 
@@ -283,6 +280,14 @@ class PdfController extends Controller
         $data = [];
 
 
+        // Retrieve all notifications
+        $notifications = Notification::all();
+
+        // Group notifications by year and month
+        $groupedNotifications = $notifications->groupBy(function ($date) {
+            return $date->created_at->format('Y-m-d');
+        });
+
 
 
         // Check if 'allStudents' is selected
@@ -291,13 +296,18 @@ class PdfController extends Controller
                 ->get(['id', 'id_number', 'grade_level', 'name', 'borrowed_count']);
         }
 
+
+
+
         // Check if 'gradeLevelMostBorrowed' is selected
         if (in_array('gradeLevelMostBorrowed', $selectedReports)) {
             $usersWithBorrowedCount = User::where('borrowed_count', '>', 0)
             ->get(['id', 'id_number', 'grade_level', 'name', 'borrowed_count']);
             $data['gradeLevelCounts'] = $usersWithBorrowedCount->groupBy('grade_level')->map->count();
-
         }
+
+
+
 
 
         // Check if 'mostBorrowedBooks' is selected

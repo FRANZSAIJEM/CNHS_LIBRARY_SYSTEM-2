@@ -154,7 +154,7 @@ $borrowCount = BorrowCount::first();
 
 
 
-            <div class="bookCenter defaultBookStyle" >
+            <div class="bookCenter defaultBookStyle mt-10" >
                 <div class="bookDisplay flex flex-wrap">
                     @foreach ($bookListsCard as $bookLists)
                     <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px; ">

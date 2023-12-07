@@ -287,6 +287,8 @@ $defDailyFine = DefaultFine::first();
                         <input style="background-color: transparent;" class="text-left border-none" type="date" name="start_date" value="{{ request('start_date') }}">
                     </div>
                     <br>
+                    <h1><b>Between</b></h1>
+                    <br>
                     <div>
                         <label for="end_date"><b><i class="fa-solid fa-boxes-packing"></i> End Date:</b></label> <br>
                         <input style="background-color: transparent;"  class="text-left border-none" type="date" name="end_date" value="{{ request('end_date') }}">
