@@ -69,7 +69,7 @@
                 @if (count($userNotifications) > 0)
                 @foreach ($userNotifications as $userNotification)
                 @php
-                      $carbonDate1 = \Carbon\Carbon::parse($userNotification->created_at);
+                    $carbonDate1 = \Carbon\Carbon::parse($userNotification->created_at);
 
                     // Adjust timezone if needed
                     $carbonDate1->setTimezone('Asia/Manila'); // Replace 'YourTimeZone' with the desired timezone
@@ -88,7 +88,6 @@
                         <div class="me-5">
                             <h6 class="me-3 text-right" style="font-size: 13px;"></h6>
                             {{ \Carbon\Carbon::parse( $userNotification->created_at )->shortRelativeDiff() }}
-
                         </div>
 
                         <!-- Add a Clear button with a form to delete the notification -->
@@ -911,16 +910,6 @@ function toggleNotificationsReturn(td) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 function getNotificationsForDay(td) {
   // Extract date information from the clicked cell
   const day = parseInt(td.textContent, 10); // Assuming the day is present in the cell content
@@ -967,18 +956,6 @@ function getNotificationsForDayReturn(td) {
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth() + 1;
 createCalendar(currentYear, currentMonth);
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     </script>

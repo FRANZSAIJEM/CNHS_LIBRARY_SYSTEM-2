@@ -255,8 +255,8 @@
                     {{-- Failure to return the requested book by the due date will result in automatic fines, emphasizing the significance of timely returns and maintaining operational efficiency.
                     In addition, a daily fine of ₱ {{ $defaultFine->set_daily_fines }} will be incurred for each day the book is not returned beyond the due date. --}}
                     Failure to return the requested book by the due date will result in the recording of the late return, emphasizing the significance of timely returns and maintaining operational efficiency.
-{{-- <br> <br>
-In addition, for each day the book is not returned beyond the due date, a record will be noted in the student's account to keep track of late returns. --}}
+                    {{-- <br> <br>
+                    In addition, for each day the book is not returned beyond the due date, a record will be noted in the student's account to keep track of late returns. --}}
 
                     <br> <br>
                     {{-- <div class="text-red-600" style="font-size: 25px;">

@@ -126,12 +126,8 @@ $defDailyFine = DefaultFine::first();
                          <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
 
                          <button type="button" class="open-modal text-green-600 hover:text-green-700 duration-100" onclick="showAcceptanceModal({{ $requestedBook->id }})" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-check"></i> Accept</b></button>
+                         <button class="text-red-600 hover:text-red-700 duration-100" type="button" style="width: 123px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal({{ $requestedBook->id }})"><b><i class="fa-solid fa-trash"></i> Remove</b></button>
 
-                         <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
-                             @csrf
-                             @method('DELETE')
-                             <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Remove</b></button>
-                         </form>
                      </div>
                      @endif
 
@@ -202,11 +198,54 @@ $defDailyFine = DefaultFine::first();
                          <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
                             {{-- <button class="open-modal text-green-600 hover:text-green-700 duration-100"  style="margin: 5px; padding: 10px; border-radius: 5px; visibility: hidden">Accept</button> --}}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <button class="text-red-600 hover:text-red-700 duration-100" type="button" style="width: 123px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal({{ $requestedBook->id }})"><b><i class="fa-solid fa-trash"></i> Cancel</b></button>
+
+
+{{--
                             <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
                                  @csrf
                                  @method('DELETE')
                                  <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Cancel Request</b></button>
-                             </form>
+                             </form> --}}
                         @endif
                         </div>
 
@@ -228,19 +267,20 @@ $defDailyFine = DefaultFine::first();
                                     @csrf
                                     <div>
                                         <label for="date_pickup"><b><i class="fa-solid fa-boxes-packing"></i> Date Pickup</b></label> <br>
-                                        <input class="border-none" type="datetime-local" id="date_pickup" name="date_pickup" required>
+                                        <input class="border-none" type="datetime-local" id="date_pickup_{{ $requestedBook->id }}" name="date_pickup" required>
                                     </div>
                                     <br>
                                     <div>
                                         <label for="date_return"><b><i class="fa-solid fa-rotate-left"></i> Date Return</b></label> <br>
-                                        <input class="border-none"  type="datetime-local" id="date_return" name="date_return" required>
+                                        <input class="border-none" type="datetime-local" id="date_return_{{ $requestedBook->id }}" name="date_return" required>
                                     </div>
                                     <br>
                                     <div>
                                         <h1><b>You can choose a return date a week from today.</b></h1> <br>
-                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(1)">1 week</button>
-                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(2)">2 weeks</button>
-                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(3)">3 weeks</button>
+                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(1, {{ $requestedBook->id }})">1 week</button>
+                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(2, {{ $requestedBook->id }})">2 weeks</button>
+                                        <button class="bg-orange-400 hover:bg-orange-500 duration-100 p-3 rounded-lg text-white" type="button" onclick="setPickupReturnDate(3, {{ $requestedBook->id }})">3 weeks</button>
+
                                     </div>
                                     <br>
                                    <br>
@@ -250,8 +290,6 @@ $defDailyFine = DefaultFine::first();
                                         <button type="button" class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;" onclick="hideAcceptanceModal({{ $requestedBook->id }})"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
                                         <button type="submit" class="rounded-lg p-4  text-green-600 hover:text-green-700 duration-100" style="width: 125px;"><i class="fa-solid fa-check"></i>  Accept</button>
                                     </div>
-
-
                                 </form>
 
                             </p>
@@ -262,6 +300,44 @@ $defDailyFine = DefaultFine::first();
 
 
 
+
+
+                {{-- Delete Modal --}}
+                <div id="confirmDeleteModalRemove-{{ $requestedBook->id }}" style="margin-top: 50px; overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+                    <div class="modalWidthRemove" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
+
+                        <div class="flex justify-between">
+                            <h2><b><i class="fa-solid fa-address-book"></i> Remove Request</b></h2>
+                            <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationModalRemove({{ $requestedBook->id }})"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <hr> <br>
+                        <p>Are you sure you want to remove this request?</p>
+                        <br>
+                        <hr> <br>
+                        <div class="">
+                            <div class="flex justify-end">
+                                <button class="rounded-lg p-4  text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModalRemove({{ $requestedBook->id }})"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+
+                                <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="text-red-600 hover:text-red-700 duration-100" type="submit" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-remove"></i> Remove</b></button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
                     @endforeach
                 @endforeach
                     @else
@@ -269,6 +345,10 @@ $defDailyFine = DefaultFine::first();
                     <p style="tra">You have no requests.</p>
                 @endif
             </div>
+
+
+
+
     {{-- Filter by date --}}
     <div id="confirmFilterDateModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
         <div class="modalWidthDate" style="transform: translateY(35px); background-color: white; border-radius: 5px; margin: 100px auto; padding: 20px; text-align: left;">
@@ -308,10 +388,20 @@ $defDailyFine = DefaultFine::first();
 
         </div>
     </div>
+
+
+
+
+
+
         </div>
 
 
     </div>
+
+
+
+
 
     {{-- Loading Screen --}}
     <div id="loading-bar" class="loading-bar"></div>
@@ -343,6 +433,9 @@ $defDailyFine = DefaultFine::first();
     }
 
 
+    .modalWidthRemove{
+        width: 600px;
+    }
     @media (max-width: 1000px) and (max-height: 2000px) {
         .requestCenter{
             display: flex;
@@ -351,7 +444,9 @@ $defDailyFine = DefaultFine::first();
         .modalWidth{
         width: 100px;
     }
-
+    .modalWidthRemove{
+        width: 550px;
+    }
 
     }
 
@@ -363,6 +458,9 @@ $defDailyFine = DefaultFine::first();
         .modalWidth{
         width: auto;
     }
+    .modalWidthRemove{
+        width: 300px;
+    }
 
     }
 
@@ -372,6 +470,8 @@ $defDailyFine = DefaultFine::first();
     .modalWidth{
         width: 300px;
     }
+
+
     .modalFlex{
         display: inline-flex;
     }
@@ -408,9 +508,37 @@ $defDailyFine = DefaultFine::first();
   transition: width 0.3s ease; /* Adjust the animation speed as needed */
 }
 
+
+
 </style>
 
 <script>
+
+
+
+ function showConfirmationModal(requestedBook) {
+
+            var modal = document.getElementById(`confirmDeleteModalRemove-${requestedBook}`);
+            modal.style.display = 'block';
+
+            // Set the action of the form to include the specific book's ID
+            var form = modal.querySelector('form');
+            form.action = form.action.replace('__REQUESTEDBOOK_ID__', requestedBook);
+        }
+
+        function hideConfirmationModalRemove(requestedBook) {
+
+            var modal = document.getElementById(`confirmDeleteModalRemove-${requestedBook}`);
+            modal.style.display = 'none';
+
+        }
+
+
+
+
+
+
+
 
 function clearDateFilter() {
         document.querySelector('input[name="start_date"]').value = '';
@@ -524,7 +652,7 @@ function showAcceptanceModal(requestedBook) {
         }
     });
 
-    function setPickupReturnDate(weeksToAdd) {
+    function setPickupReturnDate(weeksToAdd, bookId) {
     // Get current date and time in the local time zone
     var currentDate = new Date();
 
@@ -535,15 +663,17 @@ function showAcceptanceModal(requestedBook) {
     var formattedDate = formatDateForInput(currentDate);
 
     // Set the date_pickup to today's date
-    document.getElementById('date_pickup').value = formattedDate;
+    document.getElementById('date_pickup_' + bookId).value = formattedDate;
 
     // Calculate the return date (pickup date + selected weeks)
     var returnDate = new Date(currentDate.getTime() + weeksToAdd * 7 * 24 * 60 * 60 * 1000);
     var formattedReturnDate = formatDateForInput(returnDate);
 
     // Set the date_return
-    document.getElementById('date_return').value = formattedReturnDate;
+    document.getElementById('date_return_' + bookId).value = formattedReturnDate;
 }
+
+
 
 // Helper function to format date for input type datetime-local
 function formatDateForInput(date) {

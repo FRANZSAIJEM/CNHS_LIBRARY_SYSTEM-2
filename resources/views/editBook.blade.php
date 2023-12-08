@@ -49,7 +49,7 @@
             </div> <br>
 
             <div>
-                <label for="publish"><b><i class="fa-solid fa-calendar-days"></i> Publish</b></label><br>
+                <label for="publish"><b><i class="fa-solid fa-calendar-days"></i> Year Published</b></label><br>
                 <input placeholder="Publish" class="modalInput rounded-lg" type="text" id="publish" name="publish" required value="{{ $book->publish }}">
             </div> <br>
 
