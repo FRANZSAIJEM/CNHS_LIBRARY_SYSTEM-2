@@ -556,7 +556,7 @@ document.getElementById('showFormButton').addEventListener('click', function() {
 
 
 
-        
+
         function showConfirmationModal(bookId) {
             var modal = document.getElementById('confirmDeleteModal');
             modal.style.display = 'block';

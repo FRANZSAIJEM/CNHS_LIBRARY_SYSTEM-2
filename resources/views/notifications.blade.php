@@ -168,12 +168,6 @@
             @endif --}}
 
 
-
-
-
-
-
-
             @foreach ($replies as $reply)
                 <a href="{{ route('viewBook', ['id' => $reply->comment->book->id]) }}" class="block">
                     <div class="p-5 mb-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
@@ -193,8 +187,6 @@
             @endforeach
 
 
-
-
             @foreach ($likes as $like)
             <a href="{{ route('viewBook', ['id' => $like->comment->book->id]) }}" class="block">
                 <div class="p-5 mb-5 rounded-md shadow-md dark:bg-dark-eval-1 hover:bg-slate-300 duration-100">
@@ -212,10 +204,6 @@
                 </div>
             </a>
         @endforeach
-
-
-
-
 
         @foreach($acceptedRequests as $request)
         <a href="{{ route('viewBook', ['id' => $request->book_id]) }}">
@@ -252,20 +240,11 @@
                         <b><i class="fa-solid fa-calendar-days"></i> Date Return</b> <br>
                         {{ $formattedDate3 }}
                     </div> <br> <hr> <br>
-                    {{-- Failure to return the requested book by the due date will result in automatic fines, emphasizing the significance of timely returns and maintaining operational efficiency.
-                    In addition, a daily fine of ₱ {{ $defaultFine->set_daily_fines }} will be incurred for each day the book is not returned beyond the due date. --}}
                     Failure to return the requested book by the due date will result in the recording of the late return, emphasizing the significance of timely returns and maintaining operational efficiency.
-                    {{-- <br> <br>
-                    In addition, for each day the book is not returned beyond the due date, a record will be noted in the student's account to keep track of late returns. --}}
-
                     <br> <br>
-                    {{-- <div class="text-red-600" style="font-size: 25px;">
-                        Total Fines: ₱ {{ $request->total_fines ?? 0 }}
-                    </div> --}}
                     <div class="text-right mt-5">
                         {{ \Carbon\Carbon::parse($request->created_at)->shortRelativeDiff() }}
                     </div>
-
                 </p>
             </div>
         </a>

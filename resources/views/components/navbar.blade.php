@@ -69,52 +69,43 @@
             @endif
         </div>
         @endif
-    <style>
-        @if ($acceptedRequestCount == 0)
-            @keyframes rotate {
-                from {
-                    transform: rotate(0deg);
+
+
+
+
+
+    <x-sidebar.link
+        href="{{ route('notifications') }}"
+    >
+        <x-slot name="icon">
+            <x-heroicon-o-bell class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+
+            @php
+                // Calculate total notifications based on different counts
+                $totalNotifications = $visitedNotificationsPage
+                    ? 0
+                    : ($acceptedRequestsWithFinesCount + $acceptedRequestsCount + $repliesCount + $reactsCount);
+
+                // Get the timestamp of the last time the user checked for new notifications
+                $lastCheckedNotificationsTime = auth()->user()->last_checked_notifications;
+
+                // If the user is on the notifications page and there are new notifications,
+                // mark it as visited and show the badge
+                if (request()->routeIs('notifications') && $totalNotifications > 0 && $lastCheckedNotificationsTime < $latestNotificationsTime) {
+                    auth()->user()->update(['last_checked_notifications' => now()]);
                 }
-                to {
-                    transform: rotate(0deg);
-                }
-            }
-        @else
-            @keyframes rotate {
-                from {
-                    transform: rotate(0deg);
-                }
-                to {
-                    transform: rotate(360deg);
-                }
-            }
-        @endif
-    </style>
+            @endphp
 
-
-
-
-        <x-sidebar.link
-
-            href="{{ route('notifications') }}"
-
-        >
-            <x-slot name="icon">
-                <x-heroicon-o-bell class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
-
-                @php
-                $totalNotifications = $visitedNotificationsPage ? 0 : ($acceptedRequestsWithFinesCount + $acceptedRequestsCount + $repliesCount + $reactsCount);
-                @endphp
-                <!-- Conditionally display the badge -->
-                @if ($totalNotifications > 0)
+            <!-- Conditionally display the badge -->
+            @if ($totalNotifications > 0)
                 <span class="bg-red-500 w-2.5 h-2.5 rounded-full absolute ms-5 mb-5"></span>
+                {{-- You can also display the count if needed --}}
                 {{-- <span class="text-dark w-7 text-center rounded-full px-2 py-1 text-xs absolute ms-3 mb-3">
                     <b>{{ $totalNotifications }}</b>
                 </span> --}}
-                @endif
-
-            </x-slot>
-        </x-sidebar.link>
+            @endif
+        </x-slot>
+    </x-sidebar.link>
 
 
 
@@ -203,3 +194,24 @@
         />
     </x-button>
 </div>
+    <style>
+        @if ($acceptedRequestCount == 0)
+            @keyframes rotate {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(0deg);
+                }
+            }
+        @else
+            @keyframes rotate {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        @endif
+    </style>

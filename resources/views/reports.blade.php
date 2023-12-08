@@ -247,9 +247,10 @@
                             @endphp
 
                             @foreach ($groupedNotifications as $date => $notifications)
-                                @php
-                                    [$year, $month, $day] = explode('-', $date);
-                                @endphp
+                            @php
+                                [$year, $month, $day] = explode('-', $date);
+                                $carbonDate = \Carbon\Carbon::createFromDate($year, $month, $day)->setTimezone('Asia/Manila');
+                            @endphp
 
                                 <tr>
                                     <td style="">
@@ -266,7 +267,7 @@
                                         @endif
                                     </td>
 
-                                    <td>Day {{ $day }}, {{ \Carbon\Carbon::createFromDate($year, $month, $day)->setTimezone('Asia/Manila')->format('l') }}</td>
+                                    <td>{{  \Carbon\Carbon::createFromDate($year, $month, $day)->setTimezone('Asia/Manila')->format('j') }}, {{ \Carbon\Carbon::createFromDate($year, $month, $day)->setTimezone('Asia/Manila')->format('l') }}</td>
                                     <td>{{ count($notifications) }}</td>
                                 </tr>
                             @endforeach

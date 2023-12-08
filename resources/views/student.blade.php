@@ -39,12 +39,36 @@
                     <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                         <div style="width: 300px; height: 600px;">
 
+
+                            @php
+                                $user = auth()->user();
+                                $totalRequests = DB::table('chats')->count();
+                                $latestDataTime = DB::table('chats')->max('created_at');
+
+                                // Update the last checked time if it's null or there are new messages
+                                if ($user->last_checked_chats === null || $latestDataTime > $user->last_checked_chats) {
+                                    $user->update(['last_checked_chats' => now()]);
+                                }
+
+                                // Check if the badge should be displayed
+                                $studentKey = 'visited_start_chat_' . $student->id;
+                                $showBadge = $student->hasChatData() && !session($studentKey) && $totalRequests > 0;
+                            @endphp
+
                             <a href="{{ route('startChat', ['userId' => $student->id]) }}" class="p-2 ps-3 pe-3 text-slate-500 bg-slate-300 hover:bg-slate-500 hover:text-slate-100 duration-100 btn btn-primary float-right start_Chat rounded-lg shadow-lg">
                                 <i class="fa-brands fa-rocketchat @if ($student->hasChatData()) rotate-3d @endif"></i>
-                                @if ($student->hasChatData())
-                                    <span class="badge-dot badge-dot-red"></span>
+
+                                @if ($showBadge)
+                                    <span style="margin-top: -10px;" class="bg-red-500 w-2.5 h-2.5 rounded-full absolute mb-5"></span>
                                 @endif
                             </a>
+
+
+
+
+                                {{-- @if ($showBadge)
+                                    <span style="margin-top: -10px;" class="bg-red-500 w-2.5 h-2.5 rounded-full absolute ms-5 mb-5"></span>
+                                @endif --}}
 
                             <div class="p-5">
                                 <h1><b><i class="fa-solid fa-file-signature"></i> Full Name</b></h1>
@@ -61,7 +85,7 @@
                                 {{$student->grade_level}} <br> <hr> <br>
                                  <!-- Display fines -->
 
-                                 
+
                                  <h1><b><i class="fa-solid fa-clock"></i> Instances of late returns.</b></h1>
                                  {{ number_format($student->totalFines, 0, '.', '') }} <br> <hr> <br>
 

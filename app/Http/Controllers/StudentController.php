@@ -71,7 +71,7 @@ class StudentController extends Controller
         , 'users.contact'
         , 'users.gender'
         , 'users.grade_level') // Add other columns from the 'users' table here
-        ->orderByDesc('chat_count') // Order by the number of chat records in descending order
+
         ->orderByDesc('latest_chat_date') // Order by the latest chat date in descending order
         ->get();
 

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -28,6 +29,10 @@ class User extends Authenticatable
         'image',
         'is_borrowed',
         'borrowed_count',
+        'last_checked_requests',
+        'last_checked_notifications',
+        'last_checked_chats',
+        'visited_students'
     ];
 
     /**
@@ -48,7 +53,8 @@ class User extends Authenticatable
     protected $casts = [
 
         'password' => 'hashed',
-        'is_admin' => 'boolean'
+        'is_admin' => 'boolean',
+        'visited_students' => 'array',
     ];
 
     // User.php
@@ -142,6 +148,18 @@ class User extends Authenticatable
         return $this->messages->count() > 0;
     }
 
+    public function chats()
+    {
+        return $this->hasMany(Chat::class, 'receiver_id', 'id');
+    }
 
+
+    public function latestChatTime()
+    {
+        // Assuming you have a relationship defined between users and chats
+        $latestChatTime = $this->chats()->max('created_at');
+
+        return $latestChatTime;
+    }
 
 }

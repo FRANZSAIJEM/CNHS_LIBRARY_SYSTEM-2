@@ -273,7 +273,7 @@
                         @endif
                     </td>
 
-                    <td>Day {{ $day }}, {{ \Carbon\Carbon::createFromDate($year, $month, $day)->setTimezone('Asia/Manila')->format('l') }}</td>
+                    <td>{{  \Carbon\Carbon::createFromDate($year, $month, $day)->setTimezone('Asia/Manila')->format('j') }}, {{ \Carbon\Carbon::createFromDate($year, $month, $day)->setTimezone('Asia/Manila')->format('l') }}</td>
                     <td>{{ count($notifications) }}</td>
                 </tr>
             @endforeach

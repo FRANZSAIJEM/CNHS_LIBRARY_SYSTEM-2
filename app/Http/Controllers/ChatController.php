@@ -17,6 +17,9 @@ class ChatController extends Controller
     {
         $user = User::find($userId);
 
+        $studentKey = 'visited_start_chat_' . $userId;
+        session([$studentKey => true]);
+
         return view('chat', compact('user'));
     }
 
@@ -47,6 +50,10 @@ class ChatController extends Controller
         // Return to the same chat page with the user's data
         return redirect()->route('startChat', ['userId' => $request->input('receiver_id')]);
     }
+
+
+
+
 
     public function delete(Chat $message)
     {

@@ -69,19 +69,44 @@
     </x-sidebar.link>
 
 
+
     @if (!Auth::user()->is_admin)
     <x-sidebar.link
         title="Chat Staff"
         href="{{ route('startChatStud') }}"
         :isActive="request()->routeIs('startChatStud')"
-        >
+    >
         <x-slot name="icon">
-            <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-comment"></i>
+            <i class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-comment"></i>
+            <!-- Check for new chat messages and display badge if needed -->
+            @php
+                // Get the timestamp of the last time the user checked for new chat messages
+                $lastCheckedChatsTime = auth()->user()->last_checked_chats;
 
+                // Query for the latest chat message from staff directed to the current user
+                $latestStaffChat = DB::table('chats')
+                    ->where('receiver_id', auth()->id()) // Use 'receiver_id' instead of 'recipient_id'
+                    ->where('sender_id', '!=', auth()->id()) // Optional: Exclude messages sent by the current user
+                    ->latest('created_at')
+                    ->first();
+
+                // If the user is on the chat page, update last_checked_chats and store the current timestamp
+                if (request()->routeIs('startChatStud') && $latestStaffChat && $latestStaffChat->created_at > $lastCheckedChatsTime) {
+                    auth()->user()->update(['last_checked_chats' => now()]);
+                }
+            @endphp
+            @if ($latestStaffChat && auth()->user()->last_checked_chats < $latestStaffChat->created_at)
+                <span class="bg-red-500 w-2.5 h-2.5 rounded-full absolute ms-5 mb-5"></span>
+            @endif
         </x-slot>
-
     </x-sidebar.link>
-    @endif
+@endif
+
+
+
+
+
+
 
 
     @php
@@ -117,44 +142,50 @@
 
 
 
+
+
 <x-sidebar.link
-title="Request"
-href="{{ route('requests') }}"
-:isActive="request()->routeIs('requests')"
+    title="Request"
+    href="{{ route('requests') }}"
+    :isActive="request()->routeIs('requests')"
 >
-<x-slot name="icon">
+    <x-slot name="icon">
+        <i class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-code-pull-request"></i>
+        <!-- Check for new requests and display badge if needed -->
+        @php
+            // Get the total number of requests
+            $totalRequests = DB::table('book_requests')->count();
 
-    <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-code-pull-request"></i>
-    <!-- Conditionally display the badge for requests -->
-    @php
-    $totalRequests = DB::table('book_requests')->count();
+            // Get the timestamp of the last time the user checked for new data
+            $lastCheckedTime = auth()->user()->last_checked_requests;
 
-    // Check if the user has visited the requests page
-    $visitedRequestsPage = session('visited_requests_page', false);
+            // Get the timestamp of the latest data (you might need to adjust this based on your data)
+            $latestDataTime = DB::table('book_requests')->max('created_at');
 
-    // If the user is on the requests page, mark it as visited
-    if (request()->routeIs('requests') && !$visitedRequestsPage) {
-        session(['visited_requests_page' => true]);
-    }
-    @endphp
+            // If the user is on the requests page and there are new requests,
+            // mark it as visited and show the badge
+            if (request()->routeIs('requests') && $latestDataTime > $lastCheckedTime) {
+                auth()->user()->update(['last_checked_requests' => now()]);
+            }
+        @endphp
 
-    @if (!$visitedRequestsPage && $totalRequests > 0)
-    {{-- <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
-        {{ $totalRequests }}
-    </span> --}}
-    @endif
-</x-slot>
+       @if (Auth::user()->is_admin)
+        @if ($totalRequests > 0 && auth()->user()->last_checked_requests < $latestDataTime)
+        <span class="bg-red-500 w-2.5 h-2.5 rounded-full absolute ms-5 mb-5"></span>
+
+            @endif
+       @endif
+    </x-slot>
 </x-sidebar.link>
 
 
 
+
+
+
+{{-- bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1 --}}
+
     @if (Auth::user()->is_admin)
-
-
-
-
-
-
         <x-sidebar.link
             title="Borrowed Books"
             href="{{ route('transactions') }}"
