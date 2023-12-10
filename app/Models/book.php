@@ -19,6 +19,8 @@ class Book extends Model
         'description',
         'publish',
         'image',
+        'number_of_copies',
+        'count_copies',
     ];
 
     public function requestedByUsers()

@@ -521,6 +521,7 @@ function updateCountdown(element, targetTimestamp, index) {
         // Get the unique fines container for this transaction
         const finesContainer = document.getElementById(`fines-container-${index}`);
         finesContainer.style.display = 'block';
+
         finesContainer.innerHTML = 'Ongoing borrowing';
 
         setTimeout(() => updateCountdown(element, targetTimestamp, index), 1000);

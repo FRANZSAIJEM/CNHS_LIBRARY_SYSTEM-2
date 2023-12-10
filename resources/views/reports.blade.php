@@ -19,62 +19,32 @@
            @endif
        </div>
 
+
+
         <div class="">
             <div class="">
                 <div class="flex justify-end">
+                    <div class="container mx-auto p-4">
+                        <label for="sectionFilter">Filter by Description:</label>
+                        <select id="sectionFilter" onchange="filterSections()">
+                            <option value="all">All Sections</option>
+                            <option value="allStudents">All Students Who Borrowed Books</option>
+                            <option value="gradeLevelMostBorrowed">Grade Level Most Borrowed</option>
+                            <option value="bookCondition">Book Condition</option>
+                            <option value="bookSubjectCounts">Total Count of Each Book Subject</option>
+                            <option value="mostBorrowedBooks">Most Borrowed Books</option>
+                            <option value="borrowedByDate">Borrowed By Date</option>
+                        </select>
+                    </div>
                     {{-- Button to export PDF --}}
-                    <button class="text-orange-600 hover:text-orange-700 duration-100" type="button" style="width: 123px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal()"><b><i class="fa-regular fa-file-pdf"></i> Export PDF</b></button>
+                    <button class="text-orange-600 hover:text-orange-700 duration-100" type="button" style="width: 133px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal()"><b><i class="fa-regular fa-file-pdf"></i> Export PDF</b></button>
                 </div>
                  <br>
 
 
-                {{-- <div>
-
-                    <div class="flex justify-end">
-
-                        <form action="{{ route('generate-pdf-allStudents') }}" method="post" target="_blank">
-                            @csrf
-                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                        </form>
-                    </div>
-
-                    <div class="flex justify-end">
-
-                        <form action="{{ route('generate-pdf-gradeLevelMostBorrowed') }}" method="post" target="_blank">
-                            @csrf
-                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                        </form>
-                    </div>
-
-                    <div class="flex justify-end">
-
-                        <form action="{{ route('generate-pdf-bookCondition') }}" method="post" target="_blank">
-                            @csrf
-                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                        </form>
-                    </div>
-
-                    <div class="flex justify-end">
-
-                        <form action="{{ route('generate-pdf-mostBorrowedBooks') }}" method="post" target="_blank">
-                            @csrf
-                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                        </form>
-                    </div>
-
-                    <div class="flex justify-end">
-
-                        <form action="{{ route('generate-pdf-borrowedByDate') }}" method="post" target="_blank">
-                            @csrf
-                            <button type="submit" class="bg-blue-500 p-3 rounded-lg text-white hover:bg-blue-600 duration-100"><i class="fa-regular fa-file-pdf"></i> Export PDF</button>
-                        </form>
-                    </div>
-
-                </div> --}}
-
                 <br>
 
-                <div class="container mx-auto p-4">
+                <div id="allStudentsSection" class="container mx-auto p-4">
                     <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> All Students Who Borrowed Books.</h1>
 
                     <table class="min-w-full border border-gray-300 text-center">
@@ -103,7 +73,7 @@
                 </div>
 
 
-                <div class="container mx-auto p-4">
+                <div id="gradeLevelMostBorrowedSection" class="container mx-auto p-4">
                     <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Most Grade Level Borrowed Books.</h1>
 
                     <table class="min-w-full border border-gray-300 text-center">
@@ -129,7 +99,7 @@
                 </div>
 
 
-                <div class="container mx-auto p-4">
+                <div id="bookConditionSection" class="container mx-auto p-4">
                     <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Total books, And Their Condition, Status, And Availabilty.</h1>
 
                     <table class="min-w-full border border-gray-300 text-center">
@@ -169,7 +139,7 @@
                 </div>
 
 
-                <div class="container mx-auto p-4">
+                <div id="bookSubjectCountsSection" class="container mx-auto p-4">
                     <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Total Count of Each Book Subject</h1>
 
                     <table class="min-w-full border border-gray-300 text-center">
@@ -192,8 +162,7 @@
                     </table>
                 </div>
 
-
-                <div class="container mx-auto p-4">
+                <div id="mostBorrowedBooksSection" class="container mx-auto p-4">
                     <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> Most Borrowed Book</h1>
 
                     <table class="min-w-full border border-gray-300 text-center">
@@ -227,7 +196,11 @@
                 </div>
 
 
-                <div class="container mx-auto p-4">
+
+
+
+
+                <div id="borrowedByDateSection" class="container mx-auto p-4">
                     <h1 class="text-sm mb-4"><b class="text-lg">Description: </b> All Students Who Borrowed Books By Year And Month</h1>
 
 
@@ -363,12 +336,7 @@
         </div>
         <br>
         <hr> <br>
-        <div class="">
-               <div class="flex justify-end">
 
-               </div>
-
-        </div>
     </div>
 </div>
 
@@ -403,6 +371,33 @@
             modal2.style.display = 'none';
 
         }
+
+
+
+
+        function filterSections() {
+        var selectedOption = document.getElementById("sectionFilter").value;
+
+        // Show all sections if "All Sections" is selected
+        if (selectedOption === "all") {
+            var sections = document.querySelectorAll('[id$="Section"]');
+            sections.forEach(function (section) {
+                section.style.display = "block";
+            });
+        } else {
+            // Hide all sections
+            var sections = document.querySelectorAll('[id$="Section"]');
+            sections.forEach(function (section) {
+                section.style.display = "none";
+            });
+
+            // Show the selected section
+            var selectedSection = document.getElementById(selectedOption + "Section");
+            if (selectedSection) {
+                selectedSection.style.display = "block";
+            }
+        }
+    }
 
     </script>
     <style>

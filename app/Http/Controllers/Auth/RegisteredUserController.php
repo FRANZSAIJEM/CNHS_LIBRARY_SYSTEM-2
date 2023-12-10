@@ -28,6 +28,10 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+
+
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -39,10 +43,9 @@ class RegisteredUserController extends Controller
             'id_number' => ['required', 'string', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'image' => '|image|mimes:jpeg,png,jpg,gif|max:2048',
-
         ]);
 
-        $is_admin = ($request->id_number === '00001') ? true : false;
+        $role = $this->getRoleFromIdNumber($request->id_number);
 
         $user = new User([
             'name' => $request->name,
@@ -54,26 +57,27 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $user->is_admin = $is_admin ? 1 : 0; // Set is_admin to 1 if true, 0 if false
+        $user->is_admin = ($role === 'admin') ? 1 : 0;
+        $user->is_assistant = ($role === 'assistant') ? 1 : 0;
 
-
+        // Handle image upload
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('profile_images', 'public');
             $user->image = $imagePath;
         } else {
             // Set a default image path based on gender
-            $gender = $request->input('gender'); // Assuming 'gender' is the name of the select input
-            if ($gender === 'Male') {
-                $user->image = 'Male.png'; // Replace with the actual path for the male default image
-            } elseif ($gender === 'Female') {
-                $user->image = 'Female.png'; // Replace with the actual path for the female default image
-            } else {
-                $user->image = 'Other.png';
+            $gender = $request->input('gender');
+            switch ($gender) {
+                case 'Male':
+                    $user->image = 'Male.png'; // Replace with the actual path for the male default image
+                    break;
+                case 'Female':
+                    $user->image = 'Female.png'; // Replace with the actual path for the female default image
+                    break;
+                default:
+                    $user->image = 'Other.png';
             }
         }
-
-
-
 
         $user->save();
 
@@ -83,4 +87,25 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME)->with('success', 'You have created your account.');
     }
+
+
+
+
+private function getRoleFromIdNumber($idNumber): string
+{
+    switch ($idNumber) {
+        case '00001':
+            return 'admin';
+        case '00002':
+            return 'assistant';
+        // Add more cases for additional roles as needed
+        default:
+            return 'user';
+    }
+}
+
+
+
+
+
 }

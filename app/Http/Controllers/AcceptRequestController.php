@@ -356,9 +356,4 @@ class AcceptRequestController extends Controller
 
 
 
-
-
-
-
-
 }

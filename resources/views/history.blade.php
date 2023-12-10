@@ -2,7 +2,7 @@
     <x-slot name="header" >
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
-                <i class="fa-solid fa-trash"></i> {{ __('History') }}
+                <i class="fa-solid fa-history"></i> {{ __('History') }}
             </h2>
         </div>
     </x-slot>

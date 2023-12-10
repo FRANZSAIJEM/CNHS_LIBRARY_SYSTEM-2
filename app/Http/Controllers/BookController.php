@@ -34,26 +34,30 @@ class BookController extends Controller
             'title' => 'required|max:255',
             'author' => 'required|max:255',
             'subject' => 'required|max:255',
-            'availability' => 'required|in:Available,Not Available',
             'status' => 'required|in:Good,Damage,Lost',
             'isbn' => 'required|max:255',
             'publish' => 'required|max:255',
             'description' => 'required|max:255',
+            'number_of_copies' => 'required|integer|min:1',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-
         ]);
+
+        // Set availability to 'Available'
+        $validatedData['availability'] = 'Available';
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('book_images', 'public');
             $validatedData['image'] = $imagePath;
         }
 
-
-
         Book::create($validatedData);
 
         return redirect()->route('bookList')->with('success', 'Added successfully!');
     }
+
+
+
+
 
     public function edit($id)
     {
@@ -147,7 +151,7 @@ class BookController extends Controller
 
 
 
-    
+
 
 
     public function removeRequest($userId, $bookId)

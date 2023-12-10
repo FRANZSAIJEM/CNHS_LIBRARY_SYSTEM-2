@@ -96,10 +96,10 @@ $defDailyFine = DefaultFine::first();
             <div class="flex flex-wrap">
                 @if ($totalRequests > 0)
                 @foreach ($users as $user)
-                @if (Auth::user()->is_admin)
+                @if (Auth::user()->is_admin || Auth::user()->is_assistant)
                 @foreach ($user->requestedBooks as $requestedBook)
-                <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: 10px;">
-                    @if (Auth::user()->is_admin)
+                <div class="shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: 10px; margin: 35px;">
+                    @if (Auth::user()->is_admin || Auth::user()->is_assistant)
                     <div style="width: 300px; height: 350px;">
                          <div class="p-5">
                              <h1><b><i class="fa-solid fa-user"></i> Borrower</b></h1>
@@ -113,7 +113,7 @@ $defDailyFine = DefaultFine::first();
                          </div>
                      </div>
                     @endif
-                    @if (!Auth::user()->is_admin)
+                    @if (!Auth::user()->is_admin && !Auth::user()->is_assistant)
 
                          <div class="p-5">
                              <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
@@ -121,7 +121,7 @@ $defDailyFine = DefaultFine::first();
                          </div>
 
                     @endif
-                     @if (Auth::user()->is_admin)
+                     @if (Auth::user()->is_admin || Auth::user()->is_assistant)
                      <div class="flex" style="margin-top: 4px;">
                          <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
 
@@ -132,7 +132,7 @@ $defDailyFine = DefaultFine::first();
                      @endif
 
                     <div class="flex justify-evenly">
-                     @if (!Auth::user()->is_admin)
+                     @if (!Auth::user()->is_admin && !Auth::user()->is_assistant)
                      <a class="text-center text-blue-600 hover:text-blue-700 duration-100" id="viewButton-{{ $requestedBook->id }}" href="{{ route('viewBook', ['id' => $requestedBook->id]) }}" style="margin: 5px; padding: 10px; border-radius: 5px;"><b> <i class="fa-solid fa-eye"></i> View</b></a>
 
                      <form action="{{ route('removeRequest', ['user_id' => $user->id, 'book_id' => $requestedBook->id]) }}" method="POST">

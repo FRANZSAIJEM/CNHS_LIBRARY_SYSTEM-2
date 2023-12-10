@@ -71,7 +71,7 @@ $borrowCount = BorrowCount::first();
 
 
                     <button class="mb-5">
-                        @if (!Auth::user()->is_admin)
+                        @if (!Auth::user()->is_admin && !Auth::user()->is_assistant)
                         <h1><b>Borrow Limit: {{ $bookRequestCount ? $bookRequestCount->request_count : '0' }}/{{ $borrowCount ? $borrowCount->count : '' }}</b></h1>
                         @endif
                     </button>
@@ -96,7 +96,7 @@ $borrowCount = BorrowCount::first();
 
                     <button style="margin-bottom: -40px;" class="bg-slate-500 hover:bg-slate-600 duration-100 pe-3 ps-3 p-2 me-2 ms-2 rounded-lg text-white" onclick="toggleStyle('cardBookStyle')"><i class="fa-solid fa-list"></i></button>
                 </div>
-                @if (Auth::user()->is_admin)
+                @if (Auth::user()->is_admin && !Auth::user()->is_assistant)
                 <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
                 <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
                 </div>
@@ -123,15 +123,17 @@ $borrowCount = BorrowCount::first();
                                     </a>
                                 </div>
                               <div>
-                                @if (Auth::user()->is_admin)
+                                @if (Auth::user()->is_admin || Auth::user()->is_assistant)
                                 <div class="flex justify-end float-right" style="margin-top: 55px; transform: translateX(-10px); width: 0px;">
                                     <form action="{{ route('editBook.edit', ['id' => $bookLists->id]) }}" method="GET" style="display: inline;">
                                         @csrf
                                         <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="!important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i></b></button>
                                     </form>
-
+                                    @if (!Auth::user()->is_assistant)
                                     <!-- Button to trigger the modal -->
                                     <button class="text-red-600 hover:text-red-700 duration-100" type="button" style="cursor: pointer;  border-radius: 5px; padding: 10px; margin-top: -10.5px;" onclick="showConfirmationModal({{ $bookLists->id }})"><b><i class="fa-solid fa-trash"></i></b></button>
+                                    @endif
+
                                 </div>
                                 @endif
                               </div>
@@ -172,15 +174,16 @@ $borrowCount = BorrowCount::first();
                                 </div>
                             </div>
                         </a>
-                        @if (Auth::user()->is_admin)
+                        @if (Auth::user()->is_admin || Auth::user()->is_assistant)
                         <div style="text-align: center; margin-top: 4px;">
                             <form action="{{ route('editBook.edit', ['id' => $bookLists->id]) }}" method="GET" style="display: inline;">
                                 @csrf
                                 <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="width: 123px !important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit</b></button>
                             </form>
-
+                            @if (!Auth::user()->is_assistant)
                             <!-- Button to trigger the modal -->
                             <button class="text-red-600 hover:text-red-700 duration-100" type="button" style="width: 123px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModal({{ $bookLists->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
+                            @endif
                         </div>
                         @endif
                     </div>
@@ -206,6 +209,11 @@ $borrowCount = BorrowCount::first();
 
        </div>
     </div>
+
+
+
+
+
 
 
     {{-- Add Modal --}}
@@ -238,12 +246,6 @@ $borrowCount = BorrowCount::first();
                         </div> <br>
 
                         <div>
-                            <label for="availability"><b><i class="fa-solid fa-chart-line"></i> Availability</b></label> <br>
-                            <input required type="radio" id="availability" name="availability" value="Available"> Available &nbsp;
-                            <input required type="radio" id="availability" name="availability" value="Not Available"> Not Available
-                        </div> <br>
-
-                        <div>
                             <label for="status"><b><i class="fa-solid fa-chart-simple"></i> Book Status</b></label> <br>
                             <input required type="radio" id="status" name="status" value="Good"> Good &nbsp;
                             <input required type="radio" id="status" name="status" value="Damage"> Damage &nbsp;
@@ -259,6 +261,13 @@ $borrowCount = BorrowCount::first();
                             <label for="publish"><b><i class="fa-solid fa-calendar-days"></i> Year Published</b></label><br>
                             <input placeholder="Publish" class="modalInput rounded-lg" type="text" id="publish" name="publish" required>
                         </div> <br>
+
+
+                        <div>
+                            <label for="number_of_copies"><b><i class="fa-solid fa-copy"></i> Number of Copies</b></label><br>
+                            <input placeholder="Number of Copies" class="modalInput rounded-lg" type="number" id="number_of_copies" name="number_of_copies" required>
+                        </div> <br>
+
 
                         <div class="overflow-hidden">
                             <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
@@ -283,6 +292,12 @@ $borrowCount = BorrowCount::first();
             </div>
         </div>
     </div>
+
+
+
+
+
+
 
 
 

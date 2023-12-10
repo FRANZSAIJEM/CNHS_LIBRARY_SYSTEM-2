@@ -138,7 +138,9 @@ Route::delete('/remove-request/{user_id}/{book_id}', [BookController::class, 're
 
 Route::delete('/acceptedRequests/{id}', [AcceptRequestController::class, 'destroy'])->name('acceptedRequests.destroy');
 Route::post('/acceptRequest/{user}/{book}', [AcceptRequestController::class, 'acceptRequest'])->name('acceptRequest');
+
 Route::get('/transactions', [AcceptRequestController::class, 'transactions'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('transactions');
+
 Route::get('/history', [AcceptRequestController::class, 'history'])->name('history');
 Route::post('/returnBook/{id}', [AcceptRequestController::class , 'returnBook'])->name('returnBook');
 

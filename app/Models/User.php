@@ -142,11 +142,14 @@ class User extends Authenticatable
         return $this->hasMany(Chat::class, 'receiver_id', 'id');
     }
 
+
         // Inside your User model (User.php)
     public function hasChatData()
     {
         return $this->messages->count() > 0;
     }
+
+
 
     public function chats()
     {

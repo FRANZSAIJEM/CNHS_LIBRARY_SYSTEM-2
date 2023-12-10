@@ -16,7 +16,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
 
-        if ($request->route()->getName() === 'bookList' || (auth()->user() && (auth()->user()->is_admin || auth()->user()->is_staff))) {
+        if ($request->route()->getName() === 'bookList' || (auth()->user() && (auth()->user()->is_admin || auth()->user()->is_staff || auth()->user()->is_assistant))) {
             return $next($request);
         }
 

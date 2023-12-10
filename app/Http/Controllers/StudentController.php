@@ -113,6 +113,10 @@ class StudentController extends Controller
     }
 
 
+
+
+
+
     public function requestIndex(Request $request)
     {
         // Retrieve all users with related requested books
@@ -167,6 +171,10 @@ class StudentController extends Controller
 
         // Find the book by ID
         $book = book::findOrFail($bookId);
+
+
+        // Increment the count_copies field
+        $book->increment('count_copies');
 
         // Find or create the user's book request record
         $userBookRequest = UserBookRequest::firstOrNew(['user_id' => $user->id]);

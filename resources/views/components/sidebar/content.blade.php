@@ -38,39 +38,41 @@
 
 
 
-        <x-sidebar.link
-        title="History"
-        href="{{ route('history') }}"
-        :isActive="request()->routeIs('history')"
-    >
-        <x-slot name="icon">
+      @if (!Auth::user()->is_assistant)
+      <x-sidebar.link
+      title="History"
+      href="{{ route('history') }}"
+      :isActive="request()->routeIs('history')"
+  >
+      <x-slot name="icon">
 
-            <i  class="fa-solid fa-clock-rotate-left w-6 h-6 flex justify-center mb-2 text-lg"></i>
-            <!-- Conditionally display the badge for history -->
-            @php
-            $loggedInUserId = Auth::id();
-            $historyCount = App\Models\UserNotification::where('user_id', $loggedInUserId)->count();
+          <i  class="fa-solid fa-clock-rotate-left w-6 h-6 flex justify-center mb-2 text-lg"></i>
+          <!-- Conditionally display the badge for history -->
+          @php
+          $loggedInUserId = Auth::id();
+          $historyCount = App\Models\UserNotification::where('user_id', $loggedInUserId)->count();
 
-            // Check if the user has visited the history page
-            $visitedHistoryPage = session('visited_history_page', false);
+          // Check if the user has visited the history page
+          $visitedHistoryPage = session('visited_history_page', false);
 
-            // If the user is on the history page, mark it as visited
-            if (request()->routeIs('history')) {
-                session(['visited_history_page' => true]);
-            }
-            @endphp
+          // If the user is on the history page, mark it as visited
+          if (request()->routeIs('history')) {
+              session(['visited_history_page' => true]);
+          }
+          @endphp
 
-            @if (!$visitedHistoryPage && $historyCount > 0)
-            {{-- <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
-                {{ $historyCount }}
-            </span> --}}
-            @endif
-        </x-slot>
-    </x-sidebar.link>
+          @if (!$visitedHistoryPage && $historyCount > 0)
+          {{-- <span class="bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1">
+              {{ $historyCount }}
+          </span> --}}
+          @endif
+      </x-slot>
+  </x-sidebar.link>
+      @endif
 
 
 
-    @if (!Auth::user()->is_admin)
+    @if (!Auth::user()->is_admin && !Auth::user()->is_assistant)
     <x-sidebar.link
         title="Chat Staff"
         href="{{ route('startChatStud') }}"
@@ -185,7 +187,7 @@
 
 {{-- bg-slate-600 text-white w-7 text-center rounded-full px-2 py-1 text-xs absolute top-30 right-1 --}}
 
-    @if (Auth::user()->is_admin)
+    @if (Auth::user()->is_admin || Auth::user()->is_assistant)
         <x-sidebar.link
             title="Borrowed Books"
             href="{{ route('transactions') }}"
@@ -201,6 +203,7 @@
 
 
 
+        @if (!Auth::user()->is_assistant)
         <x-sidebar.link
             title="Students"
             href="{{ route('student') }}"
@@ -211,7 +214,11 @@
             <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-users"></i>
         </x-slot>
         </x-sidebar.link>
+        @endif
 
+
+
+        @if (!Auth::user()->is_assistant)
         <x-sidebar.link
         title="Reports"
         href="{{ route('reports') }}"
@@ -223,6 +230,8 @@
 
     </x-slot>
     </x-sidebar.link>
+    @endif
+
 
 
     @endif

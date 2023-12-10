@@ -52,7 +52,7 @@ class BookListController extends Controller
                 $query->where('title', 'LIKE', $letterFilter . '%');
             }
         }
-
+        $query->orderBy('created_at', 'desc');
 
         $bookListsDefault = $query->paginate(35);
         $bookListsCard = $query->paginate(8);

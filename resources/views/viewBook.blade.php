@@ -31,6 +31,9 @@
 
             <div class="viewFlex rounded-md mb-5">
                <div class="marginTwo">
+                    <div class="p-1 text-white text-right" style="margin-top: -30px; transform: translateY(45px); background-color: rgba(0, 0, 0, 0.5)">
+                       {{$book->number_of_copies}} Copies
+                    </div>
                     @if (isset($book))
                         <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 410px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" >
 
@@ -42,13 +45,14 @@
                         <b>Published:</b> {{$book->publish}}
                     </div>
                <div class="text-center" style="margin-top: -15px;">
-                    @if (Auth::user()->is_admin)
+                    @if (Auth::user()->is_admin || Auth::user()->is_assistant)
                         <form action="{{ route('editBook.edit', ['id' => $book->id]) }}" method="GET" style="display: inline;">
                             @csrf
                             <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="!important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit</b></button>
                         </form>
+                        @if (!Auth::user()->is_assistant)
                         <button class="text-red-600 hover:text-red-700 duration-100" type="button" style=" border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDelete({{ $book->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
-
+                        @endif
                     @endif
                </div>
                </div>
@@ -67,9 +71,17 @@
                     <br> <hr> <br>
                     <h1><b><i class="fa-solid fa-chart-simple"></i> Status</b></h1>
                     {{$book->status}} <br> <hr> <br>
+
+
                 </div>
 
             </div>
+
+
+
+
+
+
             <h1><b><i class="fa-solid fa-paragraph"></i> Description</b></h1>
             <div style="display: grid; place-content: center">
                 <textarea disabled style="resize: none" class="justDescription p-6 overflow-hidden border-none bg-slate-100 rounded-md shadow-md dark:bg-dark-eval-1" name="" id="" rows="11">{{$book->description}}</textarea>
@@ -209,9 +221,7 @@
 
 
                                             <div class="flex">
-                                                  <!-- Like button with a form -->
-                                           <!-- Like button with a form -->
-                                       <!-- Like button with a form -->
+
                                                 <form method="POST" action="{{ route('comments.like', ['comment' => $comment]) }}" class="like-form">
                                                     @csrf
                                                     <button type="submit" class="like-button p-2 ps-5 pe-5 rounded-md duration-100
@@ -303,8 +313,12 @@
 
 
     <div style="display: grid; place-content: center;" class="mt-5">
-        @if (!Auth::user()->is_admin)
+        @if (!Auth::user()->is_admin && !Auth::user()->is_assistant)
             <div >
+
+
+
+
                 <button class="your-button-class {{ $book->availability === 'Not Available' || $book->requestedByUsers->count() > 0 || $userHasAcceptedRequest || $userHasRequestedThisBook || ($userBookRequest && $userBookRequest->request_count == $borrowCount->count) || ($userBookRequest && $userBookRequest->request_count >= $borrowCount->count) ? 'disabled' : '' }}"
                     onclick="showConfirmationModal({{ $book->id }})"
                     type="submit"
@@ -360,31 +374,16 @@
                                     @endif
                                 @endif
                             </button>
-
-
-
-
                         @else
                             <i class="fa-solid fa-code-pull-request"></i> Request
                         @endif
                     </b>
                 </button>
-                {{-- <p>Book Returned Status: {{ $bookReturnStatus ? 'Returned' : 'Not Returned' }}</p> --}}
+
 
 
             </div>
-                {{-- put here --}}
 
-                    {{-- @if (!$userHasAcceptedRequestForReturnedBook && $user->hasAcceptedRequestForBook($book->id))
-                        <div>
-                            <button class="your-button-class"
-                                onclick="showConfirmationModal({{ $book->id }})"
-                                type="submit"
-                            >
-                                <b>Reserve book</b>
-                            </button>
-                        </div>
-                    @endif --}}
 
 
         @endif

@@ -39,7 +39,6 @@
                     <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                         <div style="width: 300px; height: 600px;">
 
-
                             @php
                                 $user = auth()->user();
                                 $totalRequests = DB::table('chats')->count();
@@ -63,12 +62,6 @@
                                 @endif
                             </a>
 
-
-
-
-                                {{-- @if ($showBadge)
-                                    <span style="margin-top: -10px;" class="bg-red-500 w-2.5 h-2.5 rounded-full absolute ms-5 mb-5"></span>
-                                @endif --}}
 
                             <div class="p-5">
                                 <h1><b><i class="fa-solid fa-file-signature"></i> Full Name</b></h1>
