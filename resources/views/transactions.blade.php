@@ -5,7 +5,7 @@
                 <i  class="fas fa-exchange-alt"></i> {{ __('Borrowed Books') }}
             </h2>
             <h2 class="rounded-md shadow-md bg-white hover:bg-slate-300 duration-100 dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
-                <a href="archivebook"><i class="fa-solid fa-newspaper fa-bounce"></i> Manual Record ></a>
+                <a href="manualRecord"><i class="fa-solid fa-newspaper fa-bounce"></i> Manual Record ></a>
             </h2>
         </div>
     </x-slot>
@@ -54,54 +54,7 @@
 
 
 
-                <div class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
-
-                    <form method="post" action="{{ route('duplicate-accept-request') }}">
-                        @csrf
-
-                        <div class="mb-4">
-                            <label for="user_id" class="block text-gray-700 text-sm font-bold mb-2">Select User:</label>
-                            <select id="user_id" name="user_id" required
-                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-indigo-500">
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="book_id" class="block text-gray-700 text-sm font-bold mb-2">Select Book:</label>
-                            <select id="book_id" name="book_id" required
-                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-indigo-500">
-                                @foreach($books as $book)
-                                    <option value="{{ $book->id }}">{{ $book->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="date_pickup" class="block text-gray-700 text-sm font-bold mb-2">Date Pickup:</label>
-                            <input type="datetime-local" id="date_pickup" name="date_pickup" required
-                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-indigo-500">
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="date_return" class="block text-gray-700 text-sm font-bold mb-2">Date Return:</label>
-                            <input type="datetime-local" id="date_return" name="date_return" required
-                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-indigo-500">
-                        </div>
-
-                        <!-- Add any other form fields as needed -->
-
-                        <div class="mt-6">
-                            <button type="submit"
-                                class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-700 focus:outline-none focus:shadow-outline-indigo active:bg-indigo-800">
-                                Submit Duplicate Accept Request
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
+            
 
 
 

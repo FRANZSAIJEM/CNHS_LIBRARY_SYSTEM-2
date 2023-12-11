@@ -102,6 +102,7 @@ class BooksTableSeeder extends Seeder
                 'subject' => $faker->randomElement($subjects),
                 'availability' => $faker->randomElement(['Available', 'Not Available']),
                 'status' => $faker->randomElement(['Good', 'Damage']),
+                'condition' => $faker->randomElement(['New Acquired', 'Outdated']),
                 'publish' => $publishYear,
                 'isbn' => $faker->isbn13,
                 'description' => $faker->paragraph,

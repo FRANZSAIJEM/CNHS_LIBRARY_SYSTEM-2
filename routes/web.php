@@ -15,6 +15,8 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BorrowCountController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ArchiveBookController;
+use App\Http\Controllers\ManualRecordController;
+
 
 
 
@@ -54,6 +56,7 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 });
 
 
+Route::get('/manualRecord', [ManualRecordController::class, 'index'])->name('manualRecord');
 
 
 Route::post('/accept-request/duplicate', [AcceptRequestController::class, 'duplicateAcceptRequest'])
