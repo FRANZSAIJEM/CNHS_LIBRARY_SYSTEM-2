@@ -3,7 +3,7 @@
 
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
-                <a href="javascript:void(0);" onclick="goBack()" class="rounded-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold"><i class="fa-solid fa-chevron-left"></i> Back</a>/ <i class="fa-solid fa-history"></i> {{ __('History') }}
+                <a href="javascript:void(0);" onclick="goBack()" class="rounded-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold"><i class="fa-solid fa-chevron-left"></i> Back</a>/ <i class="fa-solid fa-archive"></i> {{ __('Archive') }}
             </h2>
         </div>
     </x-slot>
@@ -72,7 +72,7 @@
                 @if (Auth::user()->is_admin || Auth::user()->is_assistant)
                 <div style="text-align: center; margin-top: 4px;">
 
-                    @if (!Auth::user()->is_assistant)
+
                     <form action="{{ route('deleteArchivedBook', ['id' => $archivedBook->book->id]) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')
@@ -80,7 +80,7 @@
                             <b><i class="fa-solid fa-trash"></i> Restore</b>
                         </button>
                     </form>
-                    @endif
+
                 </div>
                 @endif
             </div>

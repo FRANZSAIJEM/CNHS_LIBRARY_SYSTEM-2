@@ -56,6 +56,11 @@ Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
 
 
 
+Route::post('/accept-request/duplicate', [AcceptRequestController::class, 'duplicateAcceptRequest'])
+    ->name('duplicate-accept-request');
+
+
+
 
 
 Route::get('/reports', [PdfController::class, 'index'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('reports');

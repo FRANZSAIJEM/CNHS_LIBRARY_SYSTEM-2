@@ -33,7 +33,7 @@ class AcceptedRequest extends Model
         return $this->belongsTo(Book::class, 'book_id');
     }
 
-    
+
     public function timeDuration()
     {
         return $this->hasOne(TimeDuration::class);

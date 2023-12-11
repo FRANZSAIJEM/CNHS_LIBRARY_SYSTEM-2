@@ -11,7 +11,7 @@ use App\Models\DefaultFine;
 use App\Models\Reply;
 use App\Models\TimeDuration;
 
-
+use Illuminate\Validation\Rule; // Import the Rule class
 
 use App\Models\Book; // Import your Book model
 use App\Models\AcceptedRequest; // Import your Book model
@@ -110,6 +110,12 @@ class AcceptRequestController extends Controller
 
 
 
+
+
+
+
+
+
     public function transactions(Request $request)
     {
         $idNumberSearch = $request->input('id_number_search');
@@ -138,6 +144,22 @@ class AcceptRequestController extends Controller
 
         $acceptedRequests = $query->get();
 
+           // Load the users related to the accepted requests
+        $acceptedRequests->load('user');
+
+           // Load the books related to the accepted requests
+        $acceptedRequests->load('book');
+
+
+        // Retrieve distinct users and books directly from the database
+        // $users = User::whereIn('id', $acceptedRequests->pluck('user_id'))->get();
+        // $books = book::whereIn('id', $acceptedRequests->pluck('book_id'))->get();
+
+        $users = User::all()->where('is_admin', false);
+        $books = book::all();
+
+
+
         foreach ($acceptedRequests as $acceptedRequest) {
             // Set total_fines directly from the AcceptedRequest model
             $acceptedRequest->total_fines = $acceptedRequest->total_fines ?? 0;
@@ -149,11 +171,19 @@ class AcceptRequestController extends Controller
             $acceptedRequest->date_return = \Carbon\Carbon::parse($acceptedRequest->date_return);
         });
 
+
+
+
         // Remove the search query parameter to clear the search
         $request->merge(['id_number_search' => null]);
 
-        return view('transactions', compact('acceptedRequests', 'idNumberSearch'));
+        return view('transactions', compact('acceptedRequests', 'idNumberSearch', 'users', 'books'));
     }
+
+
+
+
+
 
 
 
@@ -352,6 +382,105 @@ class AcceptRequestController extends Controller
         ]);
     }
 
+
+
+
+
+
+
+
+    public function duplicateAcceptRequest(Request $request, User $user, Book $book)
+    {
+        // Set the timezone to your application's timezone
+        Config::set('app.timezone', 'Asia/Manila');
+
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'date_pickup' => 'required|date_format:Y-m-d\TH:i',
+            'date_return' => 'required|date_format:Y-m-d\TH:i',
+        ]);
+
+            // Retrieve the selected user and book
+        $user = User::find($request->input('user_id'));
+        $book = book::find($request->input('book_id'));
+
+
+        $acceptedRequest = new AcceptedRequest();
+        $acceptedRequest->user_id = $user->id;
+        $acceptedRequest->book_id = $book->id;
+        $acceptedRequest->book_title = $book->title;
+        $acceptedRequest->borrower_id = $user->id;
+        $acceptedRequest->date_borrow = now();
+
+        $latestDefaultFine = DefaultFine::orderBy('updated_at', 'desc')->first();
+
+        if ($latestDefaultFine) {
+            $acceptedRequest->default_fine_id = $latestDefaultFine->id;
+        } else {
+            // Handle the case when there is no latest default fine
+        }
+        $acceptedRequest->date_pickup = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_pickup'));
+        $acceptedRequest->date_return = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('date_return'));
+
+        $timeDuration = new TimeDuration();
+        $timeDuration->date_pickup_seconds = $acceptedRequest->date_pickup->timestamp;
+        $timeDuration->date_return_seconds = $acceptedRequest->date_return->timestamp;
+
+        $acceptedRequest->updated_at = now();
+        $request->session()->put('fines', $acceptedRequest->fines);
+
+        $acceptedRequest->save();
+
+        $timeDuration = new TimeDuration();
+        $timeDuration->accepted_request_id = $acceptedRequest->id;
+        $timeDuration->date_pickup_seconds = $acceptedRequest->date_pickup->timestamp;
+        $timeDuration->date_return_seconds = $acceptedRequest->date_return->timestamp;
+        $timeDuration->save();
+
+        // Detach the book from the user's requestedBooks relationship since it's been accepted.
+        $user->requestedBooks()->detach($book);
+
+        $notificationText = "{$user->name} Borrowed '{$book->title}' ";
+
+        $notification = new Notification([
+            'user_id' => $user->id,
+            'notification_text' => $notificationText,
+        ]);
+
+        $notification->save();
+
+        $userIdsToNotify = User::pluck('id')->toArray();
+
+        $usersToNotify = User::whereIn('id', $userIdsToNotify)->get();
+
+        foreach ($usersToNotify as $userToNotify) {
+            $userNotification = new UserNotification([
+                'user_id' => $userToNotify->id,
+                'notification_id' => $notification->id,
+            ]);
+            $userNotification->save();
+        }
+
+        // Update the is_borrowed field for the user to true
+        $user->is_borrowed = true;
+        $user->save();
+
+        $user->borrowed_count++;
+        $user->save();
+
+        $book->count++;
+        $book->save();
+
+       // Find or create the user's book request record
+       $userBookRequest = UserBookRequest::firstOrNew(['user_id' => $user->id]);
+       $userBookRequest->request_count++;
+       $userBookRequest->save();
+
+        // Redirect back to the previous page or wherever you want.
+        return redirect()->back()->with('success', 'Accepted and saved.')
+            ->with('notification', $notificationText);
+    }
 
 
 

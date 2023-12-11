@@ -4,6 +4,9 @@
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
                 <i  class="fas fa-exchange-alt"></i> {{ __('Borrowed Books') }}
             </h2>
+            <h2 class="rounded-md shadow-md bg-white hover:bg-slate-300 duration-100 dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
+                <a href="archivebook"><i class="fa-solid fa-newspaper fa-bounce"></i> Manual Record ></a>
+            </h2>
         </div>
     </x-slot>
 
@@ -46,6 +49,65 @@
 
         <div class="">
             <div class="transactCenter">
+
+
+
+
+
+                <div class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
+
+                    <form method="post" action="{{ route('duplicate-accept-request') }}">
+                        @csrf
+
+                        <div class="mb-4">
+                            <label for="user_id" class="block text-gray-700 text-sm font-bold mb-2">Select User:</label>
+                            <select id="user_id" name="user_id" required
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-indigo-500">
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="book_id" class="block text-gray-700 text-sm font-bold mb-2">Select Book:</label>
+                            <select id="book_id" name="book_id" required
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-indigo-500">
+                                @foreach($books as $book)
+                                    <option value="{{ $book->id }}">{{ $book->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="date_pickup" class="block text-gray-700 text-sm font-bold mb-2">Date Pickup:</label>
+                            <input type="datetime-local" id="date_pickup" name="date_pickup" required
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-indigo-500">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="date_return" class="block text-gray-700 text-sm font-bold mb-2">Date Return:</label>
+                            <input type="datetime-local" id="date_return" name="date_return" required
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-indigo-500">
+                        </div>
+
+                        <!-- Add any other form fields as needed -->
+
+                        <div class="mt-6">
+                            <button type="submit"
+                                class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-700 focus:outline-none focus:shadow-outline-indigo active:bg-indigo-800">
+                                Submit Duplicate Accept Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+
+
+
+
+
                 <div class="flex flex-wrap">
                     @if (count($acceptedRequests) > 0)
                     @foreach ($acceptedRequests as $index => $acceptedRequest)
@@ -78,12 +140,12 @@
                                     {{ $acceptedRequest->user->grade_level }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
                                     {{ $acceptedRequest->book->title }} <br> <hr> <br>
-                                    <h1><b><i class="fa-solid fa-calendar-days"></i> Borrowed On</b></h1>
+                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Borrowed On</b></h1>
                                     {{ $formattedDate1}} <br> <hr> <br>
 
-
+{{--
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Pickup Date</b></h1>
-                                    {{ $formattedDate2 }} <br> <hr> <br>
+                                    {{ $formattedDate2 }} <br> <hr> <br> --}}
 
 
                                     <h1><b><i class="fa-solid fa-calendar-days"></i> Return Date</b></h1>
@@ -112,42 +174,8 @@
 
                                 </div>
                             </div>
-                          <div class="text-center" style="margin-top: 125px;">
+                          <div class="text-center" style="margin-top: -10px;">
                             <button class="text-green-600 hover:text-green-700 duration-100" type="button" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showConfirmationModal({{ $acceptedRequest->id }})"><b><i class="fa-solid fa-check"></i> End Record</b></button>
-
-                            {{-- <form action="{{ route('acceptedRequests.destroy', $acceptedRequest->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-
-                                <button class="text-green-600 hover:text-green-700 duration-100"
-                                    style="width: 150px; border-radius: 5px; padding: 10px;"
-                                    type="submit"
-                                >
-                                    <b><i class="fa-solid fa-check"></i> End Record</b>
-                                </button>
-                            </form> --}}
-
-                            {{-- <form action="{{ route('returnBook', $acceptedRequest->id) }}" method="POST">
-                                @csrf
-                                @if (!$acceptedRequest->book_returned)
-                                    <button class="text-green-600 hover:text-green-700 duration-100"
-                                        style="width: 150px; border-radius: 5px; padding: 10px;"
-                                        type="submit"
-                                    >
-                                        <b><i class="fa-solid fa-rotate-left"></i> Return Book Only</b>
-                                    </button>
-                                @else
-                                    <button class="text-gray-400"
-                                        style="width: 150px; border-radius: 5px; padding: 10px;"
-                                        type="button"
-                                        disabled
-                                    >
-                                        <b><i class="fa-solid fa-rotate-left"></i> Book Already Returned</b>
-                                    </button>
-                                @endif
-                            </form> --}}
-
-
 
                           </div>
                         </div>
@@ -155,12 +183,20 @@
                     @else
                         <p>There is no transactions.</p>
                     @endif
-
-
-
-
-
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
             {{-- <div>
                 @foreach ($acceptedRequests as $acceptedRequest)

@@ -173,8 +173,7 @@ class StudentController extends Controller
         $book = book::findOrFail($bookId);
 
 
-        // Increment the count_copies field
-        $book->increment('count_copies');
+
 
         // Find or create the user's book request record
         $userBookRequest = UserBookRequest::firstOrNew(['user_id' => $user->id]);
