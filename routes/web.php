@@ -14,6 +14,8 @@ use App\Http\Controllers\DefaultFineController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\BorrowCountController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\ArchiveBookController;
+
 
 
 
@@ -130,6 +132,13 @@ Route::get('/replies', [AcceptRequestController::class, 'replies'])->name('repli
 Route::get('/student', [StudentController::class, 'index'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('student');
 Route::get('/book', [BookController::class, 'index'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('book');
 Route::post('/book', [BookController::class, 'store'])->middleware(['auth', 'verified', AdminMiddleware::class])->name('book');
+
+Route::get('/archivebook', [ArchiveBookController::class, 'archivebookIndex'])->name('archivebook');
+Route::post('/archivebook/{id}', [ArchiveBookController::class, 'archiveBook'])->name('archiveBook');
+Route::delete('/delete-archived-book/{id}', [ArchiveBookController::class, 'deleteArchivedBook'])->name('deleteArchivedBook');
+
+
+
 
 Route::get('/editBook/{id}', [BookController::class, 'edit'])->name('editBook.edit');
 Route::put('/updateBook/{id}', [BookController::class, 'update'])->name('updateBook.update');

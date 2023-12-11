@@ -44,6 +44,13 @@
 
 
             <div>
+                <label for="condition"><b><i class="fa-solid fa-chart-simple"></i> Book Condition</b></label> <br>
+                <input required {{ $book->condition == 'New Acquired' ? 'checked' : '' }} type="radio" id="condition_new" name="condition" value="New Acquired"> New Acquired &nbsp;
+                <input required {{ $book->condition == 'Outdated' ? 'checked' : '' }} type="radio" id="condition_outdated" name="condition" value="Outdated">  &nbsp; Outdated
+            </div> <br>
+
+
+            <div>
                 <label for="isbn"><b><i class="fa-solid fa-code-compare"></i> ISBN</b></label><br>
                 <input placeholder="ISBN" class="modalInput rounded-lg" type="text" id="isbn" name="isbn" required value="{{ $book->isbn }}">
             </div> <br>

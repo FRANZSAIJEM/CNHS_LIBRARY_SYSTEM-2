@@ -52,10 +52,18 @@ class BookListController extends Controller
                 $query->where('title', 'LIKE', $letterFilter . '%');
             }
         }
-        $query->orderBy('created_at', 'desc');
 
-        $bookListsDefault = $query->paginate(35);
-        $bookListsCard = $query->paginate(8);
+        $booksNotArchived = $query->whereNotIn('id', function ($subquery) {
+            $subquery->select('book_id')->from('archive_books');
+        });
+
+
+
+
+        $booksNotArchived->orderBy('created_at', 'desc');
+
+        $bookListsDefault = $booksNotArchived->paginate(35);
+        $bookListsCard = $booksNotArchived->paginate(8);
 
 
         return view('bookList', [
@@ -63,6 +71,8 @@ class BookListController extends Controller
             'bookListsCard' => $bookListsCard,
             'bookRequestCount' => $bookRequestCount]);
     }
+
+
 
 
 

@@ -35,6 +35,25 @@
 
 
 
+{{--
+
+        <x-sidebar.link
+        title="Books"
+        href="{{ route('archivebook') }}"
+        :isActive="request()->routeIs('archivebook')"
+        >
+        <x-slot name="icon">
+            <i  class="fa-solid w-6 h-6 flex justify-center mb-2 text-lg fa-book"></i>
+
+        </x-slot>
+
+    </x-sidebar.link> --}}
+
+
+
+
+
+
 
 
 

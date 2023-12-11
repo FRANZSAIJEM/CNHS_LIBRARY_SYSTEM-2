@@ -21,6 +21,7 @@ class Book extends Model
         'image',
         'number_of_copies',
         'count_copies',
+        'condition'
     ];
 
     public function requestedByUsers()

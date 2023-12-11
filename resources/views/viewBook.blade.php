@@ -31,9 +31,9 @@
 
             <div class="viewFlex rounded-md mb-5">
                <div class="marginTwo">
-                    <div class="p-1 text-white text-right" style="margin-top: -30px; transform: translateY(45px); background-color: rgba(0, 0, 0, 0.5)">
+                    {{-- <div class="p-1 text-white text-right" style="margin-top: -30px; transform: translateY(45px); background-color: rgba(0, 0, 0, 0.5)">
                        {{$book->number_of_copies}} Copies
-                    </div>
+                    </div> --}}
                     @if (isset($book))
                         <div class="rounded-md shadow-md dark:bg-dark-eval-1" style="background-position: center center; border-radius: 5px; width: 250px; height: 410px; background-size: cover; background-image: url('{{ asset('storage/' . $book->image) }}');" >
 
@@ -44,17 +44,36 @@
                     <div class="p-1 text-white" style="transform: translateY(-45px); background-color: rgba(0, 0, 0, 0.5)">
                         <b>Published:</b> {{$book->publish}}
                     </div>
-               <div class="text-center" style="margin-top: -15px;">
-                    @if (Auth::user()->is_admin || Auth::user()->is_assistant)
-                        <form action="{{ route('editBook.edit', ['id' => $book->id]) }}" method="GET" style="display: inline;">
-                            @csrf
-                            <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="!important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit</b></button>
-                        </form>
-                        @if (!Auth::user()->is_assistant)
-                        <button class="text-red-600 hover:text-red-700 duration-100" type="button" style=" border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDelete({{ $book->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button>
+
+                <div class="text-center" style="margin-top: -15px;">
+                        @if (Auth::user()->is_admin || Auth::user()->is_assistant)
+                            <form action="{{ route('editBook.edit', ['id' => $book->id]) }}" method="GET" style="display: inline;">
+                                @csrf
+                                <button class="text-green-600 hover:text-green-700 duration-100" type="submit" style="!important; border: none; border-radius: 5px; padding: 10px; text-decoration: none; cursor: pointer;"><b><i class="fa-solid fa-edit"></i> Edit</b></button>
+                            </form>
+                            @if (!Auth::user()->is_assistant)
+                            {{-- <button class="text-red-600 hover:text-red-700 duration-100" type="button" style=" border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDelete({{ $book->id }})"><b><i class="fa-solid fa-trash"></i> Delete</b></button> --}}
+                            @php
+                                $inArchive = \App\Models\ArchiveBook::where('book_id', $book->id)->exists();
+                            @endphp
+
+                                @if (!$inArchive)
+                            <button class="text-red-600 hover:text-red-700 duration-100" type="button" style=" border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDelete({{ $book->id }})"><b><i class="fa-solid fa-archive"></i> Archive</b></button>
+
+                                    {{-- <form action="{{ route('archiveBook', ['id' => $book->id]) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="button" class="text-red-600 hover:text-red-700 duration-100" type="submit" style="border: none; border-radius: 5px; padding: 10px; margin-left: 10px; cursor: pointer;" onclick="showConfirmationModalDelete({{ $book->id }})>
+                                            <b><i class="fa-solid fa-archive"></i> Archive</b>
+                                        </button>
+                                    </form> --}}
+                                @endif
+
+                            @endif
                         @endif
-                    @endif
-               </div>
+                </div>
+
+
+
                </div>
 
                 <div class="marginTwo" style="width: 250px;">
@@ -71,6 +90,7 @@
                     <br> <hr> <br>
                     <h1><b><i class="fa-solid fa-chart-simple"></i> Status</b></h1>
                     {{$book->status}} <br> <hr> <br>
+
 
 
                 </div>
@@ -441,18 +461,23 @@
             <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationModalDelete()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <hr> <br>
-        <p>Are you sure you want to delete this book?</p>
+        <p>Are you sure you want to restore this book?</p>
         <br>
         <hr> <br>
         <div class="">
                <div class="flex justify-end">
                 <button class="rounded-lg p-4  text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModalDelete()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                <form action="{{ route('archiveBook', ['id' => $book->id]) }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button class="rounded-lg p-4  text-red-600 hover:text-red-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-trash"></i>  Confirm</button>
+                </form>
 
-                <form action="{{ route('bookList.destroy', ['id' => '__BOOK_ID__']) }}" method="POST" style="display: inline;">
+
+                {{-- <form action="{{ route('bookList.destroy', ['id' => '__BOOK_ID__']) }}" method="POST" style="display: inline;">
                     @csrf
                     @method('DELETE')
                     <button class="rounded-lg p-4  text-red-600 hover:text-red-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-trash"></i>  Confirm</button>
-                </form>
+                </form> --}}
                </div>
 
         </div>

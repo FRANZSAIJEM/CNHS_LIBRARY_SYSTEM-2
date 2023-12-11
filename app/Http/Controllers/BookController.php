@@ -35,10 +35,11 @@ class BookController extends Controller
             'author' => 'required|max:255',
             'subject' => 'required|max:255',
             'status' => 'required|in:Good,Damage,Lost',
+
+            'condition' => 'required|in:New Acquired,Outdated',
             'isbn' => 'required|max:255',
             'publish' => 'required|max:255',
             'description' => 'required|max:255',
-            'number_of_copies' => 'required|integer|min:1',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -77,6 +78,7 @@ class BookController extends Controller
             'subject' => 'required|max:255',
             'availability' => 'required|in:Available,Not Available',
             'status' => 'required|in:Good,Damage,Lost',
+            'condition' => 'required|in:New Acquired,Outdated',
             'isbn' => 'required|max:255',
             'publish' => 'required|max:255',
             'description' => 'required|max:255',
@@ -176,6 +178,28 @@ class BookController extends Controller
         $user->requestedBooks()->wherePivot('book_id', $bookId)->detach();
 
         return redirect()->back()->with('success', 'Removed successfullyss.');
+    }
+
+
+
+
+    public function archiveBook($id)
+    {
+        $book = book::find($id);
+
+        if (!$book) {
+            // Handle the case where the book is not found.
+            // You may want to redirect the user or show an error message.
+        }
+
+        // Create a record in the archive_books table
+        $archiveBook = ArchiveBook::create(['book_id' => $book->id]);
+
+        // Optionally, you can delete the book from the original table if needed.
+        // $book->delete();
+
+        // Redirect the user or perform any other actions you need.
+        return redirect()->route('book')->with('success', 'Book archived successfully');
     }
 
 }

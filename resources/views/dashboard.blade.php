@@ -19,7 +19,7 @@
            @endif
        </div>
         <div class="text-center ">
-            @if (!Auth::user()->is_admin)
+            @if (!Auth::user()->is_admin && !Auth::user()->is_assistant)
             <h1><b><i class="fa-solid fa-book"></i> Total Available Books</b></h1>
 
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$availableBooks}}</h3>
@@ -29,7 +29,7 @@
             </x-nav-link>
             @endif
 
-            @if (Auth::user()->is_admin)
+            @if (Auth::user()->is_admin || Auth::user()->is_assistant)
             <h1><b><i class="fa-solid fa-book"></i> Total Books</b></h1>
 
             <h3 style="font-size: 50px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif">{{$totalBooks}}</h3>
@@ -56,7 +56,7 @@
 
 
 
-    @if (!Auth::user()->is_admin)
+    @if (!Auth::user()->is_admin && !Auth::user()->is_assistant)
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="text-center ">
             <h1><b><i class="fa-solid fa-clock"></i> Late Returns</b></h1>

@@ -11,12 +11,15 @@ $borrowCount = BorrowCount::first();
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="rounded-md shadow-md bg-white dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
                 <i class="fa-solid fa-book"></i> {{ __('Books') }}
+
+            </h2>
+            <h2 class="rounded-md shadow-md bg-white hover:bg-slate-300 duration-100 dark:bg-dark-eval-1 p-3 text-xl font-semibold leading-tight">
+                <a href="archivebook"><i class="fa-solid fa-box-archive fa-bounce"></i> Archive ></a>
             </h2>
         </div>
     </x-slot>
 
 <div>
-
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
        <div style="display: grid; place-items: center;">
             @if(session('success'))
@@ -51,7 +54,6 @@ $borrowCount = BorrowCount::first();
                                 <option style="width: 100px;" value="Encyclopedia" {{ (request()->input('subject_filter') == 'Encyclopedia') ? 'selected' : '' }}>Encyclopedia</option>
                             </select>
                         </div>
-
                     </form>
 
 
@@ -77,6 +79,15 @@ $borrowCount = BorrowCount::first();
                     </button>
                 </div>
 
+
+
+
+
+
+
+
+
+
                 <div id="defaultFineForm" style="z-index: 1; display: none; position: absolute; right: 0; transform: translateX(-45px) translateY(45px)">
                     <div class="p-5 rounded-lg shadow-md bg-slate-50">
                         <h1 class="text-center"><b>Set Borrowing Limit</b></h1><br>
@@ -93,9 +104,9 @@ $borrowCount = BorrowCount::first();
 
                 <div class="flex justify-start">
                     <button style="margin-bottom: -40px;" class="bg-slate-500 hover:bg-slate-600 duration-100 pe-3 ps-3 p-2 me-2 ms-2 rounded-lg text-white" onclick="toggleStyle('defaultBookStyle')"><i class="fa-regular fa-hard-drive"></i></button>
-
                     <button style="margin-bottom: -40px;" class="bg-slate-500 hover:bg-slate-600 duration-100 pe-3 ps-3 p-2 me-2 ms-2 rounded-lg text-white" onclick="toggleStyle('cardBookStyle')"><i class="fa-solid fa-list"></i></button>
                 </div>
+
                 @if (Auth::user()->is_admin && !Auth::user()->is_assistant)
                 <button type="button" class="text-green-600 hover:text-green-700 duration-100" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showAddConfirmationModal()"><i class="fa-solid fa-plus"></i> Add Book</button>
                 <button class="text-slate-600 hover:text-slate-900 duration-100" id="showFormButton"><i class="fa-solid fa-gear"></i></button>
@@ -162,8 +173,19 @@ $borrowCount = BorrowCount::first();
                     <div class="m-16 shadow-lg dark:bg-dark-eval-1 bg-slate-100 hover:shadow-sm duration-200" style="border-radius: 5px; ">
                         <a href="{{ route('viewBook', ['id' => $bookLists->id]) }}" style="text-decoration: none;">
                             <div class="bookImage" style="background-position: center center; border-radius: 5px; background-size: cover; background-image: url('{{ asset('storage/' . $bookLists->image) }}');">
+                                <span class="float-right rounded-bl-lg
+                                    @if($bookLists->condition == 'New Acquired') bg-blue-500 @elseif($bookLists->condition == 'Outdated') bg-red-500 @endif
+                                    text-white p-1" style="font-size: 10px;">
+                                    <b>{{ $bookLists->condition }}</b>
+                                </span>
+                                {{-- <br>
+                                <span class="float-right bg-green-500 text-white p-1 rounded-bl-lg" style="font-size: 10px;">
+                                    <b>6 Copies</b>
+                                </span>
+ --}}
+
                                 <div style="color: white; text-align: center; padding: 10px; text-shadow: 0px 0px 5px black">
-                                    <div style="margin-top: 75px;">
+                                    <div style="margin-top: 55px;">
                                         <b style="font-size: 25px;">Title</b> <br>
                                         {{$bookLists->title}} <br>
                                         <b style="font-size: 25px;">Author</b> <br>
@@ -187,6 +209,9 @@ $borrowCount = BorrowCount::first();
                         </div>
                         @endif
                     </div>
+
+
+
                 @endforeach
 
                 </div>
@@ -219,13 +244,10 @@ $borrowCount = BorrowCount::first();
     {{-- Add Modal --}}
     <div id="confirmAddModal" style="overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
         <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
-
             <div class="flex justify-between">
                 <h2><b><i class="fa-solid fa-address-book"></i> Add Book</b></h2>
                 <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
-
             <hr> <br>
             <div class="modalFlex">
                 <form action="{{ route('book') }}" method="post" enctype="multipart/form-data">
@@ -251,6 +273,12 @@ $borrowCount = BorrowCount::first();
                             <input required type="radio" id="status" name="status" value="Damage"> Damage &nbsp;
                         </div> <br>
 
+                        <div>
+                            <label for="condition"><b><i class="fa-solid fa-chart-simple"></i> Book Condition</b></label> <br>
+                            <input required type="radio" id="condition_new" name="condition" value="New Acquired"> New Acquired &nbsp;
+                            <input required type="radio" id="condition_outdated" name="condition" value="Outdated"> Outdated &nbsp;
+                        </div> <br>
+
 
                         <div>
                             <label for="isbn"><b><i class="fa-solid fa-code-compare"></i> ISBN</b></label><br>
@@ -263,16 +291,11 @@ $borrowCount = BorrowCount::first();
                         </div> <br>
 
 
-                        <div>
-                            <label for="number_of_copies"><b><i class="fa-solid fa-copy"></i> Number of Copies</b></label><br>
-                            <input placeholder="Number of Copies" class="modalInput rounded-lg" type="number" id="number_of_copies" name="number_of_copies" required>
-                        </div> <br>
-
-
                         <div class="overflow-hidden">
                             <label for="description"><b><i class="fa-solid fa-paragraph"></i> Description</b></label><br>
                             <textarea placeholder="Description" class="modalInput rounded-lg" placeholder="Type here!" cols="29" rows="5" id="description" name="description" required></textarea>
                         </div> <br>
+
                         <p id="charCount" style="visibility: hidden;">Characters remaining: 255</p>
 
                     <div style="">
@@ -284,11 +307,13 @@ $borrowCount = BorrowCount::first();
                     <br>
 
                    <div class="flex justify-end">
-                    <button type="button" class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
-                    <button class="rounded-lg p-4 text-blue-600 hover:text-blue-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-plus"></i>  Add Book</button>
+                        <button type="button" class="rounded-lg p-4 text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;"  onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                        <button class="rounded-lg p-4 text-blue-600 hover:text-blue-700 duration-100" style="width: 125px;" type="submit"><i class="fa-solid fa-plus"></i>  Add Book</button>
 
                    </div>
                     </form>
+
+
             </div>
         </div>
     </div>

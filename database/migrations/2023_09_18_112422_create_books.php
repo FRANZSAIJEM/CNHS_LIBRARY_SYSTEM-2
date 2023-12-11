@@ -18,11 +18,10 @@ return new class extends Migration
             $table->string('subject');
             $table->string('availability');
             $table->string('status');
+            $table->string('condition');
             $table->string('isbn');
             $table->string('description');
             $table->string('publish');
-            $table->integer('number_of_copies')->default(0);
-            $table->integer('count_copies')->default(0);
             $table->string('image')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('user_id')->nullable();
