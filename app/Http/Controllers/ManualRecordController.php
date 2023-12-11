@@ -13,11 +13,16 @@ use App\Models\book;
 class ManualRecordController extends Controller
 {
 
-    public function index(){
+    public function index(Request $request){
+        $query = $request->input('search');
+        $users = User::where('is_admin', false)
+                      ->where(function($q) use ($query) {
+                          $q->where('name', 'LIKE', "%$query%")
+                            ->orWhere('email', 'LIKE', "%$query%");
+                      })
+                      ->get();
 
-
-        $users = User::all()->where('is_admin', false);
-        $books = book::all();
+        $books = Book::where('title', 'LIKE', "%$query%")->get();
 
         return view('manualRecord', compact('users', 'books'));
     }
