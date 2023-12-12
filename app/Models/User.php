@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\CarbonInterval;
 
 class User extends Authenticatable
 {
@@ -60,6 +62,8 @@ class User extends Authenticatable
         'is_admin' => 'boolean',
         'visited_students' => 'array',
         'is_suspended' => 'boolean',
+        'suspend_start_date' => 'datetime',
+        'suspend_end_date' => 'datetime',
     ];
 
     // User.php
@@ -169,5 +173,32 @@ class User extends Authenticatable
 
         return $latestChatTime;
     }
+
+    public function getSuspensionDuration()
+    {
+        if ($this->is_suspended) {
+            $startDate = Carbon::parse($this->suspend_start_date);
+            $endDate = Carbon::parse($this->suspend_end_date);
+
+            // Swap dates if necessary
+            if ($startDate->greaterThan($endDate)) {
+                [$startDate, $endDate] = [$endDate, $startDate];
+            }
+
+            $diffInSeconds = $endDate->diffInSeconds($startDate);
+
+            $hours = floor($diffInSeconds / 3600);
+            $minutes = floor(($diffInSeconds % 3600) / 60);
+            $seconds = $diffInSeconds % 60;
+
+            $formattedDiff = sprintf('%dh %02dm %02ds', $hours, $minutes, $seconds);
+
+            return $formattedDiff;
+        }
+
+        return "";
+    }
+
+
 
 }

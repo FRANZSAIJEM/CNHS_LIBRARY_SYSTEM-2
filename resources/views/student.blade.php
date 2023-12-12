@@ -90,13 +90,14 @@
 
 
 
-                              <div class="flex justify-evenly">
+                              <div class="flex justify-evenly" style="margin-top: -20px;">
                                 <form class="toggle-form" data-student-id="{{ $student->id }}" style="display: inline;">
                                     @csrf
 
                                     <i id="i" class="fa-regular fa-address-card"></i><button class="toggle-button " type="button"style="font-weight: 1000; padding: 10px; border-radius: 5px; color: {{ $student->is_disabled ? 'red' : 'green' }};">{{ $student->is_disabled ? 'Disabled' : 'Enabled' }}
                                     </button>
                                 </form>
+                                {{-- display here the total time --}}
 
                                 <button class="text-red-600 hover:text-red-700 duration-100"
                                         type="button"
@@ -107,6 +108,10 @@
                                     <b><i class="fa-solid fa-lock"></i>
                                         @if($student->is_suspended == 1) Suspended @else Suspend @endif
                                     </b>
+                                    <div id="countdown">
+                                        {{ $student->getSuspensionDuration() }}
+                                    </div>
+
                                 </button>
 
 
@@ -132,11 +137,11 @@
             <hr> <br>
             @csrf
             <div class="mb-4">
-                <label for="start_date" class="">Start Date:</label>
+                <label for="start_date" class=""><b><i class="fa-solid fa-calendar-days"></i> Start Date:</b></label>
                 <input type="datetime-local" id="start_date" name="start_date" required class="">
             </div>
             <div class="mb-6">
-                <label for="end_date" class="">End Date:</label>
+                <label for="end_date" class=""><b><i class="fa-solid fa-calendar-days"></i> End Date:</b></label>
                 <input type="datetime-local" id="end_date" name="end_date" required class="">
             </div>
             <br>
@@ -327,6 +332,31 @@ function hideConfirmationModal() {
 }
 
 
+function updateCountdown() {
+        // Assuming $student is passed from the server as a JSON object with the necessary properties
+        var startDate = new Date("{{ $student->suspend_start_date }}");
+        var endDate = new Date("{{ $student->suspend_end_date }}");
+
+        var now = new Date();
+        var timeRemaining = endDate - now;
+
+        if (timeRemaining > 0) {
+            var hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+            var minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = hours + "h " + minutes + "m " + seconds + "s";
+        } else {
+
+            clearInterval(countdownInterval);
+        }
+    }
+
+    // Update the countdown every second
+    var countdownInterval = setInterval(updateCountdown, 1000);
+
+    // Initial update
+    updateCountdown();
 
 
     </script>

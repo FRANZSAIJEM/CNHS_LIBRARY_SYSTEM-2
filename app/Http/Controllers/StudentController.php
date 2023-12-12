@@ -61,6 +61,10 @@ class StudentController extends Controller
             'users.gender',
             'users.grade_level',
             'users.is_suspended',
+            'users.suspend_start_date',
+            'users.suspend_end_date',
+
+
 
             // Add other columns from the 'users' table here
 
@@ -72,7 +76,9 @@ class StudentController extends Controller
         , 'users.contact'
         , 'users.gender'
         , 'users.grade_level' // Add other columns from the 'users' table here
-        , 'users.is_suspended')
+        , 'users.is_suspended'
+        , 'users.suspend_start_date'
+        , 'users.suspend_end_date')
 
         ->orderByDesc('latest_chat_date') // Order by the latest chat date in descending order
         ->get();
@@ -110,6 +116,8 @@ class StudentController extends Controller
 
         return redirect('student')->with('success', 'Account suspended successfully.');
     }
+
+
 
 
 

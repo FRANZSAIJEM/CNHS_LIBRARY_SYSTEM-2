@@ -48,10 +48,22 @@ class DailyFine extends Command
 
 
 
-
         foreach ($usersToUnsuspend as $user) {
-            $user->update(['is_suspended' => false]);
-        }
+            // Update is_suspended to false
+            $user->is_suspended = false;
+
+            // Set suspend_start_date and suspend_end_date to null
+            $user->suspend_start_date = null;
+            $user->suspend_end_date = null;
+
+            try {
+                    // Save the model
+                    $user->save();
+                } catch (\Exception $e) {
+                    // Log or dump the exception for debugging
+                    dump("Exception occurred for User ID: {$user->id} - {$e->getMessage()}");
+                }
+            }
 
 
         foreach ($requests as $request) {
