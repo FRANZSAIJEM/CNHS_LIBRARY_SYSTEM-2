@@ -85,16 +85,30 @@
 
 
                             </div>
-                            <div class="text-center">
+                            <div class="">
+
+
+
+                              <div class="flex justify-evenly">
                                 <form class="toggle-form" data-student-id="{{ $student->id }}" style="display: inline;">
                                     @csrf
-                                    <i id="i" class="fa-regular fa-address-card"></i>
-                                    <button class="toggle-button " type="button"
-                                            style="font-weight: 1000; padding: 10px; border-radius: 5px; color: {{ $student->is_disabled ? 'red' : 'green' }};">
-                                        {{ $student->is_disabled ? 'Account Disabled' : 'Account Enabled' }}
+
+                                    <i id="i" class="fa-regular fa-address-card"></i><button class="toggle-button " type="button"style="font-weight: 1000; padding: 10px; border-radius: 5px; color: {{ $student->is_disabled ? 'red' : 'green' }};">{{ $student->is_disabled ? 'Disabled' : 'Enabled' }}
                                     </button>
                                 </form>
 
+                                <button class="text-red-600 hover:text-red-700 duration-100"
+                                        type="button"
+                                        style="cursor: pointer;  border-radius: 5px; padding: 10px;"
+                                        onclick="showConfirmationModal({{ $student->id }})"
+                                        data-student-id="{{ $student->id }}">
+                                    <b><i class="fa-solid fa-lock"></i> Suspend</b>
+                                </button>
+
+
+
+
+                              </div>
                             </div>
                         </div>
                     </div>
@@ -103,11 +117,46 @@
                 </div>
             </div>
         </div>
+
+<!-- Delete Modal -->
+<div id="confirmDeleteModal" style="margin-top: 50px; overflow-y: auto; display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 1;">
+    <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
+        <form id="suspendForm" action="{{ route('suspend-account', ['id' => '__STUDENT_ID__']) }}" method="post">
+
+            <div class="flex justify-between">
+                <h2><b><i class="fa-solid fa-lock"></i> Suspend Student</b></h2>
+                <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <hr> <br>
+            @csrf
+            <div class="mb-4">
+                <label for="start_date" class="">Start Date:</label>
+                <input type="datetime-local" id="start_date" name="start_date" required class="">
+            </div>
+            <div class="mb-6">
+                <label for="end_date" class="">End Date:</label>
+                <input type="datetime-local" id="end_date" name="end_date" required class="">
+            </div>
+            <br>
+            <hr> <br>
+            <div class="">
+                <div class="flex justify-end">
+                    <button class="rounded-lg p-4  text-slate-600 hover:text-slate-700 duration-100" style="width: 125px;" onclick="hideConfirmationModal()"><i class="fa-solid fa-ban"></i> Cancel</button> &nbsp;
+                    <button type="submit" class="rounded-lg p-4 text-red-500 hover:text-red-600 duration-100" style="width: 150px;"><i class="fa-solid fa-lock"></i> Suspend</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
     </div>
 
    {{-- Loading Screen --}}
    <div id="loading-bar" class="loading-bar"></div>
   <style>
+
 
 @keyframes rotate3d {
     0% {
@@ -156,11 +205,17 @@
         .search-button {
             padding: 10px;
         }
+        .modalWidth{
+        width: 600px;
+    }
             @media (max-width: 1000px) and (max-height: 2000px) {
             .studentCenter{
         display: flex;
         place-content: center;
     }
+    .modalWidth{
+            width: 550px;
+        }
     }
 
     @media (max-width: 600px) and (max-height: 2000px) {
@@ -168,6 +223,9 @@
         display: flex;
         place-content: center;
     }
+    .modalWidth{
+            width: 300px;
+        }
     }
     .studentCenter{
         display: flex;
@@ -216,7 +274,7 @@ toggleButtons.forEach(button => {
                 const newColor = currentStatus === 'Enabled' ? 'red' : 'green';
 
 
-                button.textContent = `Account ${newStatus}`;
+                button.textContent = `${newStatus}`;
                 button.style.color = newColor;
             }
         } catch (error) {
@@ -236,5 +294,38 @@ toggleButtons.forEach(button => {
             searchForm.style.maxHeight = '0';
         }
     });
+
+      // Get the modal and button elements
+      const modal = document.getElementById('suspendModal');
+    const openModalButton = document.getElementById('openModalButton');
+    const closeModalButton = document.getElementById('closeModalButton');
+
+
+
+
+    function showConfirmationModal(studentId) {
+    console.log("Suspend student with ID: " + studentId);
+
+    // Show the modal
+    var modal = document.getElementById('confirmDeleteModal');
+    modal.style.display = 'block';
+
+    // Set the action of the form to include the specific student's ID
+    var form = modal.querySelector('form');
+    form.action = form.action.replace(/\/suspend-account\/__STUDENT_ID__/, '/suspend-account/' + studentId);
+}
+
+
+
+
+function hideConfirmationModal() {
+    // Hide the modal
+    var modal = document.getElementById('confirmDeleteModal');
+    modal.style.display = 'none';
+}
+
+
+
+
     </script>
 </x-app-layout>

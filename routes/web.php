@@ -49,7 +49,7 @@ Route::get('/', function () {
 
 
 
-Route::middleware(['auth', 'verified', 'account_status'])->group(function () {
+Route::middleware(['auth', 'verified', 'account_status', 'checkSuspension'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/student', [StudentController::class, 'index'])->name('student');
 
@@ -180,6 +180,12 @@ Route::delete('/bookList/{id}', [BookListController::class,  'destroy'])->name('
 Route::post('/toggle-account-status/{id}', [StudentController::class, 'toggleAccountStatus'])
     ->middleware(['auth', 'verified'])
     ->name('toggleAccountStatus');
+
+
+    Route::group(['middleware' => 'checkSuspension'], function () {
+        Route::post('/suspend-account/{id}', [StudentController::class, 'suspendAccount'])->name('suspend-account');
+    });
+
 
 //this will make the student account enabled or disabled
 Route::post('/disable-account/{id}', [StudentController::class, 'disableAccount'])

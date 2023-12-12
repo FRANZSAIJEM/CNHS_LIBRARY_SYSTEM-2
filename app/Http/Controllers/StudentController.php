@@ -88,8 +88,22 @@ class StudentController extends Controller
     }
 
 
+    public function suspendAccount($id, Request $request)
+    {
+        $student = User::findOrFail($id);
 
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
+        // Validate start and end dates as needed
+
+        $student->suspend_start_date = $startDate;
+        $student->suspend_end_date = $endDate;
+        $student->is_suspended = true; // Set suspension status to true
+        $student->save();
+
+        return redirect()->route('student')->with('success', 'Account suspended successfully.');
+    }
 
 
 
@@ -101,6 +115,8 @@ class StudentController extends Controller
 
         return redirect()->route('student')->with('success', 'Account disabled successfully.');
     }
+
+
 
     public function toggleAccountStatus($id)
     {
