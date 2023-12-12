@@ -78,6 +78,7 @@
                         <p><b><i class="fa-solid fa-id-card"></i> ID Number</b><br> {{ $user->id_number }}</p><hr> <br>
                         <p><b><i class="fa-solid fa-layer-group"></i> Grade Level</b><br> {{ $user->grade_level }}</p><hr> <br>
 
+
                     </div>
                     @endforeach
 

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamp('suspend_start_date')->nullable();
             $table->timestamp('suspend_end_date')->nullable();
             $table->boolean('is_suspended')->default(false);
+     
             $table->timestamp('email_verified_at')->nullable();
             $table->string('image')->nullable();
             $table->rememberToken();

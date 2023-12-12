@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\AcceptedRequest;
 use App\Models\DefaultFine;
+use App\Models\User;
+
 
 class DailyFine extends Command
 {
@@ -30,6 +32,10 @@ class DailyFine extends Command
         $currentDate = now();
 
         $requests = AcceptedRequest::where('date_return', '<=', $currentDate)->get();
+        $usersToUnsuspend = User::where('suspend_end_date', '<=', $currentDate)->get();
+
+
+
 
         // Retrieve the amount from any DefaultFine record (assuming there's only one)
         $defaultFine = DefaultFine::value('amount');
@@ -39,6 +45,14 @@ class DailyFine extends Command
             // Subtract set_daily_fines from defaultFine once
             $defaultFine -= $dailyFine;
         }
+
+
+
+
+        foreach ($usersToUnsuspend as $user) {
+            $user->update(['is_suspended' => false]);
+        }
+
 
         foreach ($requests as $request) {
             // Check if the book has been returned

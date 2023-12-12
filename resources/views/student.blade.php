@@ -36,6 +36,7 @@
             <div class="studentCenter">
                 <div class="flex flex-wrap">
                     @foreach ($students as $student)
+
                     <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
                         <div style="width: 300px; height: 600px;">
 
@@ -99,13 +100,14 @@
 
                                 <button class="text-red-600 hover:text-red-700 duration-100"
                                         type="button"
-                                        style="cursor: pointer;  border-radius: 5px; padding: 10px;"
+                                        style="cursor: pointer; border-radius: 5px; padding: 10px;"
                                         onclick="showConfirmationModal({{ $student->id }})"
-                                        data-student-id="{{ $student->id }}">
-                                    <b><i class="fa-solid fa-lock"></i> Suspend</b>
+                                        data-student-id="{{ $student->id }}"
+                                        @if($student->is_suspended == 1) disabled @endif>
+                                    <b><i class="fa-solid fa-lock"></i>
+                                        @if($student->is_suspended == 1) Suspended @else Suspend @endif
+                                    </b>
                                 </button>
-
-
 
 
                               </div>

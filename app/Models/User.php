@@ -32,8 +32,12 @@ class User extends Authenticatable
         'last_checked_requests',
         'last_checked_notifications',
         'last_checked_chats',
-        'visited_students'
+        'visited_students',
+        'is_suspended',
     ];
+
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -55,6 +59,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'is_admin' => 'boolean',
         'visited_students' => 'array',
+        'is_suspended' => 'boolean',
     ];
 
     // User.php

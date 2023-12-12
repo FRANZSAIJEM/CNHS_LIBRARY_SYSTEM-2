@@ -60,6 +60,7 @@ class StudentController extends Controller
             'users.contact',
             'users.gender',
             'users.grade_level',
+            'users.is_suspended',
 
             // Add other columns from the 'users' table here
 
@@ -70,7 +71,8 @@ class StudentController extends Controller
         , 'users.email'
         , 'users.contact'
         , 'users.gender'
-        , 'users.grade_level') // Add other columns from the 'users' table here
+        , 'users.grade_level' // Add other columns from the 'users' table here
+        , 'users.is_suspended')
 
         ->orderByDesc('latest_chat_date') // Order by the latest chat date in descending order
         ->get();
@@ -88,6 +90,8 @@ class StudentController extends Controller
     }
 
 
+
+
     public function suspendAccount($id, Request $request)
     {
         $student = User::findOrFail($id);
@@ -100,9 +104,11 @@ class StudentController extends Controller
         $student->suspend_start_date = $startDate;
         $student->suspend_end_date = $endDate;
         $student->is_suspended = true; // Set suspension status to true
+
+
         $student->save();
 
-        return redirect()->route('student')->with('success', 'Account suspended successfully.');
+        return redirect('student')->with('success', 'Account suspended successfully.');
     }
 
 
