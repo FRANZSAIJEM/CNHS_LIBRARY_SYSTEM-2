@@ -25,7 +25,7 @@
             <div class="">
                 <div class="flex justify-end">
                     <div class="container mx-auto p-4">
-                        <label for="sectionFilter">Filter by Description:</label>
+                        <label for="sectionFilter"><b>Filter by Description:</b></label>
                         <select id="sectionFilter" onchange="filterSections()">
                             <option value="all">All Sections</option>
                             <option value="allStudents">All Students Who Borrowed Books</option>

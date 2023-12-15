@@ -199,6 +199,14 @@ class User extends Authenticatable
         return "";
     }
 
+    public function userBookRequest()
+    {
+        return $this->hasOne(UserBookRequest::class);
+    }
 
+    public function borrowCount()
+    {
+        return $this->hasOne(BorrowCount::class);
+    }
 
 }

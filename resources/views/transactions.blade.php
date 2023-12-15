@@ -23,16 +23,31 @@
        </div>
         <div class="text-right">
             <div>
+
                 <div class="" style="display: grid; place-content: center;">
-                    <form action="{{ route('transactions') }}" method="GET" class="search-bar">
+                    <form action="{{ route('transactions') }}" method="GET" class="search-bar" id="bookFilterForm">
                         <div class="overflow-hidden rounded mb-5 shadow-md dark:bg-dark-eval-1 flex">
                             <input style="width: 1000px;" class="overflow-hidden rounded-md border-none bg-slate-50 searchInpt bg-transparent" type="text" name="id_number_search" placeholder="🔍 ID Number, Name, Book">
                             <button style="" type="submit" name="letter_filter" value="" class=" hover:bg-slate-300 duration-100 p-1 ps-3 pe-3 rounded-md me-2 m-1 {{ empty(request()->input('letter_filter')) ? 'active' : '' }}">Clear</button>
                         </div>
-
+                        <div style="display: grid; place-content: center">
+                            <select style="width: 275px; font-size: 15px;" name="subject_filter" class="p-3 me-2 m-1 rounded-lg" id="subjectFilter" onchange="submitForm()">
+                                <option style="width: 100px;" value="" {{ empty(request()->input('subject_filter')) ? 'selected' : '' }}>Select Subject</option>
+                                <option style="width: 100px;" value="Periodical subscription" {{ (request()->input('subject_filter') == 'Periodical subscription') ? 'selected' : '' }}>Periodical subscription</option>
+                                <option style="width: 100px;" value="English" {{ (request()->input('subject_filter') == 'English') ? 'selected' : '' }}>English</option>
+                                <option style="width: 100px;" value="Science" {{ (request()->input('subject_filter') == 'Science') ? 'selected' : '' }}>Science</option>
+                                <option style="width: 100px;" value="Mathematics" {{ (request()->input('subject_filter') == 'Mathematics') ? 'selected' : '' }}>Mathematics</option>
+                                <option style="width: 100px;" value="Senior High" {{ (request()->input('subject_filter') == 'Senior High') ? 'selected' : '' }}>Senior High</option>
+                                <option style="width: 100px;" value="Additional Supplementary Readers" {{ (request()->input('subject_filter') == 'Additional Supplementary Readers') ? 'selected' : '' }}>Additional Supplementary Readers</option>
+                                <option style="width: 100px;" value="Encyclopedia" {{ (request()->input('subject_filter') == 'Encyclopedia') ? 'selected' : '' }}>Encyclopedia</option>
+                            </select>
+                        </div>
                     </form>
-
                 </div>
+
+
+
+
                 <form action="{{ route('transactions') }}" method="GET" class="search-bar">
                     <div class="flex justify-end">
                         <button class="text-white bg-orange-400 hover:bg-orange-500 duration-100" type="button" style="width: 143px; border-radius: 5px; padding: 10px; " onclick="showConfirmationModalDateFilter()"><b><i class="fa-regular fa-calendar-days"></i> Filter By Date</b></button>
@@ -54,7 +69,7 @@
 
 
 
-            
+
 
 
 
@@ -93,6 +108,8 @@
                                     {{ $acceptedRequest->user->grade_level }} <br> <hr> <br>
                                     <h1><b><i class="fa-solid fa-book"></i> Book Title</b></h1>
                                     {{ $acceptedRequest->book->title }} <br> <hr> <br>
+                                    <h1><b><i class="fa-solid fa-book"></i> Subject</b></h1>
+                                    {{ $acceptedRequest->book->subject }} <br> <hr> <br>
                                      <h1><b><i class="fa-solid fa-calendar-days"></i> Borrowed On</b></h1>
                                     {{ $formattedDate1}} <br> <hr> <br>
 
@@ -101,7 +118,7 @@
                                     {{ $formattedDate2 }} <br> <hr> <br> --}}
 
 
-                                    <h1><b><i class="fa-solid fa-calendar-days"></i> Return Date</b></h1>
+                                    {{-- <h1><b><i class="fa-solid fa-calendar-days"></i> Return Date</b></h1> --}}
 
 
                                     <div >
@@ -113,7 +130,7 @@
 
 
 
-                                        {{ $formattedDate3 }} <br> <hr> <br>
+                                        {{-- {{ $formattedDate3 }} <br> <hr> <br> --}}
 
 
                                         <h1><b><i class="fa-solid fa-chart-simple"></i> Status</b></h1>
@@ -123,11 +140,9 @@
                                         <hr>
 
 
-
-
                                 </div>
                             </div>
-                          <div class="text-center" style="margin-top: -10px;">
+                          <div class="text-center" style="margin-top: 10px;">
                             <button class="text-green-600 hover:text-green-700 duration-100" type="button" style="width: 150px; border-radius: 5px; padding: 10px;" onclick="showConfirmationModal({{ $acceptedRequest->id }})"><b><i class="fa-solid fa-check"></i> End Record</b></button>
 
                           </div>
@@ -391,12 +406,17 @@ transform: translateY(-5px);
     }
     </style>
 <script>
+
+
+function submitForm() {
+        document.getElementById("bookFilterForm").submit();
+    }
+
+
     function clearDateFilter() {
         document.querySelector('input[name="start_date"]').value = '';
         document.querySelector('input[name="end_date"]').value = '';
     }
-
-
 
 
         function showConfirmationModal(bookId) {

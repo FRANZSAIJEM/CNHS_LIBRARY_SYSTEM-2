@@ -63,6 +63,8 @@ class StudentController extends Controller
             'users.is_suspended',
             'users.suspend_start_date',
             'users.suspend_end_date',
+            'users.is_disabled',
+
 
 
 
@@ -78,7 +80,8 @@ class StudentController extends Controller
         , 'users.grade_level' // Add other columns from the 'users' table here
         , 'users.is_suspended'
         , 'users.suspend_start_date'
-        , 'users.suspend_end_date')
+        , 'users.suspend_end_date'
+        , 'users.is_disabled')
 
         ->orderByDesc('latest_chat_date') // Order by the latest chat date in descending order
         ->get();
@@ -89,7 +92,11 @@ class StudentController extends Controller
             $student->totalFines = $this->calculateTotalFines($student->id);
         }
 
-        return view('student', ['students' => $students, 'fines' => $fines])
+        $isAnyStudentDisabled = $students->contains('is_disabled', true);
+        $isAnyStudentEnabled = $students->contains('is_disabled', false);
+
+        return view('student', ['students' => $students, 'fines' => $fines, 'isAnyStudentDisabled' => $isAnyStudentDisabled,
+        'isAnyStudentEnabled' => $isAnyStudentEnabled ])
             ->with('date_pickup', $date_pickup)
             ->with('date_return', $date_return)
             ->with('acceptedRequest', $acceptedRequest);
@@ -142,6 +149,26 @@ class StudentController extends Controller
         return redirect()->route('student')->with('success', $message);
     }
 
+
+    public function disableAllAccounts()
+    {
+        // Assuming you have a User model
+        User::where('is_disabled', false)
+            ->whereNotIn('name', ['STAFF', 'ASSISTANT']) // Exclude specific user IDs
+            ->update(['is_disabled' => true]);
+
+        return redirect()->route('student')->with('success', 'All accounts disabled successfully.');
+    }
+
+    public function enableAllAccounts()
+    {
+        // Assuming you have a User model
+        User::where('is_disabled', true)
+            ->whereNotIn('name', ['STAFF', 'ASSISTANT']) // Exclude specific user IDs
+            ->update(['is_disabled' => false]);
+
+        return redirect()->route('student')->with('success', 'All accounts disabled successfully.');
+    }
 
 
 
@@ -202,9 +229,6 @@ class StudentController extends Controller
         // Find the book by ID
         $book = book::findOrFail($bookId);
 
-
-
-
         // Find or create the user's book request record
         $userBookRequest = UserBookRequest::firstOrNew(['user_id' => $user->id]);
         $userBookRequest->request_count++;
@@ -212,6 +236,9 @@ class StudentController extends Controller
 
         // Store the request information in the database
         $user->requestedBooks()->attach($book);
+
+         // Mark the book as borrowed
+        $book->update(['is_borrowed' => true]);
 
         return redirect()->route('viewBook', ['id' => $bookId])->with('success', 'Requested successfully.');
     }

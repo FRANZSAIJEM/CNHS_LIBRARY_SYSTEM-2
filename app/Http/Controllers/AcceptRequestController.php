@@ -101,6 +101,9 @@ class AcceptRequestController extends Controller
         $book->count++;
         $book->save();
 
+        // Mark the book as borrowed (set is_borrowed to true)
+        $book->update(['is_borrowed' => true]);
+
         // Redirect back to the previous page or wherever you want.
         return redirect()->back()->with('success', 'Accepted and saved.')
         ->with('notification', $notificationText);
@@ -132,8 +135,22 @@ class AcceptRequestController extends Controller
             })
             ->orWhereHas('book', function ($bookQuery) use ($idNumberSearch) {
                 $bookQuery->where('title', 'LIKE', "%$idNumberSearch%");
+
             });
         }
+
+
+         // Handle subject filter
+        if ($request->has('subject_filter')) {
+            $subjectFilter = $request->input('subject_filter');
+            if ($subjectFilter) {
+                // Assuming 'subject' is a column in the 'book' relationship
+                $query->whereHas('book', function ($bookQuery) use ($subjectFilter) {
+                    $bookQuery->where('subject', $subjectFilter);
+                });
+            }
+        }
+
 
         if (!empty($startDate) && !empty($endDate)) {
             $query->where(function ($query) use ($startDate, $endDate) {
@@ -284,6 +301,9 @@ class AcceptRequestController extends Controller
         $user = $transaction->user; // Assuming there's a 'user' relationship in your AcceptedRequest model
 
         $user->requestedBooks()->detach($book);
+
+        // Mark the book as not borrowed (set is_borrowed to false)
+        $book->update(['is_borrowed' => false]);
 
         $notificationText = "{$user->name} Returned '{$book->title}' ";
 
@@ -476,6 +496,9 @@ class AcceptRequestController extends Controller
        $userBookRequest = UserBookRequest::firstOrNew(['user_id' => $user->id]);
        $userBookRequest->request_count++;
        $userBookRequest->save();
+
+       // Mark the book as borrowed (set is_borrowed to true)
+        $book->update(['is_borrowed' => true]);
 
         // Redirect back to the previous page or wherever you want.
         return redirect()->back()->with('success', 'Accepted and saved.')

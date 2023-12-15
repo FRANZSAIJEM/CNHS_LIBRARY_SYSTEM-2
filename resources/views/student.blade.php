@@ -28,6 +28,28 @@
 
                       </div>
                   </form>
+                  <div class="flex justify-end">
+                    <form id="disable-all-form" action="{{ route('disableAllAccounts') }}" method="POST" style="display: inline;">
+                        @csrf
+                        @if ($isAnyStudentEnabled)
+                            <button class="disable-all-button" type="submit" style="font-weight: 1000; padding: 10px; border-radius: 5px; color: red;" >Disable All</button>
+                        @else
+                            <button class="disable-all-button" type="submit" style="font-weight: 1000; padding: 10px; border-radius: 5px; color: rgb(255, 176, 176);" disabled>Disable All</button>
+                        @endif
+                    </form>
+
+                    <form id="enable-all-form" action="{{ route('enableAllAccounts') }}" method="POST" style="display: inline;">
+                        @csrf
+                        @if ($isAnyStudentDisabled)
+                            <button class="disable-all-button" type="submit" style="font-weight: 1000; padding: 10px; border-radius: 5px; color: green;" >Enable All</button>
+                        @else
+                            <button class="disable-all-button" type="submit" style="font-weight: 1000; padding: 10px; border-radius: 5px; color: rgb(151, 200, 151);" disabled>Enable All</button>
+                        @endif
+                    </form>
+
+
+
+                  </div>
               </div>
               <button id="showSearchButton" class="text-slate-600 hover:text-slate-700 duration-100" style="width: 50px; padding: 10px; visibility: hidden;"><i class="fa-solid fa-search"></i></button>
             </div>
@@ -35,6 +57,7 @@
         <div class="">
             <div class="studentCenter">
                 <div class="flex flex-wrap">
+
                     @foreach ($students as $student)
 
                     <div class="m-10 shadow-lg dark:bg-dark-eval-1hover:shadow-sm duration-200" style="border-radius: 5px; margin-top: -15px;">
@@ -79,11 +102,8 @@
                                 {{$student->grade_level}} <br> <hr> <br>
                                  <!-- Display fines -->
 
-
                                  <h1><b><i class="fa-solid fa-clock"></i> Instances of late returns.</b></h1>
                                  {{ number_format($student->totalFines, 0, '.', '') }} <br> <hr> <br>
-
-
 
                             </div>
                             <div class="">
@@ -91,12 +111,20 @@
 
 
                               <div class="flex justify-evenly" style="margin-top: -20px;">
+
+
                                 <form class="toggle-form" data-student-id="{{ $student->id }}" style="display: inline;">
                                     @csrf
 
-                                    <i id="i" class="fa-regular fa-address-card"></i><button class="toggle-button " type="button"style="font-weight: 1000; padding: 10px; border-radius: 5px; color: {{ $student->is_disabled ? 'red' : 'green' }};">{{ $student->is_disabled ? 'Disabled' : 'Enabled' }}
+                                    <i id="i" class="fa-regular fa-address-card"></i>
+                                    <button class="toggle-button" type="button" style="font-weight: 1000; padding: 10px; border-radius: 5px; color: {{ $student->is_disabled ? 'red' : 'green' }};">
+                                        {{ $student->is_disabled ? 'Disabled' : 'Enabled' }}
                                     </button>
+
                                 </form>
+
+
+
                                 {{-- display here the total time --}}
 
                                 <button class="text-red-600 hover:text-red-700 duration-100"
@@ -261,8 +289,6 @@ window.addEventListener('load', function () {
 });
 
 const toggleButtons = document.querySelectorAll('.toggle-button');
-
-
 toggleButtons.forEach(button => {
     button.addEventListener('click', async () => {
         const form = button.closest('.toggle-form');
@@ -289,6 +315,8 @@ toggleButtons.forEach(button => {
         }
     });
 });
+
+
 
    // JavaScript to toggle the search bar visibility with sliding effect
    const showSearchButton = document.getElementById('showSearchButton');

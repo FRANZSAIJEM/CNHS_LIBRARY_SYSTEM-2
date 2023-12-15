@@ -14,27 +14,32 @@
                 @csrf
                 <div class="shadow-lg p-3 float-left mb-10 me-10" style="width: 480px; display: flex; flex-direction: column; height: 70.5vh; overflow-y: auto;">
                     <h1 class="flex justify-center">Select Student</h1> <br>
-
                     <div class="">
                         <input type="text" id="searchUser" name="searchUser" oninput="filterUsers()" placeholder="Type to search..."
                         class="mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 block w-full">
                     </div>
                     @foreach($users as $user)
                         <div class="float-left mb-5 user-item">
-                            <input style="opacity: 0;" type="radio" id="user_{{ $user->id }}" name="user_id" value="{{ $user->id }}" onchange="showUserInfo('{{ $user->id }}')">
+                            <input style="opacity: 0;" type="radio" id="user_{{ $user->id }}" name="user_id" value="{{ $user->id }}" onchange="showUserInfo('{{ $user->id }}')" @if($user->is_suspended) disabled @endif>
                             <div>
-                                <label class="cursor-pointer rounded-lg" for="user_{{ $user->id }}">
+                                <label class="cursor-pointer rounded-lg" for="user_{{ $user->id }}" @if($user->is_suspended) style="color: gray;" @endif>
                                     <b><i class="fa fa-user"></i></b> {{ $user->name }}
                                 </label>
                                 <div class="float-right">
-                                    <b><i class="fa-solid fa-clock"></i></b> Late Records: {{ number_format($user->totalFines, 0, '.', '') }}
 
+                                    <b>
+                                        @if($user->is_suspended)
+                                        <span class="text-red-300">Suspended</span>
+                                        @else
+                                            <span class="text-green-500">Active</span>
+                                        @endif
+                                    </b>
                                 </div>
+
+
                             </div>
                         </div>
                     @endforeach
-
-
                 </div>
 
 
@@ -50,19 +55,35 @@
                 @foreach($books as $book)
 
                 <div class="float-left mb-5 book-item">
-                    <input style="opacity: 0;" type="radio" id="book_{{ $book->id }}" name="book_id" value="{{ $book->id }}"
-                        onchange="showBookInfo('{{ $book->id }}')">
+                    <input
+                        style="opacity: 0;"
+                        type="radio"
+                        id="book_{{ $book->id }}"
+                        name="book_id"
+                        value="{{ $book->id }}"
+                        onchange="showBookInfo('{{ $book->id }}')"
+                        {{ $book->is_borrowed ? 'disabled' : '' }}
+
+                    >
                     <div>
-                        <label class="cursor-pointer rounded-lg" for="book_{{ $book->id }}">
+                        <label
+                        style="{{ $book->is_borrowed ? 'color: gray;' : '' }}"
+                        class="cursor-pointer rounded-lg" for="book_{{ $book->id }}">
                             <b><i class="fa-solid fa-book"></i></b> {{ $book->title }}
                         </label>
                         <div class="float-right">
+                         <b>
+                            @if($book->is_borrowed)
+                            <span class="text-red-300">Borrowed</span>
+                            @else
+                                <span class="text-green-500">Available</span>
+                            @endif
+                         </b>
                             <a class="text-blue-500 hover:text-blue-700 duration-100 p-1 rounded-lg ps-3 pe-3" href="{{ route('viewBook', ['id' => $book->id]) }}" style="font-size: 20px; text-decoration: none;">
                                 <i class="fa fa-eye"></i>
                             </a>
                         </div>
                     </div>
-
                 </div>
 
                 @endforeach
@@ -71,7 +92,7 @@
 
 
                 <div class="shadow-lg p-3 float-left" style="width: 480px; display: flex; flex-direction: column;">
-                    <h1 class="flex justify-center">Record</h1> <br>
+                    <h1 class="flex justify-center">Details</h1> <br>
                     @foreach($users as $user)
                     <div id="user_info_{{ $user->id }}" class="user-info">
                         <p><b><i class="fa fa-user"></i> Borrower</b><br> {{ $user->name }}</p><hr> <br>

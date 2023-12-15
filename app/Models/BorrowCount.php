@@ -15,4 +15,10 @@ class BorrowCount extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // BorrowCount model
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

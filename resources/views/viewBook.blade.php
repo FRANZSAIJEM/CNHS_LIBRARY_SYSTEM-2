@@ -457,11 +457,11 @@
     <div class="modalWidth" style="background-color: white; border-radius: 5px;  margin: 100px auto; padding: 20px; text-align: left;">
 
         <div class="flex justify-between">
-            <h2><b><i class="fa-solid fa-address-book"></i> Delete Book</b></h2>
+            <h2><b><i class="fa-solid fa-address-book"></i> Archive Book</b></h2>
             <button class="rounded-lg p-4 text-slate-400 hover:text-slate-500 duration-100" style="transform: translateY(-15px); width: 50px;" onclick="hideConfirmationModalDelete()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <hr> <br>
-        <p>Are you sure you want to restore this book?</p>
+        <p>Are you sure you want to archive this book?</p>
         <br>
         <hr> <br>
         <div class="">

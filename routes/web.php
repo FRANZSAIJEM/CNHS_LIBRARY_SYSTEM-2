@@ -176,22 +176,36 @@ Route::get('/bookList', [BookListController::class, 'index'])->middleware(['auth
 
 Route::delete('/bookList/{id}', [BookListController::class,  'destroy'])->name('bookList.destroy');
 
+
+Route::group(['middleware' => 'checkSuspension'], function () {
+    Route::post('/suspend-account/{id}', [StudentController::class, 'suspendAccount'])->name('suspend-account');
+});
+
+
+
+
+
 //this will make the student toggle enabled or disabled
 Route::post('/toggle-account-status/{id}', [StudentController::class, 'toggleAccountStatus'])
     ->middleware(['auth', 'verified'])
     ->name('toggleAccountStatus');
-
-
-    Route::group(['middleware' => 'checkSuspension'], function () {
-        Route::post('/suspend-account/{id}', [StudentController::class, 'suspendAccount'])->name('suspend-account');
-    });
-
 
 //this will make the student account enabled or disabled
 Route::post('/disable-account/{id}', [StudentController::class, 'disableAccount'])
     ->middleware(['auth', 'verified'])
     ->name('disableAccount');
 
+
+    // Route to disable all student accounts
+Route::post('/disable-all-accounts', [StudentController::class, 'disableAllAccounts'])
+    ->middleware(['auth', 'verified'])
+    ->name('disableAllAccounts');
+
+
+        // Route to disable all student accounts
+Route::post('/enable-all-accounts', [StudentController::class, 'enableAllAccounts'])
+    ->middleware(['auth', 'verified'])
+    ->name('enableAllAccounts');
 
 
 Route::middleware('auth')->group(function () {

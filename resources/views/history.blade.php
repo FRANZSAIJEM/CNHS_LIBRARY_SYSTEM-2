@@ -509,7 +509,7 @@ if (notificationsForDayReturn.length > 0) {
     const toggleButton = document.createElement('button');
     toggleButton.textContent = 'View Returner';
     toggleButton.style.borderRadius = '10px';
-    toggleButton.style.marginLeft = '15px';
+    toggleButton.style.marginLeft = '24px';
 
     toggleButton.addEventListener('click', () => {
         toggleNotificationsReturn(td);
